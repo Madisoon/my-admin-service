@@ -1,6 +1,7 @@
 package com.alienlab.my.config.interceptor;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -12,14 +13,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 public class WebAppConfigurer extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 多个拦截器组成一个拦截器链 ,可以添加多个
-        // addPathPatterns 用于添加拦截规则 , excludePathPatterns 用户排除拦截
+        // 注册拦截器
+        InterceptorRegistration ir = registry.addInterceptor(new ApiInterceptor());
+        // 配置拦截的路径
+        ir.addPathPatterns("/api/**");
+        // 配置不拦截的路径
+        /*ir.excludePathPatterns("*//**.html");*/
 
-        // 拦截除
-        registry.addInterceptor(new ApiInterceptor()).addPathPatterns("/**")
-                .excludePathPatterns("/system/judgeUser")
-                .excludePathPatterns("/manpower/uploadImage");  //对来自/user/** 这个链接来的请求进行拦截
-       /* registry.addInterceptor(new ExcludeInterceptor()).excludePathPatterns("/system/judgeUser");  //对来自/user*//** 这个链接来的请求进行拦截*/
-        super.addInterceptors(registry);
+        // 还可以在这里注册其它的拦截器
+        //registry.addInterceptor(new OtherInterceptor()).addPathPatterns("/**");
     }
 }
