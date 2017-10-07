@@ -2,10 +2,13 @@ package com.alienlab.my.module.book.service;
 
 
 import com.alienlab.my.entity.BookInfo;
+import com.alienlab.my.entity.StockInfo;
 
 import java.util.List;
 
 public interface IBookManageService {
+
+    // 书籍信息的接口
     public BookInfo insertBookInfo(BookInfo bookInfo);
 
     public List<BookInfo> getAllBook();
@@ -13,4 +16,12 @@ public interface IBookManageService {
     public BookInfo updateBookInfo(BookInfo bookInfo);
 
     public void deleteBookInfo(BookInfo bookInfo);
+
+    // 库存信息的接口
+
+    public StockInfo insertStockInfo(StockInfo stockInfo);
+
+    public List<StockInfo> getAllStockByIsbn(String isbn);
+
+    public StockInfo deleteStockInfo(StockInfo stockInfo);
 }
