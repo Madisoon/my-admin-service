@@ -5,9 +5,12 @@ import com.alienlab.my.entity.StockInfo;
 import com.alienlab.my.module.book.service.IBookManageService;
 import com.alienlab.my.repository.BookInfoRepository;
 import com.alienlab.my.repository.StockInfoRepository;
+import org.hibernate.engine.spi.EntityEntryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 @Service
@@ -18,6 +21,7 @@ public class BookManageService implements IBookManageService {
 
     @Autowired
     StockInfoRepository stockInfoRepository;
+
 
     @Override
     public BookInfo insertBookInfo(BookInfo bookInfo) {
@@ -46,11 +50,14 @@ public class BookManageService implements IBookManageService {
 
     @Override
     public List<StockInfo> getAllStockByIsbn(String isbn) {
-        return this.stockInfoRepository.findAll(isbn);
+        String selectSql = "select * from ?1";
+      /*  EntityManager entityManager;
+        entityManager.createQuery(selectSql, StockInfo.class).getResultList();*/
+        return null;
     }
 
     @Override
-    public StockInfo deleteStockInfo(StockInfo stockInfo) {
-        return null;
+    public void deleteStockInfo(StockInfo stockInfo) {
+        this.stockInfoRepository.delete(stockInfo);
     }
 }

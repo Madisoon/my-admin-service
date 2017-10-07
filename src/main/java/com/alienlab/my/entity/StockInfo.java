@@ -10,6 +10,9 @@ import java.util.Date;
 @Table(name = "stockinfo")
 public class StockInfo {
 
+    @ManyToOne
+    private BookInfo bookInfo;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "LibraryID")
@@ -32,6 +35,14 @@ public class StockInfo {
 
     @Column(name = "SumBNo")
     private BigDecimal SumBNo;
+
+    public BookInfo getBookInfo() {
+        return bookInfo;
+    }
+
+    public void setBookInfo(BookInfo bookInfo) {
+        this.bookInfo = bookInfo;
+    }
 
     public String getLibraryID() {
         return LibraryID;
@@ -87,5 +98,19 @@ public class StockInfo {
 
     public void setSumBNo(BigDecimal sumBNo) {
         SumBNo = sumBNo;
+    }
+
+    @Override
+    public String toString() {
+        return "StockInfo{" +
+                "bookInfo=" + bookInfo +
+                ", LibraryID='" + LibraryID + '\'' +
+                ", ISBN13='" + ISBN13 + '\'' +
+                ", ISBN10='" + ISBN10 + '\'' +
+                ", StockTag=" + StockTag +
+                ", ReaderID='" + ReaderID + '\'' +
+                ", LastTime=" + LastTime +
+                ", SumBNo=" + SumBNo +
+                '}';
     }
 }

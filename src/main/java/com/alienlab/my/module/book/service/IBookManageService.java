@@ -23,5 +23,5 @@ public interface IBookManageService {
 
     public List<StockInfo> getAllStockByIsbn(String isbn);
 
-    public StockInfo deleteStockInfo(StockInfo stockInfo);
+    public void deleteStockInfo(StockInfo stockInfo);
 }

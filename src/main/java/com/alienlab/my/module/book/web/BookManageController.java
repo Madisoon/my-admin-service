@@ -2,6 +2,7 @@ package com.alienlab.my.module.book.web;
 
 import com.alibaba.fastjson.JSON;
 import com.alienlab.my.entity.BookInfo;
+import com.alienlab.my.entity.StockInfo;
 import com.alienlab.my.module.book.service.IBookManageService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -68,6 +69,15 @@ public class BookManageController {
         bookInfo.setISBN13(isbn13);
         iBookManageService.deleteBookInfo(bookInfo);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("1");
+    }
 
+    @GetMapping(value = "/getAllStockByIsbn")
+    @ApiOperation(value = "getAllStockByIsbn", notes = "获取书籍的打码信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "isbn13", value = "书籍编码", required = true, dataType = "STRING")
+    })
+    public ResponseEntity getAllStockByIsbn(@RequestParam("isbn13") String isbn13) {
+        List<StockInfo> list = iBookManageService.getAllStockByIsbn(isbn13);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(list);
     }
 }

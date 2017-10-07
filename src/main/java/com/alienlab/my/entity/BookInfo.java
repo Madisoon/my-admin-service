@@ -1,12 +1,18 @@
 package com.alienlab.my.entity;
 
-
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "bookinfo")
 public class BookInfo {
+
+    @OneToMany
+    @JoinTable(name = "stockinfo")
+    /*@JoinColumn(name = "isbn13", referencedColumnName = "isbn13")*/
+    private List<StockInfo> stockInfo;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ISBN13")
@@ -438,10 +444,19 @@ public class BookInfo {
         LexileCombined = lexileCombined;
     }
 
+    public List<StockInfo> getStockInfo() {
+        return stockInfo;
+    }
+
+    public void setStockInfo(List<StockInfo> stockInfo) {
+        this.stockInfo = stockInfo;
+    }
+
     @Override
     public String toString() {
         return "BookInfo{" +
-                "ISBN13='" + ISBN13 + '\'' +
+                "stockInfo=" + stockInfo +
+                ", ISBN13='" + ISBN13 + '\'' +
                 ", ISBN10='" + ISBN10 + '\'' +
                 ", Name='" + Name + '\'' +
                 ", Author='" + Author + '\'' +
