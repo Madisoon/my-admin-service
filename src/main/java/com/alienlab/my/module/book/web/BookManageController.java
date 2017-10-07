@@ -41,6 +41,7 @@ public class BookManageController {
     })
     public ResponseEntity getAllBook() {
         List<BookInfo> list = iBookManageService.getAllBook();
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(list);
 
     }
