@@ -4,6 +4,7 @@ import com.alienlab.my.entity.BookInfo;
 import com.alienlab.my.entity.StockInfo;
 import com.alienlab.my.module.book.service.IBookManageService;
 import com.alienlab.my.repository.BookInfoRepository;
+import com.alienlab.my.repository.StockInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,9 @@ public class BookManageService implements IBookManageService {
 
     @Autowired
     BookInfoRepository bookInfoRepository;
+
+    @Autowired
+    StockInfoRepository stockInfoRepository;
 
     @Override
     public BookInfo insertBookInfo(BookInfo bookInfo) {
@@ -37,12 +41,12 @@ public class BookManageService implements IBookManageService {
 
     @Override
     public StockInfo insertStockInfo(StockInfo stockInfo) {
-        return null;
+        return this.stockInfoRepository.save(stockInfo);
     }
 
     @Override
     public List<StockInfo> getAllStockByIsbn(String isbn) {
-        return null;
+        return this.stockInfoRepository.findAll(isbn);
     }
 
     @Override
