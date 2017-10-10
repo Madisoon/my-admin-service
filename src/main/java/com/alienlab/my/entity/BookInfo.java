@@ -10,11 +10,13 @@ public class BookInfo {
 
     @OneToMany
     @JoinTable(name = "stockinfo")
-    /*@JoinColumn(name = "isbn13", referencedColumnName = "isbn13")*/
     private List<StockInfo> stockInfo;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private String id;
+
     @Column(name = "ISBN13")
     private String ISBN13;
 
@@ -131,6 +133,15 @@ public class BookInfo {
 
     @Column(name = "LexileCombined")
     private String LexileCombined;
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getISBN13() {
         return ISBN13;
@@ -456,6 +467,7 @@ public class BookInfo {
     public String toString() {
         return "BookInfo{" +
                 "stockInfo=" + stockInfo +
+                ", id='" + id + '\'' +
                 ", ISBN13='" + ISBN13 + '\'' +
                 ", ISBN10='" + ISBN10 + '\'' +
                 ", Name='" + Name + '\'' +

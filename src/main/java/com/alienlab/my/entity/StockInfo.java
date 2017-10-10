@@ -18,6 +18,9 @@ public class StockInfo {
     @Column(name = "LibraryID")
     private String LibraryID;
 
+    @Column(name = "BookId")
+    private String BookId;
+
     @Column(name = "ISBN13")
     private String ISBN13;
 
@@ -26,6 +29,9 @@ public class StockInfo {
 
     @Column(name = "StockTag")
     private int StockTag;
+
+    @Column(name = "RRanking")
+    private int RRanking;
 
     @Column(name = "ReaderID")
     private String ReaderID;
@@ -50,6 +56,14 @@ public class StockInfo {
 
     public void setLibraryID(String libraryID) {
         LibraryID = libraryID;
+    }
+
+    public String getBookId() {
+        return BookId;
+    }
+
+    public void setBookId(String bookId) {
+        BookId = bookId;
     }
 
     public String getISBN13() {
@@ -100,14 +114,24 @@ public class StockInfo {
         SumBNo = sumBNo;
     }
 
+    public int getRRanking() {
+        return RRanking;
+    }
+
+    public void setRRanking(int RRanking) {
+        this.RRanking = RRanking;
+    }
+
     @Override
     public String toString() {
         return "StockInfo{" +
                 "bookInfo=" + bookInfo +
                 ", LibraryID='" + LibraryID + '\'' +
+                ", BookId='" + BookId + '\'' +
                 ", ISBN13='" + ISBN13 + '\'' +
                 ", ISBN10='" + ISBN10 + '\'' +
                 ", StockTag=" + StockTag +
+                ", RRanking=" + RRanking +
                 ", ReaderID='" + ReaderID + '\'' +
                 ", LastTime=" + LastTime +
                 ", SumBNo=" + SumBNo +

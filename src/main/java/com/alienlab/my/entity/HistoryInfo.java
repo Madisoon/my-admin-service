@@ -19,6 +19,9 @@ public class HistoryInfo {
     @Column(name = "LibraryID")
     private String LibraryID;
 
+    @Column(name = "RRanking")
+    private String RRanking;
+
     @Column(name = "BorrowTime")
     private Date BorrowTime;
 
@@ -41,6 +44,22 @@ public class HistoryInfo {
         LibraryID = libraryID;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getRRanking() {
+        return RRanking;
+    }
+
+    public void setRRanking(String RRanking) {
+        this.RRanking = RRanking;
+    }
+
     public Date getBorrowTime() {
         return BorrowTime;
     }
@@ -55,5 +74,17 @@ public class HistoryInfo {
 
     public void setReturnTime(Date returnTime) {
         ReturnTime = returnTime;
+    }
+
+    @Override
+    public String toString() {
+        return "HistoryInfo{" +
+                "id=" + id +
+                ", ReaderID='" + ReaderID + '\'' +
+                ", LibraryID='" + LibraryID + '\'' +
+                ", RRanking='" + RRanking + '\'' +
+                ", BorrowTime=" + BorrowTime +
+                ", ReturnTime=" + ReturnTime +
+                '}';
     }
 }
