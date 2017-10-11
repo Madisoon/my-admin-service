@@ -14,12 +14,9 @@ public class StockInfo {
     private BookInfo bookInfo;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "LibraryID")
-    private String LibraryID;
-
-    @Column(name = "BookId")
-    private String BookId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "LibraryId")
+    private String LibraryId;
 
     @Column(name = "ISBN13")
     private String ISBN13;
@@ -51,20 +48,20 @@ public class StockInfo {
     }
 
     public String getLibraryID() {
-        return LibraryID;
+        return LibraryId;
     }
 
-    public void setLibraryID(String libraryID) {
-        LibraryID = libraryID;
+    public void setLibraryID(String libraryId) {
+        LibraryId = libraryId;
     }
 
-    public String getBookId() {
-        return BookId;
+    /*public String getBookId() {
+        return BookInfoId;
     }
 
     public void setBookId(String bookId) {
-        BookId = bookId;
-    }
+        BookInfoId = BookInfoId;
+    }*/
 
     public String getISBN13() {
         return ISBN13;
@@ -120,21 +117,5 @@ public class StockInfo {
 
     public void setRRanking(int RRanking) {
         this.RRanking = RRanking;
-    }
-
-    @Override
-    public String toString() {
-        return "StockInfo{" +
-                "bookInfo=" + bookInfo +
-                ", LibraryID='" + LibraryID + '\'' +
-                ", BookId='" + BookId + '\'' +
-                ", ISBN13='" + ISBN13 + '\'' +
-                ", ISBN10='" + ISBN10 + '\'' +
-                ", StockTag=" + StockTag +
-                ", RRanking=" + RRanking +
-                ", ReaderID='" + ReaderID + '\'' +
-                ", LastTime=" + LastTime +
-                ", SumBNo=" + SumBNo +
-                '}';
     }
 }
