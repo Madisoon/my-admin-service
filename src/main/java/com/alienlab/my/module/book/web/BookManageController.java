@@ -8,6 +8,10 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -78,5 +82,21 @@ public class BookManageController {
     public ResponseEntity getAllStockByIsbn(@RequestParam("isbn13") String isbn13) {
         List<StockInfo> list = iBookManageService.getAllStockByIsbn(isbn13);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(list);
+    }
+
+
+    @GetMapping(value = "/getRecommendBook")
+    @ApiOperation(value = "getRecommendBook", notes = "获取本馆推荐书籍")
+    public ResponseEntity getRecommendBook() {
+
+
+        try{
+            Page<BookInfo> recommendList = iBookManageService.getRecommednBook(new PageRequest(0,10,new Sort(Sort.Direction.DESC,"recommendIndex")));
+            return ResponseEntity.ok().body(recommendList);
+        }catch(Exception e){
+            e.printStackTrace();
+            ExecResult er=new ExecResult(false,e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
     }
 }

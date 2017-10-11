@@ -3,6 +3,8 @@ package com.alienlab.my.module.book.service;
 
 import com.alienlab.my.entity.BookInfo;
 import com.alienlab.my.entity.StockInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -24,4 +26,6 @@ public interface IBookManageService {
     public List<StockInfo> getAllStockByIsbn(String isbn);
 
     public void deleteStockInfo(StockInfo stockInfo);
+
+    public Page<BookInfo> getRecommednBook(Pageable pageable) throws Exception;
 }

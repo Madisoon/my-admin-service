@@ -133,9 +133,20 @@ public class BookInfo {
     @Column(name = "LexileCombined")
     private String LexileCombined;
 
+    @Column(name = "recommendIndex")
+    private int recommendIndex;
+
     @OneToMany(mappedBy = "bookInfo")
     private Set<StockInfo> stockInfo = new HashSet<>();
 
+
+    public int getRecommendIndex() {
+        return recommendIndex;
+    }
+
+    public void setRecommendIndex(int recommendIndex) {
+        this.recommendIndex = recommendIndex;
+    }
 
     public Long getId() {
         return id;

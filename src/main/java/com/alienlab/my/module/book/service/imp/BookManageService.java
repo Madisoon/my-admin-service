@@ -7,6 +7,8 @@ import com.alienlab.my.repository.BookInfoRepository;
 import com.alienlab.my.repository.StockInfoRepository;
 import org.hibernate.engine.spi.EntityEntryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -59,5 +61,14 @@ public class BookManageService implements IBookManageService {
     @Override
     public void deleteStockInfo(StockInfo stockInfo) {
         this.stockInfoRepository.delete(stockInfo);
+    }
+
+    @Override
+    public Page<BookInfo> getRecommednBook(Pageable pageable) throws Exception{
+        Page<BookInfo> recommendList = bookInfoRepository.findAll(pageable);
+        if(recommendList == null){
+            throw new Exception("书籍为空或暂无推荐书籍，请联系管理员!");
+        }
+        return recommendList;
     }
 }
