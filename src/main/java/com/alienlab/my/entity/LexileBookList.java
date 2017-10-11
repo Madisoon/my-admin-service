@@ -7,7 +7,10 @@ import javax.persistence.*;
 public class LexileBookList {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+
     @Column(name = "ISBN13")
     String ISBN13;
 
@@ -43,6 +46,14 @@ public class LexileBookList {
 
     @Column(name = "Introduction")
     String Introduction;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getISBN13() {
         return ISBN13;

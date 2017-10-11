@@ -2,20 +2,19 @@ package com.alienlab.my.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "bookinfo")
 public class BookInfo {
 
-    @OneToMany
-    @JoinTable(name = "stockinfo")
-    private List<StockInfo> stockInfo;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private String id;
+    private Long id;
 
     @Column(name = "ISBN13")
     private String ISBN13;
@@ -134,12 +133,15 @@ public class BookInfo {
     @Column(name = "LexileCombined")
     private String LexileCombined;
 
+    @OneToMany(mappedBy = "bookInfo")
+    private Set<StockInfo> stockInfo = new HashSet<>();
 
-    public String getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -455,11 +457,11 @@ public class BookInfo {
         LexileCombined = lexileCombined;
     }
 
-    public List<StockInfo> getStockInfo() {
+    public Set<StockInfo> getStockInfo() {
         return stockInfo;
     }
 
-    public void setStockInfo(List<StockInfo> stockInfo) {
+    public void setStockInfo(Set<StockInfo> stockInfo) {
         this.stockInfo = stockInfo;
     }
 

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.baidu.ueditor.ActionEnter;
 
 @WebServlet(name = "UEditorServlet", urlPatterns = "/UEditor")
 public class UEditorController extends HttpServlet {
@@ -21,7 +20,7 @@ public class UEditorController extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        request.setCharacterEncoding("utf-8");
+       /* request.setCharacterEncoding("utf-8");
         response.setHeader("Content-Type", "text/html");
         PrintWriter out = response.getWriter();
         ServletContext application = this.getServletContext();
@@ -34,7 +33,7 @@ public class UEditorController extends HttpServlet {
             rootPath = rootPath.replace("\\", "/");
             result = result.replaceAll(rootPath, "/");
         }
-        out.write(result);
+        out.write(result);*/
     }
 
 }

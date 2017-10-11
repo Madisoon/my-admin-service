@@ -7,13 +7,24 @@ import javax.persistence.*;
 @Table(name = "sysuserinfo")
 public class SysUserInfo {
 
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @Column(name = "UserLoginName")
     private String UserLoginName;
 
     @Column(name = "UserPassWord")
     private String UserPassWord;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUserLoginName() {
         return UserLoginName;

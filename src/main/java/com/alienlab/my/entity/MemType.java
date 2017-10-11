@@ -11,8 +11,7 @@ public class MemType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MemID")
-    private int MemID;
+    private Long id;
 
     @Column(name = "MemName")
     private String MemName;
@@ -29,12 +28,12 @@ public class MemType {
     @Column(name = "DuringTime")
     private int DuringTime;
 
-    public int getMemID() {
-        return MemID;
+    public Long getMemID() {
+        return id;
     }
 
-    public void setMemID(int memID) {
-        MemID = memID;
+    public void setMemID(Long memID) {
+        this.id = memID;
     }
 
     public String getMemName() {

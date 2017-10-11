@@ -7,8 +7,14 @@ import java.util.Date;
 @Entity
 @Table(name = "userinfo")
 public class UserInfo {
+
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+
+
     @Column(name = "ReaderID")
     private String ReaderID;
 
@@ -71,6 +77,15 @@ public class UserInfo {
 
     @Column(name = "RWCount")
     private int RWCount;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getReaderID() {
         return ReaderID;

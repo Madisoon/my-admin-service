@@ -10,8 +10,7 @@ public class HistoryInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
+    private Long id;
 
     @Column(name = "ReaderID")
     private String ReaderID;

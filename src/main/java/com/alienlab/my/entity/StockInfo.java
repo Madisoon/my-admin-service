@@ -10,34 +10,36 @@ import java.util.Date;
 @Table(name = "stockinfo")
 public class StockInfo {
 
-    @ManyToOne
-    private BookInfo bookInfo;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "LibraryId")
-    private String LibraryId;
+    private Long id;
 
-    @Column(name = "ISBN13")
+    @Column(name = "isbn13")
     private String ISBN13;
 
-    @Column(name = "ISBN10")
+    @Column(name = "isbn10")
     private String ISBN10;
 
-    @Column(name = "StockTag")
+    @Column(name = "stockTag")
     private int StockTag;
 
-    @Column(name = "RRanking")
+    @Column(name = "rranking")
     private int RRanking;
 
-    @Column(name = "ReaderID")
+    @Column(name = "readerId")
     private String ReaderID;
 
-    @Column(name = "LastTime")
+    @Column(name = "lastTime")
     private Date LastTime;
 
-    @Column(name = "SumBNo")
+    @Column(name = "sumNo")
     private BigDecimal SumBNo;
+
+    @ManyToOne
+    @JoinColumn(name="book_info_id")
+    private BookInfo bookInfo;
 
     public BookInfo getBookInfo() {
         return bookInfo;
@@ -47,15 +49,14 @@ public class StockInfo {
         this.bookInfo = bookInfo;
     }
 
-    public String getLibraryID() {
-        return LibraryId;
+    public Long getId() {
+        return id;
     }
 
-    public void setLibraryID(String libraryId) {
-        LibraryId = libraryId;
+    public void setId(Long id) {
+        this.id = id;
     }
-
-    /*public String getBookId() {
+/*public String getBookId() {
         return BookInfoId;
     }
 
