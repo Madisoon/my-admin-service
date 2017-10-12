@@ -33,5 +33,5 @@ public interface IBookManageService {
 
     public SaveInfo collectBook(String readerId, String bookId) throws Exception;
 
-    public OrderInfo orderBook(String readerId, String bookId) throws Exception;
+    public OrderInfo orderBook(String readerId, String bookId ,int limit) throws Exception;
 }

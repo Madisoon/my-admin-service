@@ -12,35 +12,44 @@ public class OrderInfo {
     private Long id;
 
     @Column(name = "ReaderID")
-    private String ReaderID;
+    private String readerID;
 
     @Column(name = "LibraryID")
-    private String LibraryID;
+    private String libraryID;
 
     @Column(name = "OrderTime")
-    private Date OrderTime;
+    private Date orderTime;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getReaderID() {
-        return ReaderID;
+        return readerID;
     }
 
     public void setReaderID(String readerID) {
-        ReaderID = readerID;
+        readerID = readerID;
     }
 
     public String getLibraryID() {
-        return LibraryID;
+        return libraryID;
     }
 
     public void setLibraryID(String libraryID) {
-        LibraryID = libraryID;
+        libraryID = libraryID;
     }
 
     public Date getOrderTime() {
-        return OrderTime;
+        return orderTime;
     }
 
     public void setOrderTime(Date orderTime) {
-        OrderTime = orderTime;
+        orderTime = orderTime;
     }
 }

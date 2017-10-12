@@ -1,5 +1,6 @@
 package com.alienlab.my.module.book.web;
 
+import com.alienlab.my.entity.OrderInfo;
 import com.alienlab.my.entity.SaveInfo;
 import com.alienlab.my.module.book.service.imp.BookManageService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -41,11 +42,13 @@ public class apiBookManageController {
     @ApiOperation(value="reserveBook",notes="预定书籍")
     @ApiImplicitParams({
             @ApiImplicitParam(name="readerId",value="用户id",dataType="string"),
-            @ApiImplicitParam(name="bookId",value="用户id",dataType="string")
+            @ApiImplicitParam(name="bookId",value="用户id",dataType="string"),
+            @ApiImplicitParam(name="limit",value="用户借书限制数",dataType="int")
     })
-    public ResponseEntity funName(){
+    public ResponseEntity reserveBook(@RequestParam String readerId,@RequestParam String bookId,@RequestParam int limit){
         try {
-            return ResponseEntity.ok().body("");
+            OrderInfo orderInfo = bookManageService.orderBook(readerId,bookId,limit);
+            return ResponseEntity.ok().body(orderInfo);
         }catch (Exception e){
             e.printStackTrace();
             ExecResult er=new ExecResult(false,e.getMessage());

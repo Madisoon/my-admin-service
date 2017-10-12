@@ -94,7 +94,13 @@ public class BookManageService implements IBookManageService {
     }
 
     @Override
-    public OrderInfo orderBook(String readerId, String bookId) throws Exception {
+    public OrderInfo orderBook(String readerId, String bookId,int limit) throws Exception {
+        List<OrderInfo> orderInfos = orderInfoRepository.findOrderByReaderID(readerId);
+        if(orderInfos!=null){
+            if(orderInfos.size()>limit){
+                throw new Exception("您已超过可预定的最大本数！");
+            }
+        }
         OrderInfo orderInfo = orderInfoRepository.findOrderInfoByReaderIDAndLibraryID(readerId,bookId);
         if(orderInfo!=null){
             throw new Exception("您已预订过该书籍，请阅读后再重新预订！");
