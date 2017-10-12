@@ -71,4 +71,10 @@ public class BookManageService implements IBookManageService {
         }
         return recommendList;
     }
+
+    @Override
+    public Boolean collectBook(String readerId, String bookId) throws Exception {
+
+        return null;
+    }
 }

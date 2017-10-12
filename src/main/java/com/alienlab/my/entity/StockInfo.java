@@ -56,13 +56,7 @@ public class StockInfo {
     public void setId(Long id) {
         this.id = id;
     }
-/*public String getBookId() {
-        return BookInfoId;
-    }
 
-    public void setBookId(String bookId) {
-        BookInfoId = BookInfoId;
-    }*/
 
     public String getISBN13() {
         return ISBN13;

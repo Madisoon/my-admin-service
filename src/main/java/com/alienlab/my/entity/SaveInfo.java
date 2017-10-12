@@ -11,24 +11,24 @@ public class SaveInfo {
     private Long id;
 
     @Column(name = "ReaderID")
-    private String ReaderID;
+    private String readerID;
 
     @Column(name = "LibraryID")
-    private String LibraryID;
+    private String libraryID;
 
     public String getReaderID() {
-        return ReaderID;
+        return readerID;
     }
 
     public void setReaderID(String readerID) {
-        ReaderID = readerID;
+        readerID = readerID;
     }
 
     public String getLibraryID() {
-        return LibraryID;
+        return libraryID;
     }
 
     public void setLibraryID(String libraryID) {
-        LibraryID = libraryID;
+        libraryID = libraryID;
     }
 }

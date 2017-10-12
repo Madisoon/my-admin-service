@@ -28,4 +28,6 @@ public interface IBookManageService {
     public void deleteStockInfo(StockInfo stockInfo);
 
     public Page<BookInfo> getRecommednBook(Pageable pageable) throws Exception;
+
+    public Boolean collectBook(String readerId,String bookId) throws Exception;
 }
