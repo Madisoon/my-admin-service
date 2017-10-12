@@ -29,5 +29,5 @@ public interface IBookManageService {
 
     public Page<BookInfo> getRecommednBook(Pageable pageable) throws Exception;
 
-    public Boolean collectBook(String readerId,String bookId) throws Exception;
+ /*   public Boolean collectBook(String readerId,String bookId) throws Exception;*/
 }

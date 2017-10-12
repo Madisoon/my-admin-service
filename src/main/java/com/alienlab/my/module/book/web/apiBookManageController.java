@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api")
 public class apiBookManageController {
 
-    @PostMapping("/collectBook")
+   /* @PostMapping("/collectBook")
     @ApiOperation(value="collectBook",notes="收藏书籍")
     @ApiImplicitParams({
         @ApiImplicitParam(name="readerId",value="用户Id",dataType="string"),
@@ -45,5 +45,5 @@ public class apiBookManageController {
             ExecResult er=new ExecResult(false,e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
         }
-    }
+    }*/
 }

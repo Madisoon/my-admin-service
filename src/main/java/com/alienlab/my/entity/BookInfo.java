@@ -1,5 +1,7 @@
 package com.alienlab.my.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -137,6 +139,7 @@ public class BookInfo {
     private int recommendIndex;
 
     @OneToMany(mappedBy = "bookInfo")
+    @JsonIgnore
     private Set<StockInfo> stockInfo = new HashSet<>();
 
 
@@ -476,50 +479,5 @@ public class BookInfo {
         this.stockInfo = stockInfo;
     }
 
-    @Override
-    public String toString() {
-        return "BookInfo{" +
-                "stockInfo=" + stockInfo +
-                ", id='" + id + '\'' +
-                ", ISBN13='" + ISBN13 + '\'' +
-                ", ISBN10='" + ISBN10 + '\'' +
-                ", Name='" + Name + '\'' +
-                ", Author='" + Author + '\'' +
-                ", Pages=" + Pages +
-                ", WordCount=" + WordCount +
-                ", Weight=" + Weight +
-                ", Diamension='" + Diamension + '\'' +
-                ", AgeStart='" + AgeStart + '\'' +
-                ", AgeStop='" + AgeStop + '\'' +
-                ", GradeStart='" + GradeStart + '\'' +
-                ", GradeStop='" + GradeStop + '\'' +
-                ", Series='" + Series + '\'' +
-                ", DocType='" + DocType + '\'' +
-                ", BookType='" + BookType + '\'' +
-                ", PubYear='" + PubYear + '\'' +
-                ", PubLisher='" + PubLisher + '\'' +
-                ", Count=" + Count +
-                ", Stock=" + Stock +
-                ", BookShelf='" + BookShelf + '\'' +
-                ", Introduction='" + Introduction + '\'' +
-                ", Topic='" + Topic + '\'' +
-                ", Review1='" + Review1 + '\'' +
-                ", Review2='" + Review2 + '\'' +
-                ", Awards='" + Awards + '\'' +
-                ", ARTag=" + ARTag +
-                ", BL=" + BL +
-                ", IL='" + IL + '\'' +
-                ", ARPoints=" + ARPoints +
-                ", ARRating=" + ARRating +
-                ", QuizNo='" + QuizNo + '\'' +
-                ", RVQuiz=" + RVQuiz +
-                ", VPQuiz=" + VPQuiz +
-                ", LSQuiz=" + LSQuiz +
-                ", QuestionNo=" + QuestionNo +
-                ", LexileTag=" + LexileTag +
-                ", LexileCode='" + LexileCode + '\'' +
-                ", LexileValue=" + LexileValue +
-                ", LexileCombined='" + LexileCombined + '\'' +
-                '}';
-    }
+
 }

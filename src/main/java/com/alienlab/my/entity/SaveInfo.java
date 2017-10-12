@@ -16,12 +16,21 @@ public class SaveInfo {
     @Column(name = "LibraryID")
     private String libraryID;
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getReaderID() {
         return readerID;
     }
 
     public void setReaderID(String readerID) {
-        readerID = readerID;
+        this.readerID = readerID;
     }
 
     public String getLibraryID() {
@@ -29,6 +38,6 @@ public class SaveInfo {
     }
 
     public void setLibraryID(String libraryID) {
-        libraryID = libraryID;
+        this.libraryID = libraryID;
     }
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface SaveInfoRepository extends JpaRepository<StockInfo, Long> {
+public interface SaveInfoRepository extends JpaRepository<SaveInfo, Long> {
 
-    SaveInfo findSaveByReaderIDAndLibraryID(String readerId,String libraryId);
+    SaveInfo findSaveInfoByReaderIDAndLibraryID(String readerId,String libraryId);
 }
