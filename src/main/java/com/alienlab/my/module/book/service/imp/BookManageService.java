@@ -4,6 +4,7 @@ import com.alienlab.my.entity.BookInfo;
 import com.alienlab.my.entity.StockInfo;
 import com.alienlab.my.module.book.service.IBookManageService;
 import com.alienlab.my.repository.BookInfoRepository;
+import com.alienlab.my.repository.SaveInfoRepository;
 import com.alienlab.my.repository.StockInfoRepository;
 import org.hibernate.engine.spi.EntityEntryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class BookManageService implements IBookManageService {
 
     @Autowired
     StockInfoRepository stockInfoRepository;
+
+    @Autowired
+    SaveInfoRepository saveInfoRepository;
 
 
     @Override
@@ -70,4 +74,10 @@ public class BookManageService implements IBookManageService {
         }
         return recommendList;
     }
+
+    /*@Override
+    public Boolean collectBook(String readerId, String bookId) throws Exception {
+
+        return null;
+    }*/
 }
