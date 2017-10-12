@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrderInfoRepository extends JpaRepository<OrderInfo, Long> {
+    OrderInfo findOrderInfoByReaderIDAndLibraryID(String readerId,String libraryId);
 }
