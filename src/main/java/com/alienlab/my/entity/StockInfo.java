@@ -11,7 +11,6 @@ import java.util.Date;
 public class StockInfo {
 
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,7 +37,7 @@ public class StockInfo {
     private BigDecimal SumBNo;
 
     @ManyToOne
-    @JoinColumn(name="book_info_id")
+    @JoinColumn(name = "book_info_id")
     private BookInfo bookInfo;
 
     public BookInfo getBookInfo() {

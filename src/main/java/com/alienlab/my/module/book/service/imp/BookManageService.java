@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -51,11 +52,9 @@ public class BookManageService implements IBookManageService {
     }
 
     @Override
-    public List<StockInfo> getAllStockByIsbn(String isbn) {
-        String selectSql = "select * from ?1";
-      /*  EntityManager entityManager;
-        entityManager.createQuery(selectSql, StockInfo.class).getResultList();*/
-        return null;
+    public BookInfo getAllBookByIsbn(String isbn) {
+        BookInfo bookInfo = bookInfoRepository.findBookByISBN13(isbn);
+        return bookInfo;
     }
 
     @Override
@@ -64,9 +63,9 @@ public class BookManageService implements IBookManageService {
     }
 
     @Override
-    public Page<BookInfo> getRecommednBook(Pageable pageable) throws Exception{
+    public Page<BookInfo> getRecommednBook(Pageable pageable) throws Exception {
         Page<BookInfo> recommendList = bookInfoRepository.findAll(pageable);
-        if(recommendList == null){
+        if (recommendList == null) {
             throw new Exception("书籍为空或暂无推荐书籍，请联系管理员!");
         }
         return recommendList;

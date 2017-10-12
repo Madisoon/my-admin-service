@@ -23,7 +23,7 @@ public interface IBookManageService {
 
     public StockInfo insertStockInfo(StockInfo stockInfo);
 
-    public List<StockInfo> getAllStockByIsbn(String isbn);
+    public BookInfo getAllBookByIsbn(String isbn);
 
     public void deleteStockInfo(StockInfo stockInfo);
 

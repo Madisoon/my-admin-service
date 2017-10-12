@@ -36,7 +36,7 @@ public class BookManageController {
     public ResponseEntity insertBookInfo(@RequestParam("bookInfo") String bookInfoData) {
         BookInfo bookInfo = JSON.parseObject(bookInfoData, BookInfo.class);
         BookInfo returnBookInfo = iBookManageService.insertBookInfo(bookInfo);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(returnBookInfo);
+        return ResponseEntity.ok().body(returnBookInfo);
     }
 
     @GetMapping(value = "/getAllBook")
@@ -46,7 +46,7 @@ public class BookManageController {
     public ResponseEntity getAllBook() {
         List<BookInfo> list = iBookManageService.getAllBook();
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(list);
+        return ResponseEntity.ok().body(list);
 
     }
 
@@ -58,7 +58,7 @@ public class BookManageController {
     public ResponseEntity updateBookInfo(@RequestParam("bookInfo") String bookInfoData) {
         BookInfo bookInfo = JSON.parseObject(bookInfoData, BookInfo.class);
         BookInfo bookInfoReturn = iBookManageService.updateBookInfo(bookInfo);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(bookInfoReturn);
+        return ResponseEntity.ok().body(bookInfoReturn);
 
     }
 
@@ -69,19 +69,21 @@ public class BookManageController {
     })
     public ResponseEntity deleteBookInfo(@RequestParam("isbn13") String isbn13) {
         BookInfo bookInfo = new BookInfo();
-        bookInfo.setISBN13(isbn13);
+        bookInfo.setiSBN13(isbn13);
         iBookManageService.deleteBookInfo(bookInfo);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("1");
+        return ResponseEntity.ok().body("1");
     }
 
-    @GetMapping(value = "/getAllStockByIsbn")
-    @ApiOperation(value = "getAllStockByIsbn", notes = "获取书籍的打码信息")
+    @GetMapping(value = "/getAllBookByIsbn")
+    /*@ApiOperation(value = "getAllBookByIsbn", notes = "获取书籍的打码信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "isbn13", value = "书籍编码", required = true, dataType = "STRING")
-    })
-    public ResponseEntity getAllStockByIsbn(@RequestParam("isbn13") String isbn13) {
-        List<StockInfo> list = iBookManageService.getAllStockByIsbn(isbn13);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(list);
+    })*/
+    public ResponseEntity getAllBookByIsbn(@RequestParam("isbn13") String isbn13) {
+        System.out.println(isbn13);
+        BookInfo bookInfo = iBookManageService.getAllBookByIsbn(isbn13);
+        System.out.println(bookInfo.toString());
+        return ResponseEntity.ok().body("");
     }
 
 
@@ -90,12 +92,12 @@ public class BookManageController {
     public ResponseEntity getRecommendBook() {
 
 
-        try{
-            Page<BookInfo> recommendList = iBookManageService.getRecommednBook(new PageRequest(0,10,new Sort(Sort.Direction.DESC,"recommendIndex")));
+        try {
+            Page<BookInfo> recommendList = iBookManageService.getRecommednBook(new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "recommendIndex")));
             return ResponseEntity.ok().body(recommendList);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            ExecResult er=new ExecResult(false,e.getMessage());
+            ExecResult er = new ExecResult(false, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
         }
     }
