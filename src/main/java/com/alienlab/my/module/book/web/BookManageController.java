@@ -87,12 +87,23 @@ public class BookManageController {
         return ResponseEntity.ok().body(bookInfo);
     }
 
+    @PostMapping(value = "/returnBook")
+    @ApiOperation(value = "returnBook", notes = "会员还书")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "isbn", value = "书籍编码", required = true, dataType = "STRING")
+    })
+    public ResponseEntity returnBook(@RequestParam("isbn") String isbn) {
+        StockInfo stockInfoData = new StockInfo();
+        stockInfoData.setId(Long.parseLong(isbn));
+        stockInfoData.setReaderID("888888");
+        StockInfo stockInfo = iBookManageService.returnBook(stockInfoData);
+        return ResponseEntity.ok().body(stockInfo);
+    }
+
 
     @GetMapping(value = "/getRecommendBook")
     @ApiOperation(value = "getRecommendBook", notes = "获取本馆推荐书籍")
     public ResponseEntity getRecommendBook() {
-
-
         try {
             Page<BookInfo> recommendList = iBookManageService.getRecommednBook(new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "recommendIndex")));
             return ResponseEntity.ok().body(recommendList);

@@ -17,6 +17,8 @@ public interface IBookManageService {
 
     public List<BookInfo> getAllBook();
 
+    public StockInfo returnBook(StockInfo stockInfo);
+
     public BookInfo updateBookInfo(BookInfo bookInfo);
 
     public void deleteBookInfo(BookInfo bookInfo);
@@ -33,5 +35,5 @@ public interface IBookManageService {
 
     public SaveInfo collectBook(String readerId, String bookId) throws Exception;
 
-    public OrderInfo orderBook(String readerId, String bookId ,int limit) throws Exception;
+    public OrderInfo orderBook(String readerId, String bookId, int limit) throws Exception;
 }

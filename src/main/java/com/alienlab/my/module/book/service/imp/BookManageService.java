@@ -40,17 +40,17 @@ public class BookManageService implements IBookManageService {
     @Override
     public BookInfo insertBookInfo(BookInfo bookInfo, String stockInfoId) {
         String[] stockInfoIds = stockInfoId.split(",");
-        System.out.println(stockInfoId);
         Set<StockInfo> set = new HashSet<>();
-        BookInfo bookInfoReturn = this.bookInfoRepository.save(bookInfo);
         for (int i = 0, bookInfoLen = stockInfoIds.length; i < bookInfoLen; i++) {
             StockInfo stockInfo = new StockInfo();
-            stockInfo.setId(Long.parseLong(stockInfoIds[i]));
-            stockInfo.setBookInfo(bookInfoReturn);
-            /*stockInfoRepository.save(stockInfo);*/
-            set.add(stockInfo);
+            stockInfo = stockInfoRepository.findOne(Long.parseLong(stockInfoIds[i].trim()));
+            // 如果数据库没有这个对象
+            if (stockInfo == null) {
+                stockInfo.setId(Long.parseLong(stockInfoIds[i].trim()));
+            }
+            /*set.add(stockInfo);*/
         }
-        bookInfo.setStockInfo(set);
+        BookInfo bookInfoReturn = this.bookInfoRepository.save(bookInfo);
         return bookInfoReturn;
     }
 
@@ -96,9 +96,9 @@ public class BookManageService implements IBookManageService {
 
     @Override
     public SaveInfo collectBook(String readerId, String bookId) throws Exception {
-        SaveInfo saveInfo = saveInfoRepository.findSaveInfoByReaderIDAndLibraryID(readerId,bookId);
-        if(saveInfo!=null){
-            throw  new Exception("您已收藏过该书籍，无法继续添加！");
+        SaveInfo saveInfo = saveInfoRepository.findSaveInfoByReaderIDAndLibraryID(readerId, bookId);
+        if (saveInfo != null) {
+            throw new Exception("您已收藏过该书籍，无法继续添加！");
         }
         saveInfo = new SaveInfo();
         saveInfo.setLibraryID(bookId);
@@ -107,20 +107,25 @@ public class BookManageService implements IBookManageService {
     }
 
     @Override
-    public OrderInfo orderBook(String readerId, String bookId,int limit) throws Exception {
+    public OrderInfo orderBook(String readerId, String bookId, int limit) throws Exception {
         List<OrderInfo> orderInfos = orderInfoRepository.findOrderByReaderID(readerId);
-        if(orderInfos!=null){
-            if(orderInfos.size()>limit){
+        if (orderInfos != null) {
+            if (orderInfos.size() > limit) {
                 throw new Exception("您已超过可预定的最大本数！");
             }
         }
-        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByReaderIDAndLibraryID(readerId,bookId);
-        if(orderInfo!=null){
+        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByReaderIDAndLibraryID(readerId, bookId);
+        if (orderInfo != null) {
             throw new Exception("您已预订过该书籍，请阅读后再重新预订！");
         }
         orderInfo = new OrderInfo();
         orderInfo.setReaderID(readerId);
         orderInfo.setLibraryID(bookId);
         return orderInfoRepository.save(orderInfo);
+    }
+
+    @Override
+    public StockInfo returnBook(StockInfo stockInfo) {
+        return this.stockInfoRepository.save(stockInfo);
     }
 }
