@@ -2,6 +2,8 @@ package com.alienlab.my.module.book.service;
 
 
 import com.alienlab.my.entity.BookInfo;
+import com.alienlab.my.entity.OrderInfo;
+import com.alienlab.my.entity.SaveInfo;
 import com.alienlab.my.entity.StockInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,5 +31,7 @@ public interface IBookManageService {
 
     public Page<BookInfo> getRecommednBook(Pageable pageable) throws Exception;
 
- /*   public Boolean collectBook(String readerId,String bookId) throws Exception;*/
+    public SaveInfo collectBook(String readerId, String bookId) throws Exception;
+
+    public OrderInfo orderBook(String readerId, String bookId ,int limit) throws Exception;
 }
