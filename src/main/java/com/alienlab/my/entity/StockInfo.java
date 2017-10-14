@@ -63,6 +63,13 @@ public class StockInfo {
         this.id = id;
     }
 
+    public String getLibraryId() {
+        return libraryId;
+    }
+
+    public void setLibraryId(String libraryId) {
+        this.libraryId = libraryId;
+    }
 
     public String getISBN13() {
         return ISBN13;
