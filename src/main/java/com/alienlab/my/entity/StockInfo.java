@@ -69,6 +69,7 @@ public class StockInfo {
 
     public void setLibraryId(String libraryId) {
         this.libraryId = libraryId;
+
     }
 
     public String getISBN13() {
