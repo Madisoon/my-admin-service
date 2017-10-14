@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class BookManageService implements IBookManageService {
@@ -36,8 +38,20 @@ public class BookManageService implements IBookManageService {
 
 
     @Override
-    public BookInfo insertBookInfo(BookInfo bookInfo) {
-        return this.bookInfoRepository.save(bookInfo);
+    public BookInfo insertBookInfo(BookInfo bookInfo, String stockInfoId) {
+        String[] stockInfoIds = stockInfoId.split(",");
+        System.out.println(stockInfoId);
+        Set<StockInfo> set = new HashSet<>();
+        BookInfo bookInfoReturn = this.bookInfoRepository.save(bookInfo);
+        for (int i = 0, bookInfoLen = stockInfoIds.length; i < bookInfoLen; i++) {
+            StockInfo stockInfo = new StockInfo();
+            stockInfo.setId(Long.parseLong(stockInfoIds[i]));
+            stockInfo.setBookInfo(bookInfoReturn);
+            /*stockInfoRepository.save(stockInfo);*/
+            set.add(stockInfo);
+        }
+        bookInfo.setStockInfo(set);
+        return bookInfoReturn;
     }
 
     @Override

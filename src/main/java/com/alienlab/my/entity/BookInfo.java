@@ -19,10 +19,10 @@ public class BookInfo {
     private Long id;
 
     @Column(name = "ISBN13")
-    private String ISBN13;
+    private String iSBN13;
 
     @Column(name = "ISBN10")
-    private String ISBN10;
+    private String iSBN10;
 
     @Column(name = "Name")
     private String Name;
@@ -138,6 +138,9 @@ public class BookInfo {
     @Column(name = "recommendIndex")
     private int recommendIndex;
 
+    @Column(name = "audio")
+    private int audio;
+
     @OneToMany(mappedBy = "bookInfo")
     private Set<StockInfo> stockInfo = new HashSet<>();
 
@@ -159,19 +162,19 @@ public class BookInfo {
     }
 
     public String getISBN13() {
-        return ISBN13;
+        return iSBN13;
     }
 
     public void setISBN13(String ISBN13) {
-        this.ISBN13 = ISBN13;
+        this.iSBN13 = ISBN13;
     }
 
     public String getISBN10() {
-        return ISBN10;
+        return iSBN10;
     }
 
     public void setISBN10(String ISBN10) {
-        this.ISBN10 = ISBN10;
+        this.iSBN10 = ISBN10;
     }
 
     public String getName() {
@@ -472,6 +475,14 @@ public class BookInfo {
 
     public Set<StockInfo> getStockInfo() {
         return stockInfo;
+    }
+
+    public int getAudio() {
+        return audio;
+    }
+
+    public void setAudio(int audio) {
+        this.audio = audio;
     }
 
     public void setStockInfo(Set<StockInfo> stockInfo) {

@@ -31,11 +31,13 @@ public class BookManageController {
     @PutMapping(value = "/insertBookInfo")
     @ApiOperation(value = "insertBookInfo", notes = "插入书籍信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "bookInfo", value = "按钮数据", required = true, dataType = "STRING")
+            @ApiImplicitParam(name = "bookInfo", value = "书籍信息", required = true, dataType = "STRING"),
+            @ApiImplicitParam(name = "stockInfo", value = "库存信息", required = true, dataType = "STRING")
     })
-    public ResponseEntity insertBookInfo(@RequestParam("bookInfo") String bookInfoData) {
+    public ResponseEntity insertBookInfo(@RequestParam("bookInfo") String bookInfoData,
+                                         @RequestParam("stockInfo") String stockInfo) {
         BookInfo bookInfo = JSON.parseObject(bookInfoData, BookInfo.class);
-        BookInfo returnBookInfo = iBookManageService.insertBookInfo(bookInfo);
+        BookInfo returnBookInfo = iBookManageService.insertBookInfo(bookInfo, stockInfo);
         return ResponseEntity.ok().body(returnBookInfo);
     }
 
@@ -69,21 +71,20 @@ public class BookManageController {
     })
     public ResponseEntity deleteBookInfo(@RequestParam("isbn13") String isbn13) {
         BookInfo bookInfo = new BookInfo();
-        bookInfo.setiSBN13(isbn13);
+        bookInfo.setISBN13(isbn13);
         iBookManageService.deleteBookInfo(bookInfo);
         return ResponseEntity.ok().body("1");
     }
 
     @GetMapping(value = "/getAllBookByIsbn")
-    /*@ApiOperation(value = "getAllBookByIsbn", notes = "获取书籍的打码信息")
+    @ApiOperation(value = "getAllBookByIsbn", notes = "获取书籍的打码信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "isbn13", value = "书籍编码", required = true, dataType = "STRING")
-    })*/
+    })
     public ResponseEntity getAllBookByIsbn(@RequestParam("isbn13") String isbn13) {
-        System.out.println(isbn13);
         BookInfo bookInfo = iBookManageService.getAllBookByIsbn(isbn13);
-        System.out.println(bookInfo.toString());
-        return ResponseEntity.ok().body("");
+
+        return ResponseEntity.ok().body(bookInfo);
     }
 
 

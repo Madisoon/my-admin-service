@@ -13,7 +13,7 @@ import java.util.List;
 public interface IBookManageService {
 
     // 书籍信息的接口
-    public BookInfo insertBookInfo(BookInfo bookInfo);
+    public BookInfo insertBookInfo(BookInfo bookInfo, String stockInfo);
 
     public List<BookInfo> getAllBook();
 
