@@ -1,18 +1,19 @@
 package com.alienlab.my.module.book.web;
 
-import com.alienlab.my.entity.StockInfo;
+import com.alienlab.my.entity.OrderInfo;
 import com.alienlab.my.module.book.service.OrderInfoService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * Created by zhuliang on 2017/10/12.
@@ -30,7 +31,7 @@ public class userController {
     })
     public ResponseEntity getRecommendBook(@RequestParam String readerId) {
         try{
-            Page<StockInfo> recommendList = orderInfoService.getAllreserveBook(readerId);
+            List<OrderInfo> recommendList = orderInfoService.getAllreserveBook(readerId);
             return ResponseEntity.ok().body(recommendList);
         }catch(Exception e){
             e.printStackTrace();

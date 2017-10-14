@@ -6,6 +6,7 @@ import com.alienlab.my.module.book.service.OrderInfoService;
 import com.alienlab.my.repository.OrderInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 /**
  * Created by zhuliang on 2017/10/12.
  */
+@Service
 public class OrderInfoServiceImpl implements OrderInfoService {
     @Autowired
     OrderInfoRepository orderInfoRepository;

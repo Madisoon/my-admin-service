@@ -1,6 +1,8 @@
 package com.alienlab.my.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -9,6 +11,7 @@ import java.util.Date;
 @Entity
 @Table(name = "stockinfo")
 public class StockInfo {
+
 
 
     @Id
@@ -37,7 +40,8 @@ public class StockInfo {
     private BigDecimal SumBNo;
 
     @ManyToOne
-    @JoinColumn(name = "book_info_id")
+    @JsonIgnore
+    @JoinColumn(name="book_info_id")
     private BookInfo bookInfo;
 
     public BookInfo getBookInfo() {

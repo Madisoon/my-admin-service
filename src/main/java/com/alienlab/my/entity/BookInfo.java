@@ -139,7 +139,6 @@ public class BookInfo {
     private int recommendIndex;
 
     @OneToMany(mappedBy = "bookInfo")
-    @JsonIgnore
     private Set<StockInfo> stockInfo = new HashSet<>();
 
 
