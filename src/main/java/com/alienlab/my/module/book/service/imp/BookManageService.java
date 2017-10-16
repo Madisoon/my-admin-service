@@ -41,16 +41,18 @@ public class BookManageService implements IBookManageService {
     public BookInfo insertBookInfo(BookInfo bookInfo, String stockInfoId) {
         String[] stockInfoIds = stockInfoId.split(",");
         Set<StockInfo> set = new HashSet<>();
+        BookInfo bookInfoReturn = this.bookInfoRepository.save(bookInfo);
         for (int i = 0, bookInfoLen = stockInfoIds.length; i < bookInfoLen; i++) {
             StockInfo stockInfo = new StockInfo();
-            stockInfo = stockInfoRepository.findOne(Long.parseLong(stockInfoIds[i].trim()));
+            stockInfo = stockInfoRepository.findStockByLibraryId(stockInfoIds[i]);
             // 如果数据库没有这个对象
             if (stockInfo == null) {
-                stockInfo.setId(Long.parseLong(stockInfoIds[i].trim()));
+                StockInfo stockInfoInsert = new StockInfo();
+                stockInfoInsert.setBookInfo(bookInfoReturn);
+                stockInfoInsert.setLibraryId(stockInfoIds[i]);
+                stockInfoRepository.save(stockInfoInsert);
             }
-            /*set.add(stockInfo);*/
         }
-        BookInfo bookInfoReturn = this.bookInfoRepository.save(bookInfo);
         return bookInfoReturn;
     }
 
@@ -102,7 +104,7 @@ public class BookManageService implements IBookManageService {
         }
         saveInfo = new SaveInfo();
         saveInfo.setLibraryID(bookId);
-        saveInfo.setReaderID(readerId);
+       /* saveInfo.setReaderID(readerId);*/
         return saveInfoRepository.save(saveInfo);
     }
 
@@ -119,7 +121,7 @@ public class BookManageService implements IBookManageService {
             throw new Exception("您已预订过该书籍，请阅读后再重新预订！");
         }
         orderInfo = new OrderInfo();
-        orderInfo.setReaderID(readerId);
+        /*orderInfo.setReaderID(readerId);*/
         orderInfo.setLibraryID(bookId);
         return orderInfoRepository.save(orderInfo);
     }

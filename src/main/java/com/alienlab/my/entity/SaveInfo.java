@@ -1,5 +1,7 @@
 package com.alienlab.my.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,12 +12,13 @@ public class SaveInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "ReaderID")
-    private String readerID;
-
     @Column(name = "LibraryID")
     private String libraryID;
 
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "user_info_id")
+    private UserInfo userInfo;
 
     public Long getId() {
         return id;
@@ -25,19 +28,19 @@ public class SaveInfo {
         this.id = id;
     }
 
-    public String getReaderID() {
-        return readerID;
-    }
-
-    public void setReaderID(String readerID) {
-        this.readerID = readerID;
-    }
-
     public String getLibraryID() {
         return libraryID;
     }
 
     public void setLibraryID(String libraryID) {
         this.libraryID = libraryID;
+    }
+
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 }

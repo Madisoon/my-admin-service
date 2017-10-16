@@ -10,10 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -54,5 +51,17 @@ public class UserController {
     public ResponseEntity getUserInfo(@RequestParam String readerId) {
         UserInfo userInfo = userManageService.getUserInfo(readerId);
         return ResponseEntity.ok().body(userInfo);
+    }
+
+    @PostMapping(value = "/getUserYzNumber")
+    @ApiOperation(value = "getUserYzNumber", notes = "获取")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userPhone", value = "用户手机号", dataType = "string"),
+            @ApiImplicitParam(name = "userCode", value = "用户验证码", dataType = "string")
+    })
+    public ResponseEntity getUserYzNumber(@RequestParam String userPhone,
+                                          @RequestParam String userCode) {
+        String message = userManageService.getUserYzNumber(userPhone, userCode);
+        return ResponseEntity.ok().body(message);
     }
 }

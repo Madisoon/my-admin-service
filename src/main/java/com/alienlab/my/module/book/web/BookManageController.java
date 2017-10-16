@@ -95,7 +95,7 @@ public class BookManageController {
     public ResponseEntity returnBook(@RequestParam("isbn") String isbn) {
         StockInfo stockInfoData = new StockInfo();
         stockInfoData.setId(Long.parseLong(isbn));
-        stockInfoData.setReaderID("888888");
+        /*stockInfoData.setUserInfoId(888888);*/
         StockInfo stockInfo = iBookManageService.returnBook(stockInfoData);
         return ResponseEntity.ok().body(stockInfo);
     }

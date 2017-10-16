@@ -2,7 +2,10 @@ package com.alienlab.my.entity;
 
 
 import javax.persistence.*;
+import javax.persistence.criteria.Order;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "userinfo")
@@ -74,6 +77,15 @@ public class UserInfo {
 
     @Column(name = "rwCount")
     private int rwCount;
+
+    @OneToMany(mappedBy = "userinfo")
+    private Set<StockInfo> stockInfo = new HashSet<>();
+
+    @OneToMany(mappedBy = "userinfo")
+    private Set<OrderInfo> orderInfo = new HashSet<>();
+
+    @OneToMany(mappedBy = "userinfo")
+    private Set<SaveInfo> saveInfo = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -249,5 +261,29 @@ public class UserInfo {
 
     public void setRwCount(int rwCount) {
         this.rwCount = rwCount;
+    }
+
+    public Set<StockInfo> getStockInfo() {
+        return stockInfo;
+    }
+
+    public void setStockInfo(Set<StockInfo> stockInfo) {
+        this.stockInfo = stockInfo;
+    }
+
+    public Set<OrderInfo> getOrderInfo() {
+        return orderInfo;
+    }
+
+    public void setOrderInfo(Set<OrderInfo> orderInfo) {
+        this.orderInfo = orderInfo;
+    }
+
+    public Set<SaveInfo> getSaveInfo() {
+        return saveInfo;
+    }
+
+    public void setSaveInfo(Set<SaveInfo> saveInfo) {
+        this.saveInfo = saveInfo;
     }
 }

@@ -144,7 +144,6 @@ public class BookInfo {
     @OneToMany(mappedBy = "bookInfo")
     private Set<StockInfo> stockInfo = new HashSet<>();
 
-
     public int getRecommendIndex() {
         return recommendIndex;
     }

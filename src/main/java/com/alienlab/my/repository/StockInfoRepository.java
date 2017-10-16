@@ -8,4 +8,5 @@ import java.util.List;
 
 @Repository
 public interface StockInfoRepository extends JpaRepository<StockInfo, Long> {
+    public StockInfo findStockByLibraryId(String libraryId);
 }

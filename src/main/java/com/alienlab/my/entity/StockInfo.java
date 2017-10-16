@@ -33,14 +33,16 @@ public class StockInfo {
     @Column(name = "rranking")
     private int RRanking;
 
-    @Column(name = "readerId")
-    private String ReaderID;
-
     @Column(name = "lastTime")
     private Date LastTime;
 
     @Column(name = "sumNo")
     private BigDecimal SumBNo;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "user_info_id")
+    private UserInfo userInfo;
 
     @ManyToOne
     @JsonIgnore
@@ -96,14 +98,6 @@ public class StockInfo {
         StockTag = stockTag;
     }
 
-    public String getReaderID() {
-        return ReaderID;
-    }
-
-    public void setReaderID(String readerID) {
-        ReaderID = readerID;
-    }
-
     public Date getLastTime() {
         return LastTime;
     }
@@ -126,5 +120,13 @@ public class StockInfo {
 
     public void setRRanking(int RRanking) {
         this.RRanking = RRanking;
+    }
+
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 }

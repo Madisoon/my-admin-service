@@ -7,4 +7,6 @@ import com.alienlab.my.entity.UserInfo;
  */
 public interface UserManageService {
     public UserInfo getUserInfo(String vipNumber);
+
+    public String getUserYzNumber(String userPhone, String userCode);
 }
