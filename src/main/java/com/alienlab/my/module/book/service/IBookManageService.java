@@ -1,6 +1,7 @@
 package com.alienlab.my.module.book.service;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.alienlab.my.entity.BookInfo;
 import com.alienlab.my.entity.OrderInfo;
 import com.alienlab.my.entity.SaveInfo;
@@ -13,11 +14,9 @@ import java.util.List;
 public interface IBookManageService {
 
     // 书籍信息的接口
-    public BookInfo insertBookInfo(BookInfo bookInfo, String stockInfo);
+    public BookInfo insertBookInfo(BookInfo bookInfo);
 
     public List<BookInfo> getAllBook();
-
-    public StockInfo returnBook(StockInfo stockInfo);
 
     public BookInfo updateBookInfo(BookInfo bookInfo);
 
@@ -27,7 +26,7 @@ public interface IBookManageService {
 
     public StockInfo insertStockInfo(StockInfo stockInfo);
 
-    public BookInfo getAllBookByIsbn(String isbn);
+    public List<StockInfo> getAllStockByIsbn(String isbn);
 
     public void deleteStockInfo(StockInfo stockInfo);
 
@@ -35,5 +34,8 @@ public interface IBookManageService {
 
     public SaveInfo collectBook(String readerId, String bookId) throws Exception;
 
-    public OrderInfo orderBook(String readerId, String bookId, int limit) throws Exception;
+    public OrderInfo orderBook(String readerId, String bookId ,int limit) throws Exception;
+
+    public JSONObject advancedSearch(JSONObject basicSearch,JSONObject ARSearch,JSONObject LLSearch,int index,int length) throws Exception;
+
 }
