@@ -13,10 +13,13 @@ import java.util.Date;
 public class StockInfo {
 
 
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
+
+    @Column(name = "libraryId")
+    private String libraryId;
 
     @Column(name = "isbn13")
     private String ISBN13;
@@ -41,7 +44,7 @@ public class StockInfo {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name="book_info_id")
+    @JoinColumn(name = "book_info_id")
     private BookInfo bookInfo;
 
     public BookInfo getBookInfo() {
@@ -60,6 +63,14 @@ public class StockInfo {
         this.id = id;
     }
 
+    public String getLibraryId() {
+        return libraryId;
+    }
+
+    public void setLibraryId(String libraryId) {
+        this.libraryId = libraryId;
+
+    }
 
     public String getISBN13() {
         return ISBN13;
