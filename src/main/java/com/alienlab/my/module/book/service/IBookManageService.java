@@ -1,6 +1,7 @@
 package com.alienlab.my.module.book.service;
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.alienlab.my.entity.BookInfo;
 import com.alienlab.my.entity.OrderInfo;
 import com.alienlab.my.entity.SaveInfo;
@@ -34,4 +35,7 @@ public interface IBookManageService {
     public SaveInfo collectBook(String readerId, String bookId) throws Exception;
 
     public OrderInfo orderBook(String readerId, String bookId ,int limit) throws Exception;
+
+    public JSONObject advancedSearch(JSONObject basicSearch,JSONObject ARSearch,JSONObject LLSearch,int index,int length) throws Exception;
+
 }

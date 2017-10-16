@@ -1,9 +1,11 @@
 package com.alienlab.my.module.book.web;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.alienlab.my.entity.BookInfo;
 import com.alienlab.my.entity.StockInfo;
 import com.alienlab.my.module.book.service.IBookManageService;
+import com.alienlab.my.module.book.service.imp.BookManageService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +29,9 @@ public class BookManageController {
 
     @Autowired
     private IBookManageService iBookManageService;
+
+    @Autowired
+    BookManageService bookManageService;
 
     @PutMapping(value = "/insertBookInfo")
     @ApiOperation(value = "insertBookInfo", notes = "插入书籍信息")
@@ -96,6 +101,26 @@ public class BookManageController {
         }catch(Exception e){
             e.printStackTrace();
             ExecResult er=new ExecResult(false,e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+    }
+
+    @PostMapping("/advancedSearch")
+    @ApiOperation(value = "advancedSearch", notes = "高级搜索")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="basicSearch",value="基础搜索信息json",dataType = "jsonObject"),
+            @ApiImplicitParam(name="arSearch",value="AR信息搜索",dataType = "jsonObject"),
+            @ApiImplicitParam(name="LLsearch",value="蓝思信息搜索",dataType = "jsonObject"),
+            @ApiImplicitParam(name="index",value="当前页码",dataType = "int"),
+            @ApiImplicitParam(name="length",value="每页长度",dataType = "int"),
+    })
+    public ResponseEntity advancedSearch(@RequestParam JSONObject basicSearch, @RequestParam JSONObject arSearch , @RequestParam JSONObject LLsearch, @RequestParam int index, @RequestParam int length){
+        try {
+            JSONObject result = bookManageService.advancedSearch(basicSearch,arSearch, LLsearch,index,length);
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
         }
     }

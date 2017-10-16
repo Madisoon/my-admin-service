@@ -1,5 +1,6 @@
 package com.alienlab.my.module.book.service.imp;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alienlab.my.entity.BookInfo;
 import com.alienlab.my.entity.OrderInfo;
 import com.alienlab.my.entity.SaveInfo;
@@ -13,11 +14,13 @@ import org.hibernate.engine.spi.EntityEntryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BookManageService implements IBookManageService {
@@ -32,6 +35,9 @@ public class BookManageService implements IBookManageService {
     SaveInfoRepository saveInfoRepository;
     @Autowired
     OrderInfoRepository orderInfoRepository;
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
 
     @Override
@@ -109,5 +115,90 @@ public class BookManageService implements IBookManageService {
         orderInfo.setReaderID(readerId);
         orderInfo.setLibraryID(bookId);
         return orderInfoRepository.save(orderInfo);
+    }
+
+    @Override
+    public JSONObject advancedSearch(JSONObject basicSearch, JSONObject ARSearch, JSONObject LLSearch,int index,int length) throws Exception {
+        JSONObject result = new JSONObject();
+        StringBuffer sql = new StringBuffer();
+        sql.append("select count(*) bookCount FROM bookinfo  where 1=1 ");
+        setBuffer(sql,basicSearch,ARSearch,LLSearch);
+        Map CountResult = jdbcTemplate.queryForMap(sql.toString());
+        String total = result.get("bookCount").toString();
+        if("0".equals(total)){
+            result.put("total",total);
+            return result;
+        }
+        sql = new StringBuffer();
+        sql.append("select * bookCount FROM bookinfo  where 1=1 ");
+        setBuffer(sql,basicSearch,ARSearch,LLSearch);
+        int start = index*length;
+        sql.append(" LIMIT "+start+" , "+length+" ");
+        Map searchResult = jdbcTemplate.queryForMap(sql.toString());
+        result.put("content",searchResult);
+        return result;
+    }
+
+    public StringBuffer setBuffer(StringBuffer sql,JSONObject basicSearch, JSONObject ARSearch, JSONObject LLSearch){
+        if(basicSearch !=null){
+            if(JsonIsNull(basicSearch,"title")){
+                sql.append(" AND  name = "+basicSearch.getString("title")+"  ");
+            }
+            if(JsonIsNull(basicSearch,"ISBN")){
+                sql.append(" AND isbn13= "+basicSearch.getString("ISBN")+" or isbn10 = "+basicSearch.getString("ISBN")+"    ");
+            }
+            if(JsonIsNull(basicSearch,"author")){
+                sql.append(" AND  author = "+basicSearch.getString("author")+"  ");
+            }
+            if(JsonIsNull(basicSearch,"publisher")){
+                sql.append(" AND  doc_type = "+basicSearch.getString("publisher")+"  ");
+            }
+            if(JsonIsNull(basicSearch,"bookType")){
+                sql.append(" AND  book_type = "+basicSearch.getString("bookType")+"  ");
+            }
+        }
+
+        if(ARSearch !=null){
+            if(JsonIsNull(ARSearch,"interestLevel")){
+                sql.append(" AND  il = "+ARSearch.getString("interestLevel")+"  ");
+            }
+            if(JsonIsNull(ARSearch,"ABLev")){
+                sql.append(" AND bl >= "+ARSearch.getString("ABLev")+"  ");
+            }
+            if(JsonIsNull(ARSearch,"ABLevT")){
+                sql.append(" AND  bl <= "+ARSearch.getString("ABLevT")+"  ");
+            }
+            if(JsonIsNull(ARSearch,"QN")){
+                sql.append(" AND  quiz_no = "+ARSearch.getString("QN")+"  ");
+            }
+            if(JsonIsNull(ARSearch,"ARP")){
+                sql.append(" AND  arpoints >= "+ARSearch.getString("ARP")+"  ");
+            }
+            if(JsonIsNull(ARSearch,"ARPT")){
+                sql.append(" AND  arpoints <= "+ARSearch.getString("ARPT")+"  ");
+            }
+        }
+
+        if(LLSearch !=null){
+            if(JsonIsNull(LLSearch,"LLV")){
+                sql.append(" AND  lexile_value >= "+LLSearch.getString("LLV")+"  ");
+            }
+            if(JsonIsNull(LLSearch,"LLVT")){
+                sql.append(" AND lexile_value <= "+LLSearch.getString("LLVT")+"  ");
+            }
+            if(JsonIsNull(LLSearch,"sort")){
+                sql.append(" ORDER BY  "+LLSearch.getString("sort")+" DESC   ");
+            }
+        }
+        return sql;
+
+    }
+
+    public Boolean JsonIsNull(JSONObject jo,String item){
+        Boolean flag = true;
+        if(jo.getString(""+item+"") == null || jo.getString(""+item+"") == "" ){
+            flag = false;
+        }
+        return flag;
     }
 }
