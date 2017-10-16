@@ -14,7 +14,7 @@ import java.util.List;
 public interface IBookManageService {
 
     // 书籍信息的接口
-    public BookInfo insertBookInfo(BookInfo bookInfo);
+    public BookInfo insertBookInfo(BookInfo bookInfo, String stockInfo);
 
     public List<BookInfo> getAllBook();
 
@@ -34,8 +34,8 @@ public interface IBookManageService {
 
     public SaveInfo collectBook(String readerId, String bookId) throws Exception;
 
-    public OrderInfo orderBook(String readerId, String bookId ,int limit) throws Exception;
+    public OrderInfo orderBook(String readerId, String bookId, int limit) throws Exception;
 
-    public JSONObject advancedSearch(JSONObject basicSearch,JSONObject ARSearch,JSONObject LLSearch,int index,int length) throws Exception;
+    public JSONObject advancedSearch(JSONObject basicSearch, JSONObject ARSearch, JSONObject LLSearch, int index, int length) throws Exception;
 
 }

@@ -87,9 +87,9 @@ public class BookManageController {
             @ApiImplicitParam(name = "isbn13", value = "书籍编码", required = true, dataType = "STRING")
     })
     public ResponseEntity getAllBookByIsbn(@RequestParam("isbn13") String isbn13) {
-        BookInfo bookInfo = iBookManageService.getAllBookByIsbn(isbn13);
+        /*BookInfo bookInfo = iBookManageService.getAllBookByIsbn(isbn13);*/
 
-        return ResponseEntity.ok().body(bookInfo);
+        return ResponseEntity.ok().body("");
     }
 
     @PostMapping(value = "/returnBook")
@@ -100,9 +100,9 @@ public class BookManageController {
     public ResponseEntity returnBook(@RequestParam("isbn") String isbn) {
         StockInfo stockInfoData = new StockInfo();
         stockInfoData.setId(Long.parseLong(isbn));
-        /*stockInfoData.setUserInfoId(888888);*/
-        StockInfo stockInfo = iBookManageService.returnBook(stockInfoData);
-        return ResponseEntity.ok().body(stockInfo);
+        /*stockInfoData.se(888888);*/
+        /*StockInfo stockInfo = iBookManageService.returnBook(stockInfoData);*/
+        return ResponseEntity.ok().body("");
     }
 
 
@@ -122,15 +122,15 @@ public class BookManageController {
     @PostMapping("/advancedSearch")
     @ApiOperation(value = "advancedSearch", notes = "高级搜索")
     @ApiImplicitParams({
-            @ApiImplicitParam(name="basicSearch",value="基础搜索信息json",dataType = "jsonObject"),
-            @ApiImplicitParam(name="arSearch",value="AR信息搜索",dataType = "jsonObject"),
-            @ApiImplicitParam(name="LLsearch",value="蓝思信息搜索",dataType = "jsonObject"),
-            @ApiImplicitParam(name="index",value="当前页码",dataType = "int"),
-            @ApiImplicitParam(name="length",value="每页长度",dataType = "int"),
+            @ApiImplicitParam(name = "basicSearch", value = "基础搜索信息json", dataType = "jsonObject"),
+            @ApiImplicitParam(name = "arSearch", value = "AR信息搜索", dataType = "jsonObject"),
+            @ApiImplicitParam(name = "LLsearch", value = "蓝思信息搜索", dataType = "jsonObject"),
+            @ApiImplicitParam(name = "index", value = "当前页码", dataType = "int"),
+            @ApiImplicitParam(name = "length", value = "每页长度", dataType = "int"),
     })
-    public ResponseEntity advancedSearch(@RequestParam JSONObject basicSearch, @RequestParam JSONObject arSearch , @RequestParam JSONObject LLsearch, @RequestParam int index, @RequestParam int length){
+    public ResponseEntity advancedSearch(@RequestParam JSONObject basicSearch, @RequestParam JSONObject arSearch, @RequestParam JSONObject LLsearch, @RequestParam int index, @RequestParam int length) {
         try {
-            JSONObject result = bookManageService.advancedSearch(basicSearch,arSearch, LLsearch,index,length);
+            JSONObject result = bookManageService.advancedSearch(basicSearch, arSearch, LLsearch, index, length);
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             e.printStackTrace();
