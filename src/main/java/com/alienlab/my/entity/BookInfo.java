@@ -18,80 +18,80 @@ public class BookInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "ISBN13")
+    @Column(name = "iSBN13")
     private String iSBN13;
 
-    @Column(name = "ISBN10")
+    @Column(name = "iSBN10")
     private String iSBN10;
 
-    @Column(name = "Name")
-    private String Name;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "Author")
-    private String Author;
+    @Column(name = "author")
+    private String author;
 
-    @Column(name = "Pages")
-    private int Pages;
+    @Column(name = "pages")
+    private int pages;
 
-    @Column(name = "WordCount")
-    private int WordCount;
+    @Column(name = "wordCount")
+    private int wordCount;
 
-    @Column(name = "Weight")
-    private int Weight;
+    @Column(name = "weight")
+    private int weight;
 
-    @Column(name = "Diamension")
-    private String Diamension;
+    @Column(name = "diamension")
+    private String diamension;
 
-    @Column(name = "AgeStart")
-    private String AgeStart;
+    @Column(name = "ageStart")
+    private String ageStart;
 
-    @Column(name = "AgeStop")
-    private String AgeStop;
+    @Column(name = "ageStop")
+    private String ageStop;
 
-    @Column(name = "GradeStart")
-    private String GradeStart;
+    @Column(name = "gradeStart")
+    private String gradeStart;
 
-    @Column(name = "GradeStop")
-    private String GradeStop;
+    @Column(name = "gradeStop")
+    private String gradeStop;
 
-    @Column(name = "Series")
-    private String Series;
+    @Column(name = "series")
+    private String series;
 
-    @Column(name = "DocType")
-    private String DocType;
+    @Column(name = "docType")
+    private String docType;
 
-    @Column(name = "BookType")
-    private String BookType;
+    @Column(name = "bookType")
+    private String bookType;
 
-    @Column(name = "PubYear")
-    private String PubYear;
+    @Column(name = "pubYear")
+    private String pubYear;
 
-    @Column(name = "PubLisher")
-    private String PubLisher;
+    @Column(name = "pubLisher")
+    private String pubLisher;
 
-    @Column(name = "Count")
-    private int Count;
+    @Column(name = "count")
+    private int count;
 
-    @Column(name = "Stock")
-    private int Stock;
+    @Column(name = "stock")
+    private int stock;
 
-    @Column(name = "BookShelf")
-    private String BookShelf;
+    @Column(name = "bookShelf")
+    private String bookShelf;
 
-    @Column(name = "Introduction")
-    private String Introduction;
+    @Column(name = "introduction")
+    private String introduction;
 
-    @Column(name = "Topic")
-    private String Topic;
+    @Column(name = "topic")
+    private String topic;
 
-    @Column(name = "Review1")
-    private String Review1;
+    @Column(name = "review1")
+    private String review1;
 
-    @Column(name = "Review2")
-    private String Review2;
+    @Column(name = "review2")
+    private String review2;
 
-    @Column(name = "Awards")
-    private String Awards;
+    @Column(name = "awards")
+    private String awards;
 
     @Column(name = "ARTag")
     private int ARTag;
@@ -109,7 +109,7 @@ public class BookInfo {
     private BigDecimal ARRating;
 
     @Column(name = "QuizNo")
-    private String QuizNo;
+    private String quizNo;
 
     @Column(name = "RVQuiz")
     private int RVQuiz;
@@ -120,20 +120,20 @@ public class BookInfo {
     @Column(name = "LSQuiz")
     private int LSQuiz;
 
-    @Column(name = "QuestionNo")
+    @Column(name = "questionNo")
     private int QuestionNo;
 
-    @Column(name = "LexileTag")
-    private int LexileTag;
+    @Column(name = "lexileTag")
+    private int lexileTag;
 
-    @Column(name = "LexileCode")
-    private String LexileCode;
+    @Column(name = "lexileCode")
+    private String lexileCode;
 
-    @Column(name = "LexileValue")
-    private int LexileValue;
+    @Column(name = "lexileValue")
+    private int lexileValue;
 
     @Column(name = "LexileCombined")
-    private String LexileCombined;
+    private String lexileCombined;
 
     @Column(name = "recommendIndex")
     private int recommendIndex;
@@ -144,14 +144,6 @@ public class BookInfo {
     @OneToMany(mappedBy = "bookInfo")
     private Set<StockInfo> stockInfo = new HashSet<>();
 
-    public int getRecommendIndex() {
-        return recommendIndex;
-    }
-
-    public void setRecommendIndex(int recommendIndex) {
-        this.recommendIndex = recommendIndex;
-    }
-
     public Long getId() {
         return id;
     }
@@ -160,204 +152,204 @@ public class BookInfo {
         this.id = id;
     }
 
-    public String getISBN13() {
+    public String getiSBN13() {
         return iSBN13;
     }
 
-    public void setISBN13(String ISBN13) {
-        this.iSBN13 = ISBN13;
+    public void setiSBN13(String iSBN13) {
+        this.iSBN13 = iSBN13;
     }
 
-    public String getISBN10() {
+    public String getiSBN10() {
         return iSBN10;
     }
 
-    public void setISBN10(String ISBN10) {
-        this.iSBN10 = ISBN10;
+    public void setiSBN10(String iSBN10) {
+        this.iSBN10 = iSBN10;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getAuthor() {
-        return Author;
+        return author;
     }
 
     public void setAuthor(String author) {
-        Author = author;
+        this.author = author;
     }
 
     public int getPages() {
-        return Pages;
+        return pages;
     }
 
     public void setPages(int pages) {
-        Pages = pages;
+        this.pages = pages;
     }
 
     public int getWordCount() {
-        return WordCount;
+        return wordCount;
     }
 
     public void setWordCount(int wordCount) {
-        WordCount = wordCount;
+        this.wordCount = wordCount;
     }
 
     public int getWeight() {
-        return Weight;
+        return weight;
     }
 
     public void setWeight(int weight) {
-        Weight = weight;
+        this.weight = weight;
     }
 
     public String getDiamension() {
-        return Diamension;
+        return diamension;
     }
 
     public void setDiamension(String diamension) {
-        Diamension = diamension;
+        this.diamension = diamension;
     }
 
     public String getAgeStart() {
-        return AgeStart;
+        return ageStart;
     }
 
     public void setAgeStart(String ageStart) {
-        AgeStart = ageStart;
+        this.ageStart = ageStart;
     }
 
     public String getAgeStop() {
-        return AgeStop;
+        return ageStop;
     }
 
     public void setAgeStop(String ageStop) {
-        AgeStop = ageStop;
+        this.ageStop = ageStop;
     }
 
     public String getGradeStart() {
-        return GradeStart;
+        return gradeStart;
     }
 
     public void setGradeStart(String gradeStart) {
-        GradeStart = gradeStart;
+        this.gradeStart = gradeStart;
     }
 
     public String getGradeStop() {
-        return GradeStop;
+        return gradeStop;
     }
 
     public void setGradeStop(String gradeStop) {
-        GradeStop = gradeStop;
+        this.gradeStop = gradeStop;
     }
 
     public String getSeries() {
-        return Series;
+        return series;
     }
 
     public void setSeries(String series) {
-        Series = series;
+        this.series = series;
     }
 
     public String getDocType() {
-        return DocType;
+        return docType;
     }
 
     public void setDocType(String docType) {
-        DocType = docType;
+        this.docType = docType;
     }
 
     public String getBookType() {
-        return BookType;
+        return bookType;
     }
 
     public void setBookType(String bookType) {
-        BookType = bookType;
+        this.bookType = bookType;
     }
 
     public String getPubYear() {
-        return PubYear;
+        return pubYear;
     }
 
     public void setPubYear(String pubYear) {
-        PubYear = pubYear;
+        this.pubYear = pubYear;
     }
 
     public String getPubLisher() {
-        return PubLisher;
+        return pubLisher;
     }
 
     public void setPubLisher(String pubLisher) {
-        PubLisher = pubLisher;
+        this.pubLisher = pubLisher;
     }
 
     public int getCount() {
-        return Count;
+        return count;
     }
 
     public void setCount(int count) {
-        Count = count;
+        this.count = count;
     }
 
     public int getStock() {
-        return Stock;
+        return stock;
     }
 
     public void setStock(int stock) {
-        Stock = stock;
+        this.stock = stock;
     }
 
     public String getBookShelf() {
-        return BookShelf;
+        return bookShelf;
     }
 
     public void setBookShelf(String bookShelf) {
-        BookShelf = bookShelf;
+        this.bookShelf = bookShelf;
     }
 
     public String getIntroduction() {
-        return Introduction;
+        return introduction;
     }
 
     public void setIntroduction(String introduction) {
-        Introduction = introduction;
+        this.introduction = introduction;
     }
 
     public String getTopic() {
-        return Topic;
+        return topic;
     }
 
     public void setTopic(String topic) {
-        Topic = topic;
+        this.topic = topic;
     }
 
     public String getReview1() {
-        return Review1;
+        return review1;
     }
 
     public void setReview1(String review1) {
-        Review1 = review1;
+        this.review1 = review1;
     }
 
     public String getReview2() {
-        return Review2;
+        return review2;
     }
 
     public void setReview2(String review2) {
-        Review2 = review2;
+        this.review2 = review2;
     }
 
     public String getAwards() {
-        return Awards;
+        return awards;
     }
 
     public void setAwards(String awards) {
-        Awards = awards;
+        this.awards = awards;
     }
 
     public int getARTag() {
@@ -401,11 +393,11 @@ public class BookInfo {
     }
 
     public String getQuizNo() {
-        return QuizNo;
+        return quizNo;
     }
 
     public void setQuizNo(String quizNo) {
-        QuizNo = quizNo;
+        this.quizNo = quizNo;
     }
 
     public int getRVQuiz() {
@@ -441,39 +433,43 @@ public class BookInfo {
     }
 
     public int getLexileTag() {
-        return LexileTag;
+        return lexileTag;
     }
 
     public void setLexileTag(int lexileTag) {
-        LexileTag = lexileTag;
+        this.lexileTag = lexileTag;
     }
 
     public String getLexileCode() {
-        return LexileCode;
+        return lexileCode;
     }
 
     public void setLexileCode(String lexileCode) {
-        LexileCode = lexileCode;
+        this.lexileCode = lexileCode;
     }
 
     public int getLexileValue() {
-        return LexileValue;
+        return lexileValue;
     }
 
     public void setLexileValue(int lexileValue) {
-        LexileValue = lexileValue;
+        this.lexileValue = lexileValue;
     }
 
     public String getLexileCombined() {
-        return LexileCombined;
+        return lexileCombined;
     }
 
     public void setLexileCombined(String lexileCombined) {
-        LexileCombined = lexileCombined;
+        this.lexileCombined = lexileCombined;
     }
 
-    public Set<StockInfo> getStockInfo() {
-        return stockInfo;
+    public int getRecommendIndex() {
+        return recommendIndex;
+    }
+
+    public void setRecommendIndex(int recommendIndex) {
+        this.recommendIndex = recommendIndex;
     }
 
     public int getAudio() {
@@ -484,9 +480,11 @@ public class BookInfo {
         this.audio = audio;
     }
 
+    public Set<StockInfo> getStockInfo() {
+        return stockInfo;
+    }
+
     public void setStockInfo(Set<StockInfo> stockInfo) {
         this.stockInfo = stockInfo;
     }
-
-
 }

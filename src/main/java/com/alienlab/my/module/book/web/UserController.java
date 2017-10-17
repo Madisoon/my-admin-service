@@ -1,5 +1,7 @@
 package com.alienlab.my.module.book.web;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.alienlab.my.entity.OrderInfo;
 import com.alienlab.my.entity.UserInfo;
 import com.alienlab.my.module.book.service.OrderInfoService;
@@ -49,8 +51,8 @@ public class UserController {
             @ApiImplicitParam(name = "readerId", value = "用户id", dataType = "string"),
     })
     public ResponseEntity getUserInfo(@RequestParam String readerId) {
-        UserInfo userInfo = userManageService.getUserInfo(readerId);
-        return ResponseEntity.ok().body(userInfo);
+        JSONObject jsonObject = userManageService.getUserInfo(readerId);
+        return ResponseEntity.ok().body(jsonObject);
     }
 
     @PostMapping(value = "/getUserYzNumber")
@@ -63,5 +65,33 @@ public class UserController {
                                           @RequestParam String userCode) {
         String message = userManageService.getUserYzNumber(userPhone, userCode);
         return ResponseEntity.ok().body(message);
+    }
+
+    @PostMapping(value = "/vipBorrowReturn")
+    @ApiOperation(value = "vipBorrowReturn", notes = "还书")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userPhone", value = "用户手机号/会员账号", dataType = "string"),
+            @ApiImplicitParam(name = "libraryId", value = "书籍信息", dataType = "string")
+    })
+    public ResponseEntity vipBorrowReturn(@RequestParam String userPhone,
+                                          @RequestParam String libraryId) {
+        JSONObject jsonObject = userManageService.vipBorrowReturn(userPhone, libraryId);
+        return ResponseEntity.ok().body(jsonObject);
+    }
+
+    @PostMapping(value = "/postUserData")
+    @ApiOperation(value = "postUserData", notes = "改改用户信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userInfoData", value = "用户信息", dataType = "string"),
+            @ApiImplicitParam(name = "returnBookId", value = "还书的id", dataType = "string"),
+            @ApiImplicitParam(name = "borrowBookId", value = "新借书的id", dataType = "string"),
+            @ApiImplicitParam(name = "orderBookId", value = "预定书的id", dataType = "string")
+    })
+    public ResponseEntity postUserData(@RequestParam String userInfoData,
+                                       @RequestParam String returnBookId,
+                                       @RequestParam String borrowBookId,
+                                       @RequestParam String orderBookId) {
+        JSONObject jsonObject = userManageService.postUserData(userInfoData, returnBookId, borrowBookId, orderBookId);
+        return ResponseEntity.ok().body(jsonObject);
     }
 }

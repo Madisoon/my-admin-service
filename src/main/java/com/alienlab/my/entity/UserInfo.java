@@ -1,8 +1,6 @@
 package com.alienlab.my.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import javax.persistence.criteria.Order;
 import java.util.Date;
@@ -80,25 +78,13 @@ public class UserInfo {
     @Column(name = "rwCount")
     private int rwCount;
 
-    @OneToOne(mappedBy = "userInfo")
-    @JsonIgnore
-    private StockInfo stockInfo;
-
-    public StockInfo getStockInfo() {
-        return stockInfo;
-    }
-
-    public void setStockInfo(StockInfo stockInfo) {
-        this.stockInfo = stockInfo;
-    }
-
-    /*  @OneToMany(mappedBy = "userinfo")
-    private Set<StockInfo> stockInfo = new HashSet<>();*/
-
     /*@OneToMany(mappedBy = "userinfo")
-    private Set<OrderInfo> orderInfo = new HashSet<>();*/
+    private Set<StockInfo> stockInfo = new HashSet<>();
 
-  /*  @OneToMany(mappedBy = "userinfo")
+    @OneToMany(mappedBy = "userinfo")
+    private Set<OrderInfo> orderInfo = new HashSet<>();
+
+    @OneToMany(mappedBy = "userinfo")
     private Set<SaveInfo> saveInfo = new HashSet<>();*/
 
     public Long getId() {
@@ -277,23 +263,23 @@ public class UserInfo {
         this.rwCount = rwCount;
     }
 
- /*   public Set<StockInfo> getStockInfo() {
+/*    public Set<StockInfo> getStockInfo() {
         return stockInfo;
     }
 
     public void setStockInfo(Set<StockInfo> stockInfo) {
         this.stockInfo = stockInfo;
-    }*/
-/*
+    }
+
     public Set<OrderInfo> getOrderInfo() {
         return orderInfo;
     }
 
     public void setOrderInfo(Set<OrderInfo> orderInfo) {
         this.orderInfo = orderInfo;
-    }*/
+    }
 
-  /*  public Set<SaveInfo> getSaveInfo() {
+    public Set<SaveInfo> getSaveInfo() {
         return saveInfo;
     }
 

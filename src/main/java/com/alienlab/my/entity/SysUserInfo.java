@@ -11,11 +11,11 @@ public class SysUserInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "UserLoginName")
-    private String UserLoginName;
+    @Column(name = "userLoginName")
+    private String userLoginName;
 
-    @Column(name = "UserPassWord")
-    private String UserPassWord;
+    @Column(name = "userPassWord")
+    private String userPassWord;
 
 
     public Long getId() {
@@ -27,18 +27,18 @@ public class SysUserInfo {
     }
 
     public String getUserLoginName() {
-        return UserLoginName;
+        return userLoginName;
     }
 
     public void setUserLoginName(String userLoginName) {
-        UserLoginName = userLoginName;
+        this.userLoginName = userLoginName;
     }
 
     public String getUserPassWord() {
-        return UserPassWord;
+        return userPassWord;
     }
 
     public void setUserPassWord(String userPassWord) {
-        UserPassWord = userPassWord;
+        this.userPassWord = userPassWord;
     }
 }

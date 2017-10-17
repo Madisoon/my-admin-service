@@ -12,43 +12,43 @@ public class HistoryInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "ReaderID")
-    private String ReaderID;
+    @Column(name = "readerId")
+    private String readerId;
 
-    @Column(name = "LibraryID")
-    private String LibraryID;
+    @Column(name = "libraryId")
+    private String libraryId;
 
     @Column(name = "RRanking")
     private String RRanking;
 
-    @Column(name = "BorrowTime")
-    private Date BorrowTime;
+    @Column(name = "orrowTime")
+    private Date orrowTime;
 
-    @Column(name = "ReturnTime")
-    private Date ReturnTime;
+    @Column(name = "returnTime")
+    private Date returnTime;
 
-    public String getReaderID() {
-        return ReaderID;
-    }
-
-    public void setReaderID(String readerID) {
-        ReaderID = readerID;
-    }
-
-    public String getLibraryID() {
-        return LibraryID;
-    }
-
-    public void setLibraryID(String libraryID) {
-        LibraryID = libraryID;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getReaderId() {
+        return readerId;
+    }
+
+    public void setReaderId(String readerId) {
+        this.readerId = readerId;
+    }
+
+    public String getLibraryId() {
+        return libraryId;
+    }
+
+    public void setLibraryId(String libraryId) {
+        this.libraryId = libraryId;
     }
 
     public String getRRanking() {
@@ -59,31 +59,19 @@ public class HistoryInfo {
         this.RRanking = RRanking;
     }
 
-    public Date getBorrowTime() {
-        return BorrowTime;
+    public Date getOrrowTime() {
+        return orrowTime;
     }
 
-    public void setBorrowTime(Date borrowTime) {
-        BorrowTime = borrowTime;
+    public void setOrrowTime(Date orrowTime) {
+        this.orrowTime = orrowTime;
     }
 
     public Date getReturnTime() {
-        return ReturnTime;
+        return returnTime;
     }
 
     public void setReturnTime(Date returnTime) {
-        ReturnTime = returnTime;
-    }
-
-    @Override
-    public String toString() {
-        return "HistoryInfo{" +
-                "id=" + id +
-                ", ReaderID='" + ReaderID + '\'' +
-                ", LibraryID='" + LibraryID + '\'' +
-                ", RRanking='" + RRanking + '\'' +
-                ", BorrowTime=" + BorrowTime +
-                ", ReturnTime=" + ReturnTime +
-                '}';
+        this.returnTime = returnTime;
     }
 }

@@ -22,24 +22,27 @@ public class StockInfo {
     private String libraryId;
 
     @Column(name = "isbn13")
-    private String ISBN13;
+    private String iSBN13;
 
     @Column(name = "isbn10")
-    private String ISBN10;
+    private String iSBN10;
 
     @Column(name = "stockTag")
-    private int StockTag;
+    private int stockTag;
 
     @Column(name = "rranking")
     private int RRanking;
 
     @Column(name = "lastTime")
-    private Date LastTime;
+    private Date lastTime;
 
     @Column(name = "sumNo")
-    private BigDecimal SumBNo;
+    private BigDecimal sumBNo;
 
-   /* @ManyToOne
+    @Column(name = "userInfoId")
+    private String userInfoId;
+
+    /*@ManyToOne
     @JsonIgnore
     @JoinColumn(name = "user_info_id")
     private UserInfo userInfo;*/
@@ -48,26 +51,6 @@ public class StockInfo {
     @JsonIgnore
     @JoinColumn(name = "book_info_id")
     private BookInfo bookInfo;
-
-    @OneToOne
-    @JoinColumn(name = "user_info_id")
-    private UserInfo userInfo;
-
-    public UserInfo getUserInfo() {
-        return userInfo;
-    }
-
-    public void setUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
-    }
-
-    public BookInfo getBookInfo() {
-        return bookInfo;
-    }
-
-    public void setBookInfo(BookInfo bookInfo) {
-        this.bookInfo = bookInfo;
-    }
 
     public Long getId() {
         return id;
@@ -83,47 +66,30 @@ public class StockInfo {
 
     public void setLibraryId(String libraryId) {
         this.libraryId = libraryId;
-
     }
 
-    public String getISBN13() {
-        return ISBN13;
+    public String getiSBN13() {
+        return iSBN13;
     }
 
-    public void setISBN13(String ISBN13) {
-        this.ISBN13 = ISBN13;
+    public void setiSBN13(String iSBN13) {
+        this.iSBN13 = iSBN13;
     }
 
-    public String getISBN10() {
-        return ISBN10;
+    public String getiSBN10() {
+        return iSBN10;
     }
 
-    public void setISBN10(String ISBN10) {
-        this.ISBN10 = ISBN10;
+    public void setiSBN10(String iSBN10) {
+        this.iSBN10 = iSBN10;
     }
 
     public int getStockTag() {
-        return StockTag;
+        return stockTag;
     }
 
     public void setStockTag(int stockTag) {
-        StockTag = stockTag;
-    }
-
-    public Date getLastTime() {
-        return LastTime;
-    }
-
-    public void setLastTime(Date lastTime) {
-        LastTime = lastTime;
-    }
-
-    public BigDecimal getSumBNo() {
-        return SumBNo;
-    }
-
-    public void setSumBNo(BigDecimal sumBNo) {
-        SumBNo = sumBNo;
+        this.stockTag = stockTag;
     }
 
     public int getRRanking() {
@@ -134,11 +100,35 @@ public class StockInfo {
         this.RRanking = RRanking;
     }
 
-/*    public UserInfo getUserInfo() {
-        return userInfo;
+    public Date getLastTime() {
+        return lastTime;
     }
 
-    public void setUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
-    }*/
+    public void setLastTime(Date lastTime) {
+        this.lastTime = lastTime;
+    }
+
+    public BigDecimal getSumBNo() {
+        return sumBNo;
+    }
+
+    public void setSumBNo(BigDecimal sumBNo) {
+        this.sumBNo = sumBNo;
+    }
+
+    public String getUserInfoId() {
+        return userInfoId;
+    }
+
+    public void setUserInfoId(String userInfoId) {
+        this.userInfoId = userInfoId;
+    }
+
+    public BookInfo getBookInfo() {
+        return bookInfo;
+    }
+
+    public void setBookInfo(BookInfo bookInfo) {
+        this.bookInfo = bookInfo;
+    }
 }

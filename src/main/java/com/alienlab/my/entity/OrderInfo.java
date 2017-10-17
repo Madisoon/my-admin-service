@@ -14,20 +14,20 @@ public class OrderInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "LibraryID")
-    private String libraryID;
+    @Column(name = "libraryId")
+    private String libraryId;
 
-    @Column(name = "OrderTime")
+    @Column(name = "orderTime")
     private Date orderTime;
 
-    @Column(name = "user_info_id")
-    private Date userInfoId;
+    @Column(name = "userInfoId")
+    private String userInfoId;
 
-   /* @ManyToOne
+    /*@ManyToOne()
     @JsonIgnore
     @JoinColumn(name = "user_info_id")
-    private UserInfo userInfo;
-*/
+    private UserInfo userInfo;*/
+
 
     public Long getId() {
         return id;
@@ -37,12 +37,12 @@ public class OrderInfo {
         this.id = id;
     }
 
-    public String getLibraryID() {
-        return libraryID;
+    public String getLibraryId() {
+        return libraryId;
     }
 
-    public void setLibraryID(String libraryID) {
-        libraryID = libraryID;
+    public void setLibraryId(String libraryId) {
+        libraryId = libraryId;
     }
 
     public Date getOrderTime() {
@@ -53,18 +53,19 @@ public class OrderInfo {
         orderTime = orderTime;
     }
 
-    public Date getUserInfoId() {
-        return userInfoId;
-    }
-
-    public void setUserInfoId(Date userInfoId) {
-        this.userInfoId = userInfoId;
-    }
-    /*public UserInfo getUserInfo() {
+/*    public UserInfo getUserInfo() {
         return userInfo;
     }
 
     public void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
     }*/
+
+    public String getUserInfoId() {
+        return userInfoId;
+    }
+
+    public void setUserInfoId(String userInfoId) {
+        this.userInfoId = userInfoId;
+    }
 }

@@ -77,7 +77,7 @@ public class BookManageController {
     })
     public ResponseEntity deleteBookInfo(@RequestParam("isbn13") String isbn13) {
         BookInfo bookInfo = new BookInfo();
-        bookInfo.setISBN13(isbn13);
+        bookInfo.setiSBN13(isbn13);
         iBookManageService.deleteBookInfo(bookInfo);
         return ResponseEntity.ok().body("1");
     }
@@ -132,7 +132,7 @@ public class BookManageController {
     public ResponseEntity advancedSearch(@RequestParam String basicSearch, @RequestParam String arSearch, @RequestParam String LLsearch, @RequestParam int index, @RequestParam int length) {
         try {
             JSONObject result = bookManageService.advancedSearch(JSONObject.parseObject(basicSearch), JSONObject.parseObject(arSearch), JSONObject.parseObject(LLsearch), index, length);
-             return ResponseEntity.ok().body(result);
+            return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             e.printStackTrace();
             ExecResult er = new ExecResult(false, e.getMessage());

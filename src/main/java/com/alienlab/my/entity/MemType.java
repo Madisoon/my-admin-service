@@ -13,66 +13,66 @@ public class MemType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "MemName")
-    private String MemName;
+    @Column(name = "memName")
+    private String memName;
 
-    @Column(name = "MaxNo")
-    private int MaxNo;
+    @Column(name = "maxNo")
+    private int maxNo;
 
-    @Column(name = "BMoney")
-    private int BMoney;
+    @Column(name = "bMoney")
+    private int bMoney;
 
-    @Column(name = "Deposit")
-    private int Deposit;
+    @Column(name = "deposit")
+    private int deposit;
 
-    @Column(name = "DuringTime")
-    private int DuringTime;
+    @Column(name = "duringTime")
+    private int duringTime;
 
-    public Long getMemID() {
+    public Long getId() {
         return id;
     }
 
-    public void setMemID(Long memID) {
-        this.id = memID;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getMemName() {
-        return MemName;
+        return memName;
     }
 
     public void setMemName(String memName) {
-        MemName = memName;
+        this.memName = memName;
     }
 
     public int getMaxNo() {
-        return MaxNo;
+        return maxNo;
     }
 
     public void setMaxNo(int maxNo) {
-        MaxNo = maxNo;
+        this.maxNo = maxNo;
     }
 
-    public int getBMoney() {
-        return BMoney;
+    public int getbMoney() {
+        return bMoney;
     }
 
-    public void setBMoney(int BMoney) {
-        this.BMoney = BMoney;
+    public void setbMoney(int bMoney) {
+        this.bMoney = bMoney;
     }
 
     public int getDeposit() {
-        return Deposit;
+        return deposit;
     }
 
     public void setDeposit(int deposit) {
-        Deposit = deposit;
+        this.deposit = deposit;
     }
 
     public int getDuringTime() {
-        return DuringTime;
+        return duringTime;
     }
 
     public void setDuringTime(int duringTime) {
-        DuringTime = duringTime;
+        this.duringTime = duringTime;
     }
 }

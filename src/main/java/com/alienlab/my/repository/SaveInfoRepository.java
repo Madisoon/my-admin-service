@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SaveInfoRepository extends JpaRepository<SaveInfo, Long> {
 
-    SaveInfo findSaveInfoByUserInfoIdAndLibraryID(String readerId,String libraryId);
+    SaveInfo findSaveInfoByUserInfoIdAndLibraryId(String readerId, String libraryId);
 }

@@ -102,12 +102,12 @@ public class BookManageService implements IBookManageService {
 
     @Override
     public SaveInfo collectBook(String readerId, String bookId) throws Exception {
-        SaveInfo saveInfo = saveInfoRepository.findSaveInfoByUserInfoIdAndLibraryID(readerId, bookId);
+        SaveInfo saveInfo = saveInfoRepository.findSaveInfoByUserInfoIdAndLibraryId(readerId, bookId);
         if (saveInfo != null) {
             throw new Exception("您已收藏过该书籍，无法继续添加！");
         }
         saveInfo = new SaveInfo();
-        saveInfo.setLibraryID(bookId);
+        saveInfo.setLibraryId(bookId);
         /*saveInfo.setReaderID(readerId);*/
         return saveInfoRepository.save(saveInfo);
     }
@@ -120,13 +120,13 @@ public class BookManageService implements IBookManageService {
                 throw new Exception("您已超过可预定的最大本数！");
             }
         }
-        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoIdAndLibraryID(readerId, bookId);
+        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoIdAndLibraryId(readerId, bookId);
         if (orderInfo != null) {
             throw new Exception("您已预订过该书籍，请阅读后再重新预订！");
         }
         orderInfo = new OrderInfo();
         /*orderInfo.set(readerId);*/
-        orderInfo.setLibraryID(bookId);
+        orderInfo.setLibraryId(bookId);
         return orderInfoRepository.save(orderInfo);
     }
 

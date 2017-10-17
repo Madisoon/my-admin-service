@@ -12,32 +12,32 @@ public class ARBookList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "QuizNo")
-    String QuizNo;
+    @Column(name = "quizNo")
+    String quizNo;
 
-    @Column(name = "Name")
-    String Name;
+    @Column(name = "name")
+    String name;
 
-    @Column(name = "Author")
-    String Author;
+    @Column(name = "author")
+    String author;
 
-    @Column(name = "WordCount")
-    int WordCount;
+    @Column(name = "wordCount")
+    int wordCount;
 
-    @Column(name = "Series")
-    String Series;
+    @Column(name = "series")
+    String series;
 
-    @Column(name = "DocType")
-    String DocType;
+    @Column(name = "docType")
+    String docType;
 
     @Column(name = "PubYear")
     String PubYear;
 
-    @Column(name = "Publisher")
-    String Publisher;
+    @Column(name = "publisher")
+    String publisher;
 
-    @Column(name = "Awards")
-    String Awards;
+    @Column(name = "awards")
+    String awards;
 
     @Column(name = "BL")
     BigDecimal BL;
@@ -57,55 +57,63 @@ public class ARBookList {
     @Column(name = "LSQuiz")
     int LSQuiz;
 
-    @Column(name = "QuestionNo")
-    int QuestionNo;
+    @Column(name = "questionNo")
+    int questionNo;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getQuizNo() {
-        return QuizNo;
+        return quizNo;
     }
 
     public void setQuizNo(String quizNo) {
-        QuizNo = quizNo;
+        this.quizNo = quizNo;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getAuthor() {
-        return Author;
+        return author;
     }
 
     public void setAuthor(String author) {
-        Author = author;
+        this.author = author;
     }
 
     public int getWordCount() {
-        return WordCount;
+        return wordCount;
     }
 
     public void setWordCount(int wordCount) {
-        WordCount = wordCount;
+        this.wordCount = wordCount;
     }
 
     public String getSeries() {
-        return Series;
+        return series;
     }
 
     public void setSeries(String series) {
-        Series = series;
+        this.series = series;
     }
 
     public String getDocType() {
-        return DocType;
+        return docType;
     }
 
     public void setDocType(String docType) {
-        DocType = docType;
+        this.docType = docType;
     }
 
     public String getPubYear() {
@@ -117,19 +125,19 @@ public class ARBookList {
     }
 
     public String getPublisher() {
-        return Publisher;
+        return publisher;
     }
 
     public void setPublisher(String publisher) {
-        Publisher = publisher;
+        this.publisher = publisher;
     }
 
     public String getAwards() {
-        return Awards;
+        return awards;
     }
 
     public void setAwards(String awards) {
-        Awards = awards;
+        this.awards = awards;
     }
 
     public BigDecimal getBL() {
@@ -181,10 +189,10 @@ public class ARBookList {
     }
 
     public int getQuestionNo() {
-        return QuestionNo;
+        return questionNo;
     }
 
     public void setQuestionNo(int questionNo) {
-        QuestionNo = questionNo;
+        this.questionNo = questionNo;
     }
 }

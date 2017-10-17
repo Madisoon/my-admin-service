@@ -4,5 +4,5 @@ import com.alienlab.my.entity.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
-    public UserInfo findUserByReaderId(String readerId);
+    public UserInfo findUserByReaderIdOrPhoneNo(String readerId, String phoneNo);
 }
