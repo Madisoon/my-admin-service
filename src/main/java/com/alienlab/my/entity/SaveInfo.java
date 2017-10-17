@@ -15,10 +15,13 @@ public class SaveInfo {
     @Column(name = "LibraryID")
     private String libraryID;
 
-    @ManyToOne
+
+    @Column(name = "userInfoId")
+    private String userInfoId;
+    /*@ManyToOne
     @JsonIgnore
     @JoinColumn(name = "user_info_id")
-    private UserInfo userInfo;
+    private UserInfo userInfo;*/
 
     public Long getId() {
         return id;
@@ -36,11 +39,18 @@ public class SaveInfo {
         this.libraryID = libraryID;
     }
 
-    public UserInfo getUserInfo() {
+    public String getUserInfoId() {
+        return userInfoId;
+    }
+
+    public void setUserInfoId(String userInfoId) {
+        this.userInfoId = userInfoId;
+    }
+/* public UserInfo getUserInfo() {
         return userInfo;
     }
 
     public void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
-    }
+    }*/
 }

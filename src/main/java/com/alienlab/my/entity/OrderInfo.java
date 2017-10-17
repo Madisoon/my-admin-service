@@ -20,11 +20,14 @@ public class OrderInfo {
     @Column(name = "OrderTime")
     private Date orderTime;
 
-    @ManyToOne()
+    @Column(name = "user_info_id")
+    private Date userInfoId;
+
+   /* @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "user_info_id")
     private UserInfo userInfo;
-
+*/
 
     public Long getId() {
         return id;
@@ -50,11 +53,18 @@ public class OrderInfo {
         orderTime = orderTime;
     }
 
-    public UserInfo getUserInfo() {
+    public Date getUserInfoId() {
+        return userInfoId;
+    }
+
+    public void setUserInfoId(Date userInfoId) {
+        this.userInfoId = userInfoId;
+    }
+    /*public UserInfo getUserInfo() {
         return userInfo;
     }
 
     public void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
-    }
+    }*/
 }

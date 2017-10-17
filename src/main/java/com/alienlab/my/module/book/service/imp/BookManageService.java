@@ -102,7 +102,7 @@ public class BookManageService implements IBookManageService {
 
     @Override
     public SaveInfo collectBook(String readerId, String bookId) throws Exception {
-        SaveInfo saveInfo = saveInfoRepository.findSaveInfoByReaderIDAndLibraryID(readerId, bookId);
+        SaveInfo saveInfo = saveInfoRepository.findSaveInfoByUserInfoIdAndLibraryID(readerId, bookId);
         if (saveInfo != null) {
             throw new Exception("您已收藏过该书籍，无法继续添加！");
         }
@@ -114,13 +114,13 @@ public class BookManageService implements IBookManageService {
 
     @Override
     public OrderInfo orderBook(String readerId, String bookId, int limit) throws Exception {
-        List<OrderInfo> orderInfos = orderInfoRepository.findOrderByReaderID(readerId);
+        List<OrderInfo> orderInfos = orderInfoRepository.findOrderByUserInfoId(readerId);
         if (orderInfos != null) {
             if (orderInfos.size() > limit) {
                 throw new Exception("您已超过可预定的最大本数！");
             }
         }
-        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByReaderIDAndLibraryID(readerId, bookId);
+        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoIdAndLibraryID(readerId, bookId);
         if (orderInfo != null) {
             throw new Exception("您已预订过该书籍，请阅读后再重新预订！");
         }
@@ -137,17 +137,17 @@ public class BookManageService implements IBookManageService {
         sql.append("select count(*) bookCount FROM bookinfo  where 1=1 ");
         setBuffer(sql, basicSearch, ARSearch, LLSearch);
         Map CountResult = jdbcTemplate.queryForMap(sql.toString());
-        String total = result.get("bookCount").toString();
+        String total = CountResult.get("bookCount").toString();
+        result.put("total", total);
         if ("0".equals(total)) {
-            result.put("total", total);
             return result;
         }
         sql = new StringBuffer();
-        sql.append("select * bookCount FROM bookinfo  where 1=1 ");
+        sql.append("select *  FROM bookinfo  where 1=1 ");
         setBuffer(sql, basicSearch, ARSearch, LLSearch);
         int start = index * length;
         sql.append(" LIMIT " + start + " , " + length + " ");
-        Map searchResult = jdbcTemplate.queryForMap(sql.toString());
+        List searchResult = jdbcTemplate.queryForList(sql.toString());
         result.put("content", searchResult);
         return result;
     }
@@ -209,7 +209,7 @@ public class BookManageService implements IBookManageService {
 
     public Boolean JsonIsNull(JSONObject jo, String item) {
         Boolean flag = true;
-        if (jo.getString("" + item + "") == null || jo.getString("" + item + "") == "") {
+        if (jo.getString("" + item + "") == null || "".equals(jo.getString("" + item + "")) || "null".equals(jo.getString("" + item + ""))) {
             flag = false;
         }
         return flag;

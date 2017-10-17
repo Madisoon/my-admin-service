@@ -39,15 +39,27 @@ public class StockInfo {
     @Column(name = "sumNo")
     private BigDecimal SumBNo;
 
-    @ManyToOne
+   /* @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "user_info_id")
-    private UserInfo userInfo;
+    private UserInfo userInfo;*/
 
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "book_info_id")
     private BookInfo bookInfo;
+
+    @OneToOne
+    @JoinColumn(name = "user_info_id")
+    private UserInfo userInfo;
+
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
 
     public BookInfo getBookInfo() {
         return bookInfo;
@@ -122,11 +134,11 @@ public class StockInfo {
         this.RRanking = RRanking;
     }
 
-    public UserInfo getUserInfo() {
+/*    public UserInfo getUserInfo() {
         return userInfo;
     }
 
     public void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
-    }
+    }*/
 }

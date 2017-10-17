@@ -21,7 +21,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Override
     public List<OrderInfo> getAllreserveBook(String readId) throws Exception {
-        List<OrderInfo> orderInfos = orderInfoRepository.findOrderByReaderID(readId);
+        List<OrderInfo> orderInfos = orderInfoRepository.findOrderByUserInfoId(readId);
         if(orderInfos==null){
             throw  new Exception("您还没有预定书籍哦!");
         }

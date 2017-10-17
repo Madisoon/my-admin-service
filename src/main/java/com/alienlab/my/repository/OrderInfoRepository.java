@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface OrderInfoRepository extends JpaRepository<OrderInfo, Long> {
-    OrderInfo findOrderInfoByReaderIDAndLibraryID(String readerId,String libraryId);
-    List<OrderInfo> findOrderByReaderID(String readerId);
+    OrderInfo findOrderInfoByUserInfoIdAndLibraryID(String readerId,String libraryId);
+    List<OrderInfo> findOrderByUserInfoId(String readerId);
 }

@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Msater Zg on 2017/10/2.
@@ -122,16 +123,16 @@ public class BookManageController {
     @PostMapping("/advancedSearch")
     @ApiOperation(value = "advancedSearch", notes = "高级搜索")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "basicSearch", value = "基础搜索信息json", dataType = "jsonObject"),
-            @ApiImplicitParam(name = "arSearch", value = "AR信息搜索", dataType = "jsonObject"),
-            @ApiImplicitParam(name = "LLsearch", value = "蓝思信息搜索", dataType = "jsonObject"),
+            @ApiImplicitParam(name = "basicSearch", value = "基础搜索信息json", dataType = "string"),
+            @ApiImplicitParam(name = "arSearch", value = "AR信息搜索", dataType = "string"),
+            @ApiImplicitParam(name = "LLsearch", value = "蓝思信息搜索", dataType = "string"),
             @ApiImplicitParam(name = "index", value = "当前页码", dataType = "int"),
             @ApiImplicitParam(name = "length", value = "每页长度", dataType = "int"),
     })
-    public ResponseEntity advancedSearch(@RequestParam JSONObject basicSearch, @RequestParam JSONObject arSearch, @RequestParam JSONObject LLsearch, @RequestParam int index, @RequestParam int length) {
+    public ResponseEntity advancedSearch(@RequestParam String basicSearch, @RequestParam String arSearch, @RequestParam String LLsearch, @RequestParam int index, @RequestParam int length) {
         try {
-            JSONObject result = bookManageService.advancedSearch(basicSearch, arSearch, LLsearch, index, length);
-            return ResponseEntity.ok().body(result);
+            JSONObject result = bookManageService.advancedSearch(JSONObject.parseObject(basicSearch), JSONObject.parseObject(arSearch), JSONObject.parseObject(LLsearch), index, length);
+             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             e.printStackTrace();
             ExecResult er = new ExecResult(false, e.getMessage());
