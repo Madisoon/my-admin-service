@@ -87,7 +87,7 @@ public class UserManageServiceImpl implements UserManageService {
                 "WHERE a.book_info_id = b.id AND a.library_id = '" + libraryId + "'";
         Map<String, Object> bookInfo = jdbcTemplate.queryForMap(sql);
         JSONObject jsonObject = (JSONObject) JSON.toJSON(bookInfo);
-        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoIdAndLibraryId(String.valueOf(userInfo.getId()),
+        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoOrderIdAndLibraryId(userInfo,
                 jsonObject.getString("id"));
         JSONObject returnJsonObject = new JSONObject();
         returnJsonObject.put("book", jsonObject);
@@ -136,7 +136,7 @@ public class UserManageServiceImpl implements UserManageService {
         for (int i = 0; i < orderBookIdsLen; i++) {
             // 先删除预定信息，然后重新插入id
             SaveInfo saveInfo = new SaveInfo();
-            saveInfo.setUserInfoId(String.valueOf(userInfo.getId()));
+            saveInfo.setUserInfo(userInfo);
             saveInfo.setLibraryId(orderBookIds[i]);
             saveInfoRepository.save(saveInfo);
         }
