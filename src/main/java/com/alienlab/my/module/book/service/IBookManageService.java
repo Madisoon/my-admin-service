@@ -38,4 +38,5 @@ public interface IBookManageService {
 
     public JSONObject advancedSearch(JSONObject basicSearch, JSONObject ARSearch, JSONObject LLSearch, int index, int length) throws Exception;
 
+    public Page<BookInfo> searchBook(String type,String value1,String value2,String value3,String value4,Pageable pageable) throws Exception;
 }

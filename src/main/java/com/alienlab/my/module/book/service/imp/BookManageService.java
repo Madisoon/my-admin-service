@@ -152,6 +152,22 @@ public class BookManageService implements IBookManageService {
         return result;
     }
 
+    @Override
+    public Page<BookInfo> searchBook(String type,String value1, String value2, String value3, String value4, Pageable pageable) throws Exception {
+        Page<BookInfo> bookInfos;
+        if (isNull(value1)) {
+            bookInfos = bookInfoRepository.findAll(pageable);
+            return bookInfos;
+        }else{
+            if(type.equals("all")){ bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthor(value1,value2,value3,value4,pageable);  return bookInfos;}
+            else if(type.equals("ar")){ bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthorAndArtag(value1,value2,value3,value4,1,pageable);  return bookInfos;}
+            else if(type.equals("lexile")){ bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthorAndLexileTag(value1,value2,value3,value4,1,pageable);  return bookInfos;}
+        }
+
+        return null;
+
+    }
+
     public StringBuffer setBuffer(StringBuffer sql, JSONObject basicSearch, JSONObject ARSearch, JSONObject LLSearch) {
         if (basicSearch != null) {
             if (JsonIsNull(basicSearch, "title")) {
@@ -209,8 +225,14 @@ public class BookManageService implements IBookManageService {
 
     public Boolean JsonIsNull(JSONObject jo, String item) {
         Boolean flag = true;
-        if (jo.getString("" + item + "") == null || "".equals(jo.getString("" + item + "")) || "null".equals(jo.getString("" + item + ""))) {
-            flag = false;
+        flag = !isNull(jo.getString("" + item + ""));
+        return flag;
+    }
+
+    public Boolean isNull(String value){
+        Boolean flag = false;
+        if (value == null || "".equals(value) || "null".equals(value)) {
+            flag = true;
         }
         return flag;
     }
