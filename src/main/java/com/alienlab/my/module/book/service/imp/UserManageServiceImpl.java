@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alienlab.my.entity.*;
 import com.alienlab.my.module.book.service.UserManageService;
-import com.alienlab.my.repository.OrderInfoRepository;
-import com.alienlab.my.repository.SaveInfoRepository;
-import com.alienlab.my.repository.StockInfoRepository;
-import com.alienlab.my.repository.UserInfoRepository;
+import com.alienlab.my.repository.*;
 import com.alienlab.my.utils.NumberInfoPost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -40,6 +37,9 @@ public class UserManageServiceImpl implements UserManageService {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    BookInfoRepository bookInfoRepository;
 
     @Override
     public JSONObject getUserInfo(String vipNumber) {
@@ -87,8 +87,8 @@ public class UserManageServiceImpl implements UserManageService {
                 "WHERE a.book_info_id = b.id AND a.library_id = '" + libraryId + "'";
         Map<String, Object> bookInfo = jdbcTemplate.queryForMap(sql);
         JSONObject jsonObject = (JSONObject) JSON.toJSON(bookInfo);
-        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoOrderIdAndLibraryId(userInfo,
-                jsonObject.getString("id"));
+        BookInfo bookInfo1 = bookInfoRepository.findOne(jsonObject.getLong("id"));
+        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoOrderIdAndOrderBookInfo(userInfo, bookInfo1);
         JSONObject returnJsonObject = new JSONObject();
         returnJsonObject.put("book", jsonObject);
         if (stockInfo == null) {
@@ -137,10 +137,19 @@ public class UserManageServiceImpl implements UserManageService {
             // 先删除预定信息，然后重新插入id
             SaveInfo saveInfo = new SaveInfo();
             saveInfo.setUserInfo(userInfo);
-            saveInfo.setLibraryId(orderBookIds[i]);
+           /* saveInfo.setLibraryId(orderBookIds[i]);*/
             saveInfoRepository.save(saveInfo);
         }
         JSONObject jsonObject = new JSONObject();
         return jsonObject;
+    }
+
+    @Override
+    public UserInfo getUserInfoAndBook(Long userId) throws Exception {
+        UserInfo userInfo = userInfoRepository.findOne(userId);
+        if (userInfo == null){
+            throw new Exception("没有对应用户信息");
+        }
+        return userInfo;
     }
 }

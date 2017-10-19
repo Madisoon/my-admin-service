@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Entity
@@ -51,6 +53,20 @@ public class StockInfo {
     @JsonIgnore
     @JoinColumn(name = "book_info_id")
     private BookInfo bookInfo;
+
+
+    @OneToMany(mappedBy = "historyStockInfo")
+    private Set<HistoryInfo> historyInfo = new HashSet<>();
+
+
+    public Set<HistoryInfo> getHistoryInfo() {
+        return historyInfo;
+    }
+
+
+    public void setHistoryInfo(Set<HistoryInfo> historyInfo) {
+        this.historyInfo = historyInfo;
+    }
 
     public Long getId() {
         return id;

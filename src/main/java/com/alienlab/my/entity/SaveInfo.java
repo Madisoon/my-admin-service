@@ -12,8 +12,6 @@ public class SaveInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "libraryId")
-    private String libraryId;
 
    /* @Column(name = "userInfoId")
     private String userInfoId;*/
@@ -23,6 +21,20 @@ public class SaveInfo {
     @JoinColumn(name = "user_info_id")
     private UserInfo userInfo;
 
+    @ManyToOne
+    @JoinColumn(name = "libraryId")
+    private BookInfo saveBookInfo;
+
+
+    public BookInfo getSaveBookInfo() {
+        return saveBookInfo;
+    }
+
+
+    public void setSaveBookInfo(BookInfo saveBookInfo) {
+        this.saveBookInfo = saveBookInfo;
+    }
+
     public Long getId() {
         return id;
     }
@@ -31,13 +43,6 @@ public class SaveInfo {
         this.id = id;
     }
 
-    public String getLibraryId() {
-        return libraryId;
-    }
-
-    public void setLibraryId(String libraryId) {
-        this.libraryId = libraryId;
-    }
 
     public UserInfo getUserInfo() {
         return userInfo;

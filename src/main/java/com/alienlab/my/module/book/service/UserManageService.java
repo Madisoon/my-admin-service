@@ -1,6 +1,7 @@
 package com.alienlab.my.module.book.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alienlab.my.entity.UserInfo;
 
 /**
  * Created by zhuliang on 2017/10/12.
@@ -16,4 +17,6 @@ public interface UserManageService {
                                    String returnBookId,
                                    String borrowBookId,
                                    String orderBookId);
+
+    public UserInfo getUserInfoAndBook(Long userId) throws Exception;
 }

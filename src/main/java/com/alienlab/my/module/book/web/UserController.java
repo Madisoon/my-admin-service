@@ -94,4 +94,21 @@ public class UserController {
         JSONObject jsonObject = userManageService.postUserData(userInfoData, returnBookId, borrowBookId, orderBookId);
         return ResponseEntity.ok().body(jsonObject);
     }
+
+
+    @GetMapping(value = "/getUserInfoAndBookInfo")
+    @ApiOperation(value = "userId", notes = "获取用户相关的图书信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId", value = "用户id", dataType = "string"),
+    })
+    public ResponseEntity postUserData(@RequestParam Long userId) {
+        try {
+            UserInfo userInfo= userManageService.getUserInfoAndBook(userId);
+            return ResponseEntity.ok().body(userInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+    }
 }

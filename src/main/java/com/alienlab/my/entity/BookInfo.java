@@ -144,8 +144,48 @@ public class BookInfo {
     @OneToMany(mappedBy = "bookInfo")
     private Set<StockInfo> stockInfo = new HashSet<>();
 
+
+    @OneToMany(mappedBy = "historyBookInfo")
+    @JsonIgnore
+    private Set<HistoryInfo> historyInfos = new HashSet<>();
+
+
+    @OneToMany(mappedBy = "orderBookInfo")
+    @JsonIgnore
+    private Set<OrderInfo> orderInfos = new HashSet<>();
+
+
+    @OneToMany(mappedBy = "saveBookInfo")
+    @JsonIgnore
+    private Set<SaveInfo> saveBookInfo = new HashSet<>();
+
+
+    public Set<SaveInfo> getSaveBookInfo() {
+        return saveBookInfo;
+    }
+    @JsonIgnore
+    public void setSaveBookInfo(Set<SaveInfo> saveBookInfo) {
+        this.saveBookInfo = saveBookInfo;
+    }
+
+    public Set<OrderInfo> getOrderInfos() {
+        return orderInfos;
+    }
+    @JsonIgnore
+    public void setOrderInfos(Set<OrderInfo> orderInfos) {
+        this.orderInfos = orderInfos;
+    }
+
     public Long getId() {
         return id;
+    }
+
+    public Set<HistoryInfo> getHistoryInfos() {
+        return historyInfos;
+    }
+    @JsonIgnore
+    public void setHistoryInfos(Set<HistoryInfo> historyInfos) {
+        this.historyInfos = historyInfos;
     }
 
     public void setId(Long id) {

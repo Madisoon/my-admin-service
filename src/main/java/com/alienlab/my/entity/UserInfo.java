@@ -81,6 +81,22 @@ public class UserInfo {
     @OneToMany(mappedBy = "userInfo")
     private Set<SaveInfo> saveInfos = new HashSet<>();
 
+
+    @OneToMany(mappedBy = "userInfoOrder")
+    private Set<OrderInfo> orderInfo = new HashSet<>();
+
+
+    @OneToMany(mappedBy = "historyUser")
+    private Set<HistoryInfo> historyInfo = new HashSet<>();
+
+    public Set<HistoryInfo> getHistoryInfo() {
+        return historyInfo;
+    }
+
+    public void setHistoryInfo(Set<HistoryInfo> historyInfo) {
+        this.historyInfo = historyInfo;
+    }
+
     public Set<SaveInfo> getSaveInfos() {
         return saveInfos;
     }
@@ -92,8 +108,7 @@ public class UserInfo {
    /* @OneToMany(mappedBy = "userinfo")
     private Set<StockInfo> stockInfo = new HashSet<>();*/
 
-    @OneToMany(mappedBy = "userInfoOrder")
-    private Set<OrderInfo> orderInfo = new HashSet<>();
+
 
 
     public Long getId() {

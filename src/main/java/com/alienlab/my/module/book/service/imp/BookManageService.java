@@ -102,12 +102,18 @@ public class BookManageService implements IBookManageService {
 
     @Override
     public SaveInfo collectBook(String readerId, String bookId) throws Exception {
-        SaveInfo saveInfo = saveInfoRepository.findSaveInfoByUserInfoIdAndLibraryId(readerId, bookId);
+        BookInfo bookInfo = bookInfoRepository.findOne(Long.valueOf(bookId));
+        if(bookInfo == null){
+            throw new Exception("咱没有该书库存，请联系管理员！");
+        }
+        UserInfo userInfo = userInfoRepository.findOne(Long.valueOf(readerId));
+        if(userInfo == null) throw new Exception("非法用户！");
+        SaveInfo saveInfo = saveInfoRepository.findSaveInfoByUserInfoIdAndSaveBookInfo(userInfo, bookInfo);
         if (saveInfo != null) {
             throw new Exception("您已收藏过该书籍，无法继续添加！");
         }
         saveInfo = new SaveInfo();
-        saveInfo.setLibraryId(bookId);
+        saveInfo.setSaveBookInfo(bookInfo);
         /*saveInfo.setReaderID(readerId);*/
         return saveInfoRepository.save(saveInfo);
     }
@@ -121,13 +127,17 @@ public class BookManageService implements IBookManageService {
                 throw new Exception("您已超过可预定的最大本数！");
             }
         }
-        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoOrderIdAndLibraryId(userInfo, bookId);
+        BookInfo bookInfo = bookInfoRepository.findOne(Long.valueOf(bookId));
+        if(bookInfo == null){
+            throw  new Exception("库存中暂无该书籍信息，无法预定!");
+        }
+        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoOrderIdAndOrderBookInfo(userInfo, bookInfo);
         if (orderInfo != null) {
             throw new Exception("您已预订过该书籍，请阅读后再重新预订！");
         }
         orderInfo = new OrderInfo();
         /*orderInfo.set(readerId);*/
-        orderInfo.setLibraryId(bookId);
+        orderInfo.setOrderBookInfo(bookInfo);
         return orderInfoRepository.save(orderInfo);
     }
 
@@ -244,10 +254,12 @@ public class BookManageService implements IBookManageService {
         String dateFormData = simpleDateFormat.format(new Date());
         String sqlUpdate = "UPDATE stockinfo a SET a.last_time='" + dateFormData + "' , " +
                 "a.user_info_id='88888888' WHERE a.library_id = '" + libraryId + "' ";
-        StockInfo stockInfo = stockInfoRepository.findStockByLibraryId(libraryId);
+        StockInfo stockInfo = stockInfoRepository.findOne(Long.valueOf(libraryId));
+        UserInfo userInfo = userInfoRepository.findOne(Long.valueOf(stockInfo.getUserInfoId()));
         HistoryInfo historyInfo = new HistoryInfo();
-        historyInfo.setLibraryId(libraryId);
-        historyInfo.setReaderId(stockInfo.getUserInfoId());
+
+        historyInfo.setStockInfo(stockInfo);
+        historyInfo.setUserInfoHistory(userInfo);
         historyInfo.setBorrowTime(stockInfo.getLastTime());
         historyInfo.setReturnTime(new Date());
         historyInfo.setRRanking("1");

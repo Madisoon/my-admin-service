@@ -1,5 +1,6 @@
 package com.alienlab.my.repository;
 
+import com.alienlab.my.entity.BookInfo;
 import com.alienlab.my.entity.OrderInfo;
 import com.alienlab.my.entity.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +11,6 @@ import java.util.List;
 
 @Repository
 public interface OrderInfoRepository extends JpaRepository<OrderInfo, Long> {
-    OrderInfo findOrderInfoByUserInfoOrderIdAndLibraryId(UserInfo userInfo,String libraryId);
+    OrderInfo findOrderInfoByUserInfoOrderIdAndOrderBookInfo(UserInfo userInfo, BookInfo bookInfo);
     List<OrderInfo> findOrderByUserInfoOrder(UserInfo userInfo);
 }

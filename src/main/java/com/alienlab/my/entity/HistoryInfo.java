@@ -1,5 +1,7 @@
 package com.alienlab.my.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -12,11 +14,7 @@ public class HistoryInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "readerId")
-    private String readerId;
 
-    @Column(name = "libraryId")
-    private String libraryId;
 
     @Column(name = "RRanking")
     private String RRanking;
@@ -27,8 +25,46 @@ public class HistoryInfo {
     @Column(name = "returnTime")
     private Date returnTime;
 
-    @Column(name = "bookId")
-    private int bookId;
+
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "readerId")
+    private UserInfo historyUser;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "libraryId")
+    private StockInfo historyStockInfo;
+
+
+    @ManyToOne
+    @JoinColumn(name = "bookId")
+    private BookInfo historyBookInfo;
+
+
+    public BookInfo getHistoryBookInfo() {
+        return historyBookInfo;
+    }
+    public void setHistoryBookInfo(BookInfo historyBookInfo) {
+        this.historyBookInfo = historyBookInfo;
+    }
+
+    public StockInfo getStockInfo() {
+        return historyStockInfo;
+    }
+    public void setStockInfo(StockInfo stockInfo) {
+        this.historyStockInfo = stockInfo;
+    }
+
+    public UserInfo getUserInfoHistory() {
+        return historyUser;
+    }
+
+    @JsonIgnore
+    public void setUserInfoHistory(UserInfo userInfoHistory) {
+        this.historyUser = userInfoHistory;
+    }
 
     public Long getId() {
         return id;
@@ -38,21 +74,6 @@ public class HistoryInfo {
         this.id = id;
     }
 
-    public String getReaderId() {
-        return readerId;
-    }
-
-    public void setReaderId(String readerId) {
-        this.readerId = readerId;
-    }
-
-    public String getLibraryId() {
-        return libraryId;
-    }
-
-    public void setLibraryId(String libraryId) {
-        this.libraryId = libraryId;
-    }
 
     public String getRRanking() {
         return RRanking;
@@ -78,11 +99,4 @@ public class HistoryInfo {
         this.returnTime = returnTime;
     }
 
-    public int getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
-    }
 }

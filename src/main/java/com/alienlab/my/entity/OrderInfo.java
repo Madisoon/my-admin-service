@@ -14,8 +14,6 @@ public class OrderInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "libraryId")
-    private String libraryId;
 
     @Column(name = "orderTime")
     private Date orderTime;
@@ -23,11 +21,23 @@ public class OrderInfo {
    /* @Column(name = "userInfoId")
     private String userInfoId;*/
 
-    @ManyToOne()
+    @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "user_info_id")
     private UserInfo userInfoOrder;
 
+    @ManyToOne
+    @JoinColumn(name = "libraryId")
+    private BookInfo orderBookInfo;
+
+    public BookInfo getOrderBookInfo() {
+        return orderBookInfo;
+    }
+
+
+    public void setOrderBookInfo(BookInfo orderBookInfo) {
+        this.orderBookInfo = orderBookInfo;
+    }
 
     public Long getId() {
         return id;
@@ -37,13 +47,7 @@ public class OrderInfo {
         this.id = id;
     }
 
-    public String getLibraryId() {
-        return libraryId;
-    }
 
-    public void setLibraryId(String libraryId) {
-        libraryId = libraryId;
-    }
 
     public Date getOrderTime() {
         return orderTime;
@@ -57,6 +61,7 @@ public class OrderInfo {
         return userInfoOrder;
     }
 
+    @JsonIgnore
     public void setUserInfo(UserInfo userInfo) {
         this.userInfoOrder = userInfo;
     }
