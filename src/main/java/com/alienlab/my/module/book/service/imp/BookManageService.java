@@ -32,6 +32,9 @@ public class BookManageService implements IBookManageService {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    UserInfoRepository userInfoRepository;
+
 
     @Override
     public BookInfo insertBookInfo(BookInfo bookInfo, String stockInfoId) {
@@ -111,13 +114,14 @@ public class BookManageService implements IBookManageService {
 
     @Override
     public OrderInfo orderBook(String readerId, String bookId, int limit) throws Exception {
-        List<OrderInfo> orderInfos = orderInfoRepository.findOrderByUserInfoId(readerId);
+        UserInfo userInfo = userInfoRepository.findOne(Long.valueOf(readerId));
+        List<OrderInfo> orderInfos = orderInfoRepository.findOrderByUserInfoOrder(userInfo);
         if (orderInfos != null) {
             if (orderInfos.size() > limit) {
                 throw new Exception("您已超过可预定的最大本数！");
             }
         }
-        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoIdAndLibraryId(readerId, bookId);
+        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoOrderIdAndLibraryId(userInfo, bookId);
         if (orderInfo != null) {
             throw new Exception("您已预订过该书籍，请阅读后再重新预订！");
         }
@@ -147,6 +151,22 @@ public class BookManageService implements IBookManageService {
         List searchResult = jdbcTemplate.queryForList(sql.toString());
         result.put("content", searchResult);
         return result;
+    }
+
+    @Override
+    public Page<BookInfo> searchBook(String type,String value1, String value2, String value3, String value4, Pageable pageable) throws Exception {
+        Page<BookInfo> bookInfos;
+        if (isNull(value1)) {
+            bookInfos = bookInfoRepository.findAll(pageable);
+            return bookInfos;
+        }else{
+            if(type.equals("all")){ bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthor(value1,value2,value3,value4,pageable);  return bookInfos;}
+            else if(type.equals("ar")){ bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthorAndArtag(value1,value2,value3,value4,1,pageable);  return bookInfos;}
+            else if(type.equals("lexile")){ bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthorAndLexileTag(value1,value2,value3,value4,1,pageable);  return bookInfos;}
+        }
+
+        return null;
+
     }
 
     public StringBuffer setBuffer(StringBuffer sql, JSONObject basicSearch, JSONObject ARSearch, JSONObject LLSearch) {
@@ -206,8 +226,14 @@ public class BookManageService implements IBookManageService {
 
     public Boolean JsonIsNull(JSONObject jo, String item) {
         Boolean flag = true;
-        if (jo.getString("" + item + "") == null || "".equals(jo.getString("" + item + "")) || "null".equals(jo.getString("" + item + ""))) {
-            flag = false;
+        flag = !isNull(jo.getString("" + item + ""));
+        return flag;
+    }
+
+    public Boolean isNull(String value){
+        Boolean flag = false;
+        if (value == null || "".equals(value) || "null".equals(value)) {
+            flag = true;
         }
         return flag;
     }

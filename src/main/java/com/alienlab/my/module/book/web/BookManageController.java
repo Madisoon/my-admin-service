@@ -135,4 +135,27 @@ public class BookManageController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
         }
     }
+
+
+
+    @GetMapping("/searchBook")
+    @ApiOperation(value = "searchBook", notes = "搜索书籍")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "搜索类型", dataType = "string"),
+            @ApiImplicitParam(name = "value", value = "搜索信息", dataType = "string"),
+            @ApiImplicitParam(name = "index", value = "当前页码", dataType = "int"),
+            @ApiImplicitParam(name = "length", value = "每页长度", dataType = "int"),
+    })
+    public ResponseEntity searchBook(@RequestParam String type,@RequestParam String value, @RequestParam int index, @RequestParam int length) {
+
+        try {
+            Page<BookInfo> page = bookManageService.searchBook(type,value,value,value,value,new PageRequest(index,length));
+            return ResponseEntity.ok().body(page);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+    }
+
 }

@@ -94,7 +94,7 @@ public class BookInfo {
     private String awards;
 
     @Column(name = "ARTag")
-    private int ARTag;
+    private int artag;
 
     @Column(name = "BL")
     private BigDecimal BL;
@@ -353,11 +353,11 @@ public class BookInfo {
     }
 
     public int getARTag() {
-        return ARTag;
+        return artag;
     }
 
     public void setARTag(int ARTag) {
-        this.ARTag = ARTag;
+        this.artag = ARTag;
     }
 
     public BigDecimal getBL() {

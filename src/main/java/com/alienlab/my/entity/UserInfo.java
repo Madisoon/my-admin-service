@@ -78,14 +78,23 @@ public class UserInfo {
     @Column(name = "rwCount")
     private int rwCount;
 
-    /*@OneToMany(mappedBy = "userinfo")
-    private Set<StockInfo> stockInfo = new HashSet<>();
+    @OneToMany(mappedBy = "userInfo")
+    private Set<SaveInfo> saveInfos = new HashSet<>();
 
-    @OneToMany(mappedBy = "userinfo")
+    public Set<SaveInfo> getSaveInfos() {
+        return saveInfos;
+    }
+
+    public void setSaveInfos(Set<SaveInfo> saveInfos) {
+        this.saveInfos = saveInfos;
+    }
+
+   /* @OneToMany(mappedBy = "userinfo")
+    private Set<StockInfo> stockInfo = new HashSet<>();*/
+
+    @OneToMany(mappedBy = "userInfoOrder")
     private Set<OrderInfo> orderInfo = new HashSet<>();
 
-    @OneToMany(mappedBy = "userinfo")
-    private Set<SaveInfo> saveInfo = new HashSet<>();*/
 
     public Long getId() {
         return id;
@@ -263,13 +272,7 @@ public class UserInfo {
         this.rwCount = rwCount;
     }
 
-/*    public Set<StockInfo> getStockInfo() {
-        return stockInfo;
-    }
 
-    public void setStockInfo(Set<StockInfo> stockInfo) {
-        this.stockInfo = stockInfo;
-    }
 
     public Set<OrderInfo> getOrderInfo() {
         return orderInfo;
@@ -279,7 +282,7 @@ public class UserInfo {
         this.orderInfo = orderInfo;
     }
 
-    public Set<SaveInfo> getSaveInfo() {
+   /*  public Set<SaveInfo> getSaveInfo() {
         return saveInfo;
     }
 
