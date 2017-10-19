@@ -1,25 +1,17 @@
 package com.alienlab.my.module.book.service.imp;
 
 import com.alibaba.fastjson.JSONObject;
-import com.alienlab.my.entity.BookInfo;
-import com.alienlab.my.entity.OrderInfo;
-import com.alienlab.my.entity.SaveInfo;
-import com.alienlab.my.entity.StockInfo;
+import com.alienlab.my.entity.*;
 import com.alienlab.my.module.book.service.IBookManageService;
-import com.alienlab.my.repository.BookInfoRepository;
-import com.alienlab.my.repository.OrderInfoRepository;
-import com.alienlab.my.repository.SaveInfoRepository;
-import com.alienlab.my.repository.StockInfoRepository;
+import com.alienlab.my.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class BookManageService implements IBookManageService {
@@ -34,6 +26,8 @@ public class BookManageService implements IBookManageService {
     SaveInfoRepository saveInfoRepository;
     @Autowired
     OrderInfoRepository orderInfoRepository;
+    @Autowired
+    HistoryInfoRepository historyInfoRepository;
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -52,6 +46,9 @@ public class BookManageService implements IBookManageService {
                 StockInfo stockInfoInsert = new StockInfo();
                 stockInfoInsert.setBookInfo(bookInfoReturn);
                 stockInfoInsert.setLibraryId(stockInfoIds[i]);
+                stockInfoInsert.setLastTime(new Date());
+                stockInfoInsert.setRRanking(1);
+                stockInfoInsert.setStockTag(1);
                 stockInfoRepository.save(stockInfoInsert);
             }
         }
@@ -213,5 +210,30 @@ public class BookManageService implements IBookManageService {
             flag = false;
         }
         return flag;
+    }
+
+    @Override
+    public JSONObject updateStock(String libraryId) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String dateFormData = simpleDateFormat.format(new Date());
+        String sqlUpdate = "UPDATE stockinfo a SET a.last_time='" + dateFormData + "' , " +
+                "a.user_info_id='88888888' WHERE a.library_id = '" + libraryId + "' ";
+        StockInfo stockInfo = stockInfoRepository.findStockByLibraryId(libraryId);
+        HistoryInfo historyInfo = new HistoryInfo();
+        historyInfo.setLibraryId(libraryId);
+        historyInfo.setReaderId(stockInfo.getUserInfoId());
+        historyInfo.setBorrowTime(stockInfo.getLastTime());
+        historyInfo.setReturnTime(new Date());
+        historyInfo.setRRanking("1");
+        historyInfoRepository.save(historyInfo);
+        int result = jdbcTemplate.update(sqlUpdate);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("result", result);
+        return jsonObject;
+    }
+
+    @Override
+    public BookInfo findBookByISBN13(String isbn) {
+        return bookInfoRepository.findBookByISBN13(isbn);
     }
 }

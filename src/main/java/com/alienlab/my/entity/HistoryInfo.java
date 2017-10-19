@@ -21,11 +21,14 @@ public class HistoryInfo {
     @Column(name = "RRanking")
     private String RRanking;
 
-    @Column(name = "orrowTime")
-    private Date orrowTime;
+    @Column(name = "borrowTime")
+    private Date borrowTime;
 
     @Column(name = "returnTime")
     private Date returnTime;
+
+    @Column(name = "bookId")
+    private int bookId;
 
     public Long getId() {
         return id;
@@ -59,12 +62,12 @@ public class HistoryInfo {
         this.RRanking = RRanking;
     }
 
-    public Date getOrrowTime() {
-        return orrowTime;
+    public Date getBorrowTime() {
+        return borrowTime;
     }
 
-    public void setOrrowTime(Date orrowTime) {
-        this.orrowTime = orrowTime;
+    public void setBorrowTime(Date borrowTime) {
+        this.borrowTime = borrowTime;
     }
 
     public Date getReturnTime() {
@@ -73,5 +76,13 @@ public class HistoryInfo {
 
     public void setReturnTime(Date returnTime) {
         this.returnTime = returnTime;
+    }
+
+    public int getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
     }
 }

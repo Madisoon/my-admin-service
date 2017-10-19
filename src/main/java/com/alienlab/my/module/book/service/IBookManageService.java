@@ -22,6 +22,10 @@ public interface IBookManageService {
 
     public void deleteBookInfo(BookInfo bookInfo);
 
+    public JSONObject updateStock(String libraryId);
+
+    public BookInfo findBookByISBN13(String isbn);
+
     // 库存信息的接口
 
     public StockInfo insertStockInfo(StockInfo stockInfo);

@@ -88,9 +88,8 @@ public class BookManageController {
             @ApiImplicitParam(name = "isbn13", value = "书籍编码", required = true, dataType = "STRING")
     })
     public ResponseEntity getAllBookByIsbn(@RequestParam("isbn13") String isbn13) {
-        /*BookInfo bookInfo = iBookManageService.getAllBookByIsbn(isbn13);*/
-
-        return ResponseEntity.ok().body("");
+        BookInfo bookInfo = iBookManageService.findBookByISBN13(isbn13);
+        return ResponseEntity.ok().body(bookInfo);
     }
 
     @PostMapping(value = "/returnBook")
@@ -99,11 +98,8 @@ public class BookManageController {
             @ApiImplicitParam(name = "isbn", value = "书籍编码", required = true, dataType = "STRING")
     })
     public ResponseEntity returnBook(@RequestParam("isbn") String isbn) {
-        StockInfo stockInfoData = new StockInfo();
-        stockInfoData.setId(Long.parseLong(isbn));
-        /*stockInfoData.se(888888);*/
-        /*StockInfo stockInfo = iBookManageService.returnBook(stockInfoData);*/
-        return ResponseEntity.ok().body("");
+        JSONObject jsonObject = iBookManageService.updateStock(isbn);
+        return ResponseEntity.ok().body(jsonObject);
     }
 
 
