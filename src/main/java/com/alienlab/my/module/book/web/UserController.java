@@ -6,6 +6,7 @@ import com.alienlab.my.entity.OrderInfo;
 import com.alienlab.my.entity.UserInfo;
 import com.alienlab.my.module.book.service.OrderInfoService;
 import com.alienlab.my.module.book.service.UserManageService;
+import com.alienlab.my.repository.UserInfoRepository;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -111,4 +112,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
         }
     }
+
+
 }

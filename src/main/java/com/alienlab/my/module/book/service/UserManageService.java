@@ -19,4 +19,6 @@ public interface UserManageService {
                                    String orderBookId);
 
     public UserInfo getUserInfoAndBook(Long userId) throws Exception;
+
+    public UserInfo userLogin(String username,String password) throws Exception;
 }

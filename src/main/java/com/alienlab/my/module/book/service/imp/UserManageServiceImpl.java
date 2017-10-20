@@ -152,4 +152,13 @@ public class UserManageServiceImpl implements UserManageService {
         }
         return userInfo;
     }
+
+    @Override
+    public UserInfo userLogin(String username, String password) throws Exception {
+        UserInfo userInfo = userInfoRepository.findUserByPhoneNoAndPassword(username,password);
+        if(userInfo==null){
+            throw  new Exception("用户名或密码错误！");
+        }
+        return userInfo;
+    }
 }
