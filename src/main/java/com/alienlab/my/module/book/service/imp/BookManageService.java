@@ -258,8 +258,8 @@ public class BookManageService implements IBookManageService {
         UserInfo userInfo = userInfoRepository.findOne(Long.valueOf(stockInfo.getUserInfoId()));
         HistoryInfo historyInfo = new HistoryInfo();
 
-        historyInfo.setStockInfo(stockInfo);
-        historyInfo.setUserInfoHistory(userInfo);
+        historyInfo.setHistoryStockInfo(stockInfo);
+        historyInfo.setHistoryUser(userInfo);
         historyInfo.setBorrowTime(stockInfo.getLastTime());
         historyInfo.setReturnTime(new Date());
         historyInfo.setRRanking("1");

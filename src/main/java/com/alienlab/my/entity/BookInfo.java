@@ -1,12 +1,13 @@
 package com.alienlab.my.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -143,50 +144,53 @@ public class BookInfo {
 
     @OneToMany(mappedBy = "bookInfo")
     private Set<StockInfo> stockInfo = new HashSet<>();
-
-
+   /* @JsonIgnore
     @OneToMany(mappedBy = "historyBookInfo")
-    @JsonIgnore
-    private Set<HistoryInfo> historyInfos = new HashSet<>();
+    private Set<HistoryInfo> historyInfos = new HashSet<>();*/
 
 
     @OneToMany(mappedBy = "orderBookInfo")
-    @JsonIgnore
     private Set<OrderInfo> orderInfos = new HashSet<>();
 
 
     @OneToMany(mappedBy = "saveBookInfo")
-    @JsonIgnore
     private Set<SaveInfo> saveBookInfo = new HashSet<>();
 
-
+    @JsonIgnore
     public Set<SaveInfo> getSaveBookInfo() {
         return saveBookInfo;
     }
-    @JsonIgnore
+
+
     public void setSaveBookInfo(Set<SaveInfo> saveBookInfo) {
         this.saveBookInfo = saveBookInfo;
     }
-
+    @JsonIgnore
     public Set<OrderInfo> getOrderInfos() {
         return orderInfos;
     }
-    @JsonIgnore
+
+
     public void setOrderInfos(Set<OrderInfo> orderInfos) {
         this.orderInfos = orderInfos;
     }
+
+  /*  @JsonIgnore
+    public Set<HistoryInfo> getHistoryInfos() {
+        return historyInfos;
+    }
+
+    public void setHistoryInfos(Set<HistoryInfo> historyInfos) {
+        this.historyInfos = historyInfos;
+    }*/
 
     public Long getId() {
         return id;
     }
 
-    public Set<HistoryInfo> getHistoryInfos() {
-        return historyInfos;
-    }
-    @JsonIgnore
-    public void setHistoryInfos(Set<HistoryInfo> historyInfos) {
-        this.historyInfos = historyInfos;
-    }
+
+
+
 
     public void setId(Long id) {
         this.id = id;

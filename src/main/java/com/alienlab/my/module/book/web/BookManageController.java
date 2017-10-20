@@ -163,7 +163,7 @@ public class BookManageController {
         }
     }
 
-    @PostMapping(value = "/userLogin")
+    @GetMapping(value = "/userLogin")
     @ApiOperation(value = "userLogin", notes = "用户登录接口")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userphone", value = "用户手机号码（用户名）", dataType = "string"),
@@ -181,3 +181,7 @@ public class BookManageController {
     }
 
 }
+
+
+
+

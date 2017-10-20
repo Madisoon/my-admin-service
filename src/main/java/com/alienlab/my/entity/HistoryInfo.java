@@ -25,7 +25,8 @@ public class HistoryInfo {
     @Column(name = "returnTime")
     private Date returnTime;
 
-
+    @Column(name = "bookId")
+    private Long bookId;
 
     @ManyToOne
     @JsonIgnore
@@ -37,33 +38,40 @@ public class HistoryInfo {
     @JoinColumn(name = "libraryId")
     private StockInfo historyStockInfo;
 
+    public Long getBookId() {
+        return bookId;
+    }
 
-    @ManyToOne
+    public void setBookId(Long bookId) {
+        this.bookId = bookId;
+    }
+
+    /*    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "bookId")
-    private BookInfo historyBookInfo;
+    private BookInfo historyBookInfo;*/
 
-
-    public BookInfo getHistoryBookInfo() {
+    /*public BookInfo getHistoryBookInfo() {
         return historyBookInfo;
-    }
-    public void setHistoryBookInfo(BookInfo historyBookInfo) {
+    }*/
+    /*public void setHistoryBookInfo(BookInfo historyBookInfo) {
         this.historyBookInfo = historyBookInfo;
-    }
+    }*/
 
-    public StockInfo getStockInfo() {
+    public StockInfo getHistoryStockInfo() {
         return historyStockInfo;
     }
-    public void setStockInfo(StockInfo stockInfo) {
-        this.historyStockInfo = stockInfo;
+    @JsonIgnore
+    public void setHistoryStockInfo(StockInfo historyStockInfo) {
+        this.historyStockInfo = historyStockInfo;
     }
 
-    public UserInfo getUserInfoHistory() {
+    public UserInfo getHistoryUser() {
         return historyUser;
     }
 
     @JsonIgnore
-    public void setUserInfoHistory(UserInfo userInfoHistory) {
-        this.historyUser = userInfoHistory;
+    public void setHistoryUser(UserInfo historyUser) {
+        this.historyUser = historyUser;
     }
 
     public Long getId() {

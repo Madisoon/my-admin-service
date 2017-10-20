@@ -55,10 +55,11 @@ public class StockInfo {
     private BookInfo bookInfo;
 
 
+    @JsonIgnore
     @OneToMany(mappedBy = "historyStockInfo")
     private Set<HistoryInfo> historyInfo = new HashSet<>();
 
-
+    @JsonIgnore
     public Set<HistoryInfo> getHistoryInfo() {
         return historyInfo;
     }
