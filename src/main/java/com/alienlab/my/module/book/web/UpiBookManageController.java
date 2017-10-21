@@ -24,10 +24,10 @@ public class UpiBookManageController {
     @PostMapping("/collectBook")
     @ApiOperation(value = "collectBook", notes = "收藏书籍")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "readerId", value = "用户Id", dataType = "string"),
-            @ApiImplicitParam(name = "bookId", value = "用户Id", dataType = "string")
+            @ApiImplicitParam(name = "readerId", value = "用户Id", dataType = "Long"),
+            @ApiImplicitParam(name = "bookId", value = "用户Id", dataType = "Long")
     })
-    public ResponseEntity collectBook(@RequestParam String readerId, @RequestParam String bookId) {
+    public ResponseEntity collectBook(@RequestParam Long readerId, @RequestParam Long bookId) {
         try {
             SaveInfo saveInfo = bookManageService.collectBook(readerId, bookId);
             return ResponseEntity.ok().body(saveInfo);
@@ -41,11 +41,11 @@ public class UpiBookManageController {
     @PostMapping("/reserveBook")
     @ApiOperation(value = "reserveBook", notes = "预定书籍")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "readerId", value = "用户id", dataType = "string"),
-            @ApiImplicitParam(name = "bookId", value = "用户id", dataType = "string"),
+            @ApiImplicitParam(name = "readerId", value = "用户id", dataType = "Long"),
+            @ApiImplicitParam(name = "bookId", value = "用户id", dataType = "Long"),
             @ApiImplicitParam(name = "limit", value = "用户借书限制数", dataType = "int")
     })
-    public ResponseEntity reserveBook(@RequestParam String readerId, @RequestParam String bookId, @RequestParam int limit) {
+    public ResponseEntity reserveBook(@RequestParam Long readerId, @RequestParam Long bookId, @RequestParam int limit) {
         try {
             OrderInfo orderInfo = bookManageService.orderBook(readerId, bookId, limit);
             return ResponseEntity.ok().body(orderInfo);

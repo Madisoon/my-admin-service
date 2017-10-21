@@ -92,7 +92,7 @@ public class UserManageServiceImpl implements UserManageService {
         Map<String, Object> bookInfo = jdbcTemplate.queryForMap(sql);
         JSONObject jsonObject = (JSONObject) JSON.toJSON(bookInfo);
         BookInfo bookInfo1 = bookInfoRepository.findOne(jsonObject.getLong("id"));
-        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoOrderIdAndOrderBookInfo(userInfo, bookInfo1);
+        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoOrderAndOrderBookInfo(userInfo, bookInfo1);
         JSONObject returnJsonObject = new JSONObject();
         returnJsonObject.put("book", jsonObject);
         if (stockInfo == null) {

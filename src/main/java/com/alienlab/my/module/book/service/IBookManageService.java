@@ -36,9 +36,9 @@ public interface IBookManageService {
 
     public Page<BookInfo> getRecommednBook(Pageable pageable) throws Exception;
 
-    public SaveInfo collectBook(String readerId, String bookId) throws Exception;
+    public SaveInfo collectBook(Long readerId, Long bookId) throws Exception;
 
-    public OrderInfo orderBook(String readerId, String bookId, int limit) throws Exception;
+    public OrderInfo orderBook(Long readerId, Long bookId, int limit) throws Exception;
 
     public JSONObject advancedSearch(JSONObject basicSearch, JSONObject ARSearch, JSONObject LLSearch, int index, int length) throws Exception;
 

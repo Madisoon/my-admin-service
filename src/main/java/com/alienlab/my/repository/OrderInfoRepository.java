@@ -11,6 +11,6 @@ import java.util.List;
 
 @Repository
 public interface OrderInfoRepository extends JpaRepository<OrderInfo, Long> {
-    OrderInfo findOrderInfoByUserInfoOrderIdAndOrderBookInfo(UserInfo userInfo, BookInfo bookInfo);
+    OrderInfo findOrderInfoByUserInfoOrderAndOrderBookInfo(UserInfo userInfo, BookInfo bookInfo);
     List<OrderInfo> findOrderByUserInfoOrder(UserInfo userInfo);
 }
