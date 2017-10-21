@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +41,9 @@ public class UserManageServiceImpl implements UserManageService {
 
     @Autowired
     BookInfoRepository bookInfoRepository;
+
+    @Autowired
+    HistoryInfoRepository historyInfoRepository;
 
     @Override
     public JSONObject getUserInfo(String vipNumber) {
@@ -160,5 +164,39 @@ public class UserManageServiceImpl implements UserManageService {
             throw  new Exception("用户名或密码错误！");
         }
         return userInfo;
+    }
+
+    @Override
+    public JSONObject getuserWatchBook(Long userId) throws Exception {
+        JSONObject result = new JSONObject();
+        UserInfo userInfo = userInfoRepository.findOne(userId);
+        List<BookInfo> bookInfos= new ArrayList<>();
+        if(userInfo == null){
+            throw new Exception("错误的用户信息！");
+        }
+        //先获得在读书籍
+        List<StockInfo> stockInfos = stockInfoRepository.findStockByUserInfoId(String.valueOf(userId));
+        if(stockInfos !=null){
+            for(int i=0;i<stockInfos.size();i++){
+                BookInfo bookInfo = stockInfos.get(i).getBookInfo();
+                bookInfos.add(bookInfo);
+            }
+            result.put("readingBook",bookInfos);
+        }
+        List<HistoryInfo> historyInfos = new ArrayList<>();
+        historyInfos = historyInfoRepository.findHistoryByHistoryUser(userInfo);
+        if(historyInfos!=null){
+            bookInfos=new ArrayList<>();
+            for(int i = 0;i<historyInfos.size();i++){
+                BookInfo bookInfo = bookInfoRepository.findOne(historyInfos.get(i).getBookId());
+                if(bookInfo!=null){
+                    bookInfos.add(bookInfo);
+                }
+            }
+            result.put("historyBook",bookInfos);
+        }
+
+        //再获得阅读历史
+        return result;
     }
 }

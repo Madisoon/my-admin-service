@@ -113,5 +113,22 @@ public class UserController {
         }
     }
 
+    @GetMapping(value = "/getUserReadingBookAndHistoryBook")
+    @ApiOperation(value = "getUserReadingBookAndHistoryBook", notes = "获取用户在读和借阅历史")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userd", value = "用户id", dataType = "Long"),
+    })
+    public ResponseEntity getUserReadingBookAndHistoryBook(@RequestParam Long userid) {
+        try {
+            JSONObject result = userManageService.getuserWatchBook(userid);
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+    }
+
+
 
 }

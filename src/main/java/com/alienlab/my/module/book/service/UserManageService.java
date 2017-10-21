@@ -21,4 +21,6 @@ public interface UserManageService {
     public UserInfo getUserInfoAndBook(Long userId) throws Exception;
 
     public UserInfo userLogin(String username,String password) throws Exception;
+
+    public JSONObject getuserWatchBook(Long userId) throws Exception;
 }

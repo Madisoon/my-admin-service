@@ -171,8 +171,12 @@ public class BookManageController {
     })
     public ResponseEntity postUserData(@RequestParam String userphone,@RequestParam String password) {
         try {
+            JSONObject result = new JSONObject();
             UserInfo userInfo= userManageService.userLogin(userphone,password);
-            return ResponseEntity.ok().body(userInfo);
+            JSONObject book = userManageService.getuserWatchBook(userInfo.getId());
+            result.put("userInfo",userInfo);
+            result.put("bookInfo",book);
+            return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             e.printStackTrace();
             ExecResult er = new ExecResult(false, e.getMessage());
