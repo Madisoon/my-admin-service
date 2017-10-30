@@ -108,7 +108,7 @@ public class BookManageService implements IBookManageService {
         }
         UserInfo userInfo = userInfoRepository.findOne(readerId);
         if(userInfo == null) throw new Exception("非法用户！");
-        SaveInfo saveInfo = saveInfoRepository.findSaveInfoByUserInfoIdAndSaveBookInfo(userInfo, bookInfo);
+        SaveInfo saveInfo = saveInfoRepository.findSaveInfoByUserInfoAndSaveBookInfo(userInfo, bookInfo);
         if (saveInfo != null) {
             throw new Exception("您已收藏过该书籍，无法继续添加！");
         }

@@ -199,4 +199,38 @@ public class UserManageServiceImpl implements UserManageService {
         //再获得阅读历史
         return result;
     }
+
+    @Override
+    public void deleteSaveBook(Long userId, Long bookId) throws Exception {
+        UserInfo userInfo = userInfoRepository.findOne(userId);
+        if(userInfo == null){
+            throw new Exception("非法用户!");
+        }
+        BookInfo bookInfo = bookInfoRepository.findOne(bookId);
+        if(bookInfo==null){
+            throw new Exception("没有对应书籍的库存，请联系管理员!");
+        }
+        SaveInfo saveInfo = saveInfoRepository.findSaveInfoByUserInfoAndSaveBookInfo(userInfo,bookInfo);
+        if(saveInfo == null){
+            throw new Exception("没有对于该书的收藏记录!");
+        }
+        saveInfoRepository.delete(saveInfo);
+    }
+
+    @Override
+    public void deleteOrderBook(Long userId, Long bookId) throws Exception {
+        UserInfo userInfo = userInfoRepository.findOne(userId);
+        if(userInfo == null){
+            throw new Exception("非法用户!");
+        }
+        BookInfo bookInfo = bookInfoRepository.findOne(bookId);
+        if(bookInfo==null){
+            throw new Exception("没有对应书籍的库存，请联系管理员!");
+        }
+        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoOrderAndOrderBookInfo(userInfo,bookInfo);
+        if(orderInfo == null){
+            throw new Exception("没有对于该书的预定信息!");
+        }
+        orderInfoRepository.delete(orderInfo);
+    }
 }
