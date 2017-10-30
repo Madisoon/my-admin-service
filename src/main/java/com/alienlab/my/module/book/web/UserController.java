@@ -56,17 +56,6 @@ public class UserController {
         return ResponseEntity.ok().body(jsonObject);
     }
 
-    @PostMapping(value = "/getUserYzNumber")
-    @ApiOperation(value = "getUserYzNumber", notes = "获取")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userPhone", value = "用户手机号", dataType = "string"),
-            @ApiImplicitParam(name = "userCode", value = "用户验证码", dataType = "string")
-    })
-    public ResponseEntity getUserYzNumber(@RequestParam String userPhone,
-                                          @RequestParam String userCode) {
-        String message = userManageService.getUserYzNumber(userPhone, userCode);
-        return ResponseEntity.ok().body(message);
-    }
 
     @PostMapping(value = "/vipBorrowReturn")
     @ApiOperation(value = "vipBorrowReturn", notes = "还书")
