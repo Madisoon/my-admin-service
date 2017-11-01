@@ -16,6 +16,8 @@ public interface IBookManageService {
     // 书籍信息的接口
     public BookInfo insertBookInfo(BookInfo bookInfo, String stockInfo);
 
+    public JSONObject getBookStockInfo(String id);
+
     public List<BookInfo> getAllBook();
 
     public BookInfo updateBookInfo(BookInfo bookInfo);
@@ -25,6 +27,10 @@ public interface IBookManageService {
     public JSONObject updateStock(String libraryId);
 
     public BookInfo findBookByISBN13(String isbn);
+
+    public JSONObject getBookCase(String libraryId);
+
+    public JSONObject updateBookCase(String libraryId, String bookCase);
 
     // 库存信息的接口
 
@@ -42,5 +48,5 @@ public interface IBookManageService {
 
     public JSONObject advancedSearch(JSONObject basicSearch, JSONObject ARSearch, JSONObject LLSearch, int index, int length) throws Exception;
 
-    public Page<BookInfo> searchBook(String type,String value1,String value2,String value3,String value4,Pageable pageable) throws Exception;
+    public Page<BookInfo> searchBook(String type, String value1, String value2, String value3, String value4, Pageable pageable) throws Exception;
 }

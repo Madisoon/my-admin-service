@@ -44,6 +44,9 @@ public class StockInfo {
     @Column(name = "userInfoId")
     private String userInfoId;
 
+    @Column(name = "bookCase")
+    private String bookCase;
+
     /*@ManyToOne
     @JsonIgnore
     @JoinColumn(name = "user_info_id")
@@ -147,5 +150,13 @@ public class StockInfo {
 
     public void setBookInfo(BookInfo bookInfo) {
         this.bookInfo = bookInfo;
+    }
+
+    public String getBookCase() {
+        return bookCase;
+    }
+
+    public void setBookCase(String bookCase) {
+        this.bookCase = bookCase;
     }
 }

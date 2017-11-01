@@ -8,6 +8,7 @@ import com.alienlab.my.module.book.service.UserManageService;
 import com.alienlab.my.repository.*;
 import com.alienlab.my.utils.NumberInfoPost;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -88,12 +89,18 @@ public class UserManageServiceImpl implements UserManageService {
         Map<String, Object> bookInfo = jdbcTemplate.queryForMap(sql);
         JSONObject jsonObject = (JSONObject) JSON.toJSON(bookInfo);
         BookInfo bookInfo1 = bookInfoRepository.findOne(jsonObject.getLong("id"));
-        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoOrderIdAndOrderBookInfo(userInfo, bookInfo1);
+        Map<String, Object> map;
+        try {
+            map = jdbcTemplate.queryForMap("SELECT * FROM  orderinfo a " +
+                    "WHERE a.user_info_id = '" + userInfo.getId() + "' AND a.library_id = '" + bookInfo1.getId() + "'");
+        } catch (EmptyResultDataAccessException e) {
+            map = null;
+        }
         JSONObject returnJsonObject = new JSONObject();
         returnJsonObject.put("book", jsonObject);
         if (stockInfo == null) {
             // 没有这本书
-            if (orderInfo == null) {
+            if (map == null) {
                 // 没有预定
                 returnJsonObject.put("result", "1");
             } else {
@@ -109,10 +116,6 @@ public class UserManageServiceImpl implements UserManageService {
 
     @Override
     public JSONObject postUserData(String userInfoData, String returnBookId, String borrowBookId, String orderBookId) {
-        System.out.println(userInfoData);
-        System.out.println(returnBookId);
-        System.out.println(borrowBookId);
-        System.out.println(orderBookId);
         String[] returnBookIds = returnBookId.split(",");
         int returnBookIdsLen = returnBookIds.length;
         String[] borrowBookIds = borrowBookId.split(",");
@@ -120,25 +123,32 @@ public class UserManageServiceImpl implements UserManageService {
         String[] orderBookIds = orderBookId.split(",");
         int orderBookIdsLen = orderBookIds.length;
         UserInfo userInfo = JSON.parseObject(userInfoData, UserInfo.class);
-        /*userInfoRepository.save(userInfo);*/
-        for (int i = 0; i < returnBookIdsLen; i++) {
-            // 将书的user_infor_id 变成88888888
-            String sql = "UPDATE stockinfo a SET a.user_info_id = '88888888' WHERE a.library_id='" + returnBookIds[i] + "'";
-            jdbcTemplate.update(sql);
+        userInfoRepository.save(userInfo);
+        if (!"".equals(returnBookId)) {
+            for (int i = 0; i < returnBookIdsLen; i++) {
+                // 将书的user_infor_id 变成88888888
+                String sql = "UPDATE stockinfo a SET a.user_info_id = '88888888' WHERE a.library_id='" + returnBookIds[i] + "'";
+                jdbcTemplate.update(sql);
+            }
         }
-        for (int i = 0; i < borrowBookIdsLen; i++) {
-            // 借书，将书的user_infor_id 变成id
-            String sql = "UPDATE stockinfo a SET a.user_info_id = '" + userInfo.getId() + "' WHERE a.library_id='" + borrowBookIds[i] + "'";
-            jdbcTemplate.update(sql);
+        if (!"".equals(borrowBookId)) {
+            for (int i = 0; i < borrowBookIdsLen; i++) {
+                // 借书，将书的user_infor_id 变成id
+                String sql = "UPDATE stockinfo a SET a.user_info_id = '" + userInfo.getId() + "' WHERE a.library_id='" + borrowBookIds[i] + "'";
+                jdbcTemplate.update(sql);
+            }
         }
-        String delete = "DELETE FROM saveinfo WHERE user_info_id ='" + userInfo.getId() + "'";
+        String delete = "DELETE FROM orderinfo WHERE user_info_id ='" + userInfo.getId() + "'";
         jdbcTemplate.update(delete);
-        for (int i = 0; i < orderBookIdsLen; i++) {
-            // 先删除预定信息，然后重新插入id
-            SaveInfo saveInfo = new SaveInfo();
-            saveInfo.setUserInfo(userInfo);
-           /* saveInfo.setLibraryId(orderBookIds[i]);*/
-            saveInfoRepository.save(saveInfo);
+        if (!"".equals(orderBookId)) {
+            for (int i = 0; i < orderBookIdsLen; i++) {
+                OrderInfo orderInfo = new OrderInfo();
+                orderInfo.setUserInfo(userInfo);
+                BookInfo bookInfo = new BookInfo();
+                bookInfo.setId(Long.parseLong(orderBookIds[i]));
+                orderInfo.setOrderBookInfo(bookInfo);
+                orderInfoRepository.save(orderInfo);
+            }
         }
         JSONObject jsonObject = new JSONObject();
         return jsonObject;
@@ -147,7 +157,7 @@ public class UserManageServiceImpl implements UserManageService {
     @Override
     public UserInfo getUserInfoAndBook(Long userId) throws Exception {
         UserInfo userInfo = userInfoRepository.findOne(userId);
-        if (userInfo == null){
+        if (userInfo == null) {
             throw new Exception("没有对应用户信息");
         }
         return userInfo;

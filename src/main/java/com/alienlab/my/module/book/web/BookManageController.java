@@ -4,9 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alienlab.my.entity.BookInfo;
 import com.alienlab.my.entity.StockInfo;
-import com.alienlab.my.entity.UserInfo;
 import com.alienlab.my.module.book.service.IBookManageService;
-import com.alienlab.my.module.book.service.UserManageService;
 import com.alienlab.my.module.book.service.imp.BookManageService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -32,9 +30,6 @@ public class BookManageController {
 
     @Autowired
     private IBookManageService iBookManageService;
-
-    @Autowired
-    UserManageService userManageService;
 
     @Autowired
     BookManageService bookManageService;
@@ -163,25 +158,4 @@ public class BookManageController {
         }
     }
 
-    @GetMapping(value = "/userLogin")
-    @ApiOperation(value = "userLogin", notes = "用户登录接口")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userphone", value = "用户手机号码（用户名）", dataType = "string"),
-            @ApiImplicitParam(name = "password", value = "用户密码", dataType = "string"),
-    })
-    public ResponseEntity postUserData(@RequestParam String userphone,@RequestParam String password) {
-        try {
-            UserInfo userInfo= userManageService.userLogin(userphone,password);
-            return ResponseEntity.ok().body(userInfo);
-        } catch (Exception e) {
-            e.printStackTrace();
-            ExecResult er = new ExecResult(false, e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
-        }
-    }
-
 }
-
-
-
-
