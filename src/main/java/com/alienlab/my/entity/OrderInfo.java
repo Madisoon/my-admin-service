@@ -54,7 +54,7 @@ public class OrderInfo {
     }
 
     public void setOrderTime(Date orderTime) {
-        orderTime = orderTime;
+        this.orderTime = orderTime;
     }
 
    public UserInfo getUserInfo() {

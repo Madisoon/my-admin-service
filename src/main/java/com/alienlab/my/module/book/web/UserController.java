@@ -56,17 +56,6 @@ public class UserController {
         return ResponseEntity.ok().body(jsonObject);
     }
 
-    @PostMapping(value = "/getUserYzNumber")
-    @ApiOperation(value = "getUserYzNumber", notes = "获取")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "userPhone", value = "用户手机号", dataType = "string"),
-            @ApiImplicitParam(name = "userCode", value = "用户验证码", dataType = "string")
-    })
-    public ResponseEntity getUserYzNumber(@RequestParam String userPhone,
-                                          @RequestParam String userCode) {
-        String message = userManageService.getUserYzNumber(userPhone, userCode);
-        return ResponseEntity.ok().body(message);
-    }
 
     @PostMapping(value = "/vipBorrowReturn")
     @ApiOperation(value = "vipBorrowReturn", notes = "还书")
@@ -112,6 +101,23 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
         }
     }
+
+    @GetMapping(value = "/getUserReadingBookAndHistoryBook")
+    @ApiOperation(value = "getUserReadingBookAndHistoryBook", notes = "获取用户在读和借阅历史")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userd", value = "用户id", dataType = "Long"),
+    })
+    public ResponseEntity getUserReadingBookAndHistoryBook(@RequestParam Long userid) {
+        try {
+            JSONObject result = userManageService.getuserWatchBook(userid);
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+    }
+
 
 
 }

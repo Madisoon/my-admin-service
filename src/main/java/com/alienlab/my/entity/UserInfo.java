@@ -1,6 +1,8 @@
 package com.alienlab.my.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.persistence.criteria.Order;
 import java.util.Date;
@@ -85,14 +87,16 @@ public class UserInfo {
     @OneToMany(mappedBy = "userInfoOrder")
     private Set<OrderInfo> orderInfo = new HashSet<>();
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "historyUser")
     private Set<HistoryInfo> historyInfo = new HashSet<>();
 
+    @JsonIgnore
     public Set<HistoryInfo> getHistoryInfo() {
         return historyInfo;
     }
 
+    @JsonIgnore
     public void setHistoryInfo(Set<HistoryInfo> historyInfo) {
         this.historyInfo = historyInfo;
     }

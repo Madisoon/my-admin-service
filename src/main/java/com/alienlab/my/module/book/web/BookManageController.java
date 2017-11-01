@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alienlab.my.entity.BookInfo;
 import com.alienlab.my.entity.StockInfo;
+import com.alienlab.my.entity.UserInfo;
 import com.alienlab.my.module.book.service.IBookManageService;
+import com.alienlab.my.module.book.service.UserManageService;
 import com.alienlab.my.module.book.service.imp.BookManageService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -30,6 +32,9 @@ public class BookManageController {
 
     @Autowired
     private IBookManageService iBookManageService;
+
+    @Autowired
+    UserManageService userManageService;
 
     @Autowired
     BookManageService bookManageService;
@@ -158,4 +163,77 @@ public class BookManageController {
         }
     }
 
+    @GetMapping(value = "/userLogin")
+    @ApiOperation(value = "userLogin", notes = "用户登录接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userphone", value = "用户手机号码（用户名）", dataType = "string"),
+            @ApiImplicitParam(name = "password", value = "用户密码", dataType = "string"),
+    })
+    public ResponseEntity postUserData(@RequestParam String userphone,@RequestParam String password) {
+        try {
+            JSONObject result = new JSONObject();
+            UserInfo userInfo= userManageService.userLogin(userphone,password);
+            JSONObject book = userManageService.getuserWatchBook(userInfo.getId());
+            result.put("userInfo",userInfo);
+            result.put("bookInfo",book);
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+    }
+
+
+    @PostMapping(value = "/getUserYzNumber")
+    @ApiOperation(value = "getUserYzNumber", notes = "获取")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userPhone", value = "用户手机号", dataType = "string"),
+            @ApiImplicitParam(name = "userCode", value = "用户验证码", dataType = "string")
+    })
+    public ResponseEntity getUserYzNumber(@RequestParam String userPhone,
+                                          @RequestParam String userCode) {
+        String message = userManageService.getUserYzNumber(userPhone, userCode);
+        return ResponseEntity.ok().body(message);
+    }
+
+    @PostMapping(value = "/regist")
+    @ApiOperation(value = "regist", notes = "注册接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "UserInfo", value = "用户信息", dataType = "UserInfo"),
+    })
+    public ResponseEntity regist(@RequestBody UserInfo userInfo) {
+        try {
+            UserInfo userInfo1 =  userManageService.regist(userInfo);
+            return ResponseEntity.ok().body(userInfo1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+
+    }
+
+    @GetMapping(value = "/getBookDetailInfo")
+    @ApiOperation(value = "getBookDetailInfo", notes = "获取单本书籍的详细信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "bookid", value = "书籍id", dataType = "Long"),
+    })
+    public ResponseEntity getBookDetailInfo(@RequestParam Long bookid) {
+        try {
+            BookInfo bookInfo = bookManageService.findOneBook(bookid);
+            return ResponseEntity.ok().body(bookInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+
+    }
+
+
 }
+
+
+
+

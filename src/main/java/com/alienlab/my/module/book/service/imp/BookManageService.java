@@ -5,6 +5,7 @@ import com.alienlab.my.entity.*;
 import com.alienlab.my.module.book.service.IBookManageService;
 import com.alienlab.my.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,6 +16,9 @@ import java.util.*;
 
 @Service
 public class BookManageService implements IBookManageService {
+
+    @Value("${system.blank-reader-id}")
+    private String blankReadid;
 
     @Autowired
     BookInfoRepository bookInfoRepository;
@@ -101,42 +105,51 @@ public class BookManageService implements IBookManageService {
     }
 
     @Override
-    public SaveInfo collectBook(String readerId, String bookId) throws Exception {
-        BookInfo bookInfo = bookInfoRepository.findOne(Long.valueOf(bookId));
+    public SaveInfo collectBook(Long readerId, Long bookId) throws Exception {
+        BookInfo bookInfo = bookInfoRepository.findOne(bookId);
         if(bookInfo == null){
-            throw new Exception("咱没有该书库存，请联系管理员！");
+            throw new Exception("没有该书库存，请联系管理员！");
         }
-        UserInfo userInfo = userInfoRepository.findOne(Long.valueOf(readerId));
+        UserInfo userInfo = userInfoRepository.findOne(readerId);
         if(userInfo == null) throw new Exception("非法用户！");
-        SaveInfo saveInfo = saveInfoRepository.findSaveInfoByUserInfoIdAndSaveBookInfo(userInfo, bookInfo);
+        SaveInfo saveInfo = saveInfoRepository.findSaveInfoByUserInfoAndSaveBookInfo(userInfo, bookInfo);
         if (saveInfo != null) {
             throw new Exception("您已收藏过该书籍，无法继续添加！");
         }
         saveInfo = new SaveInfo();
         saveInfo.setSaveBookInfo(bookInfo);
-        /*saveInfo.setReaderID(readerId);*/
+        saveInfo.setUserInfo(userInfo);
         return saveInfoRepository.save(saveInfo);
     }
 
     @Override
-    public OrderInfo orderBook(String readerId, String bookId, int limit) throws Exception {
-        UserInfo userInfo = userInfoRepository.findOne(Long.valueOf(readerId));
+    public OrderInfo orderBook(Long readerId, Long bookId, int limit) throws Exception {
+        UserInfo userInfo = userInfoRepository.findOne(readerId);
         List<OrderInfo> orderInfos = orderInfoRepository.findOrderByUserInfoOrder(userInfo);
         if (orderInfos != null) {
             if (orderInfos.size() > limit) {
                 throw new Exception("您已超过可预定的最大本数！");
             }
         }
-        BookInfo bookInfo = bookInfoRepository.findOne(Long.valueOf(bookId));
+        BookInfo bookInfo = bookInfoRepository.findOne(bookId);
         if(bookInfo == null){
             throw  new Exception("库存中暂无该书籍信息，无法预定!");
         }
-        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoOrderIdAndOrderBookInfo(userInfo, bookInfo);
+        int flag = 0;
+        Set<StockInfo> stockInfos = bookInfo.getStockInfo();
+        for(StockInfo stockInfo :stockInfos){
+            if(blankReadid.equals(stockInfo.getUserInfoId()))flag++;
+        }
+        if(flag==stockInfos.size()){
+            throw  new Exception("暂无空余库存，无法预订该书籍!");
+        }
+        OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoOrderAndOrderBookInfo(userInfo, bookInfo);
         if (orderInfo != null) {
             throw new Exception("您已预订过该书籍，请阅读后再重新预订！");
         }
         orderInfo = new OrderInfo();
-        /*orderInfo.set(readerId);*/
+        orderInfo.setUserInfo(userInfo);
+        orderInfo.setOrderTime(new Date());
         orderInfo.setOrderBookInfo(bookInfo);
         return orderInfoRepository.save(orderInfo);
     }
@@ -179,28 +192,37 @@ public class BookManageService implements IBookManageService {
 
     }
 
+    @Override
+    public BookInfo findOneBook(Long bookid) throws Exception {
+        BookInfo bookInfo = bookInfoRepository.findOne(bookid);
+        if (bookInfo==null){
+            throw  new Exception("没有对应书籍信息,请联系管理员！");
+        }
+        return bookInfo;
+    }
+
     public StringBuffer setBuffer(StringBuffer sql, JSONObject basicSearch, JSONObject ARSearch, JSONObject LLSearch) {
         if (basicSearch != null) {
             if (JsonIsNull(basicSearch, "title")) {
-                sql.append(" AND  name = " + basicSearch.getString("title") + "  ");
+                sql.append(" AND  name like  '% "+ basicSearch.getString("title") + " %' ");
             }
             if (JsonIsNull(basicSearch, "ISBN")) {
-                sql.append(" AND isbn13= " + basicSearch.getString("ISBN") + " or isbn10 = " + basicSearch.getString("ISBN") + "    ");
+                sql.append(" AND isbn13  like  '%" + basicSearch.getString("ISBN") + " %' or isbn10 like  '% " + basicSearch.getString("ISBN") + "%'    ");
             }
             if (JsonIsNull(basicSearch, "author")) {
-                sql.append(" AND  author = " + basicSearch.getString("author") + "  ");
+                sql.append(" AND  author like  '% " + basicSearch.getString("author") + "%' ");
             }
             if (JsonIsNull(basicSearch, "publisher")) {
-                sql.append(" AND  doc_type = " + basicSearch.getString("publisher") + "  ");
+                sql.append(" AND  doc_type like '%  " + basicSearch.getString("publisher") + "%'  ");
             }
             if (JsonIsNull(basicSearch, "bookType")) {
-                sql.append(" AND  book_type = " + basicSearch.getString("bookType") + "  ");
+                sql.append(" AND  book_type like '%  " + basicSearch.getString("bookType") + "%'  ");
             }
         }
 
         if (ARSearch != null) {
             if (JsonIsNull(ARSearch, "interestLevel")) {
-                sql.append(" AND  il = " + ARSearch.getString("interestLevel") + "  ");
+                sql.append(" AND  il like '% " + ARSearch.getString("interestLevel") + "%'  ");
             }
             if (JsonIsNull(ARSearch, "ABLev")) {
                 sql.append(" AND bl >= " + ARSearch.getString("ABLev") + "  ");
@@ -209,7 +231,7 @@ public class BookManageService implements IBookManageService {
                 sql.append(" AND  bl <= " + ARSearch.getString("ABLevT") + "  ");
             }
             if (JsonIsNull(ARSearch, "QN")) {
-                sql.append(" AND  quiz_no = " + ARSearch.getString("QN") + "  ");
+                sql.append(" AND  quiz_no like '%" + ARSearch.getString("QN") + " %' ");
             }
             if (JsonIsNull(ARSearch, "ARP")) {
                 sql.append(" AND  arpoints >= " + ARSearch.getString("ARP") + "  ");
