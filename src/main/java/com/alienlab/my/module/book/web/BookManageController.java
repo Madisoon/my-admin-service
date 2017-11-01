@@ -214,6 +214,23 @@ public class BookManageController {
 
     }
 
+    @GetMapping(value = "/getBookDetailInfo")
+    @ApiOperation(value = "getBookDetailInfo", notes = "获取单本书籍的详细信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "bookid", value = "书籍id", dataType = "Long"),
+    })
+    public ResponseEntity getBookDetailInfo(@RequestParam Long bookid) {
+        try {
+            BookInfo bookInfo = bookManageService.findOneBook(bookid);
+            return ResponseEntity.ok().body(bookInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+
+    }
+
 
 }
 

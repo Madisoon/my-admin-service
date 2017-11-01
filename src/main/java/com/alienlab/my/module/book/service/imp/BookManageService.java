@@ -17,7 +17,7 @@ import java.util.*;
 @Service
 public class BookManageService implements IBookManageService {
 
-    @Value("${system.blank-reader-id=}")
+    @Value("${system.blank-reader-id}")
     private String blankReadid;
 
     @Autowired
@@ -190,6 +190,15 @@ public class BookManageService implements IBookManageService {
 
         return null;
 
+    }
+
+    @Override
+    public BookInfo findOneBook(Long bookid) throws Exception {
+        BookInfo bookInfo = bookInfoRepository.findOne(bookid);
+        if (bookInfo==null){
+            throw  new Exception("没有对应书籍信息,请联系管理员！");
+        }
+        return bookInfo;
     }
 
     public StringBuffer setBuffer(StringBuffer sql, JSONObject basicSearch, JSONObject ARSearch, JSONObject LLSearch) {
