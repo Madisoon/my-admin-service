@@ -197,6 +197,24 @@ public class BookManageController {
         return ResponseEntity.ok().body(message);
     }
 
+    @PostMapping(value = "/regist")
+    @ApiOperation(value = "regist", notes = "注册接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "UserInfo", value = "用户信息", dataType = "UserInfo"),
+    })
+    public ResponseEntity regist(@RequestBody UserInfo userInfo) {
+        try {
+            UserInfo userInfo1 =  userManageService.regist(userInfo);
+            return ResponseEntity.ok().body(userInfo1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+
+    }
+
+
 }
 
 

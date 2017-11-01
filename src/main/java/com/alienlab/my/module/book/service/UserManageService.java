@@ -27,4 +27,6 @@ public interface UserManageService {
     public void deleteSaveBook(Long userId,Long bookId) throws Exception;
 
     public void deleteOrderBook(Long userId,Long bookId) throws Exception;
+
+    public UserInfo regist(UserInfo userInfo)throws Exception;
 }

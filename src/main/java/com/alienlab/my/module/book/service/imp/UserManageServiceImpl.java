@@ -233,4 +233,14 @@ public class UserManageServiceImpl implements UserManageService {
         }
         orderInfoRepository.delete(orderInfo);
     }
+
+    @Override
+    public UserInfo regist(UserInfo userInfo) throws Exception {
+        List<UserInfo> userInfos = userInfoRepository.findUserByPhoneNo(userInfo.getPhoneNo());
+        if(userInfos!=null){
+            throw  new Exception("该手机号已经注册过，无法重复注册！");
+        }
+        return userInfoRepository.save(userInfo);
+
+    }
 }

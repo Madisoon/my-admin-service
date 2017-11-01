@@ -5,6 +5,7 @@ import com.alienlab.my.entity.*;
 import com.alienlab.my.module.book.service.IBookManageService;
 import com.alienlab.my.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,6 +16,9 @@ import java.util.*;
 
 @Service
 public class BookManageService implements IBookManageService {
+
+    @Value("${system.blank-reader-id=}")
+    private String blankReadid;
 
     @Autowired
     BookInfoRepository bookInfoRepository;
@@ -130,6 +134,14 @@ public class BookManageService implements IBookManageService {
         BookInfo bookInfo = bookInfoRepository.findOne(bookId);
         if(bookInfo == null){
             throw  new Exception("库存中暂无该书籍信息，无法预定!");
+        }
+        int flag = 0;
+        Set<StockInfo> stockInfos = bookInfo.getStockInfo();
+        for(StockInfo stockInfo :stockInfos){
+            if(blankReadid.equals(stockInfo.getUserInfoId()))flag++;
+        }
+        if(flag==stockInfos.size()){
+            throw  new Exception("暂无空余库存，无法预订该书籍!");
         }
         OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoOrderAndOrderBookInfo(userInfo, bookInfo);
         if (orderInfo != null) {
