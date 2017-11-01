@@ -93,7 +93,7 @@ public class UserController {
     })
     public ResponseEntity postUserData(@RequestParam Long userId) {
         try {
-            UserInfo userInfo= userManageService.getUserInfoAndBook(userId);
+            UserInfo userInfo = userManageService.getUserInfoAndBook(userId);
             return ResponseEntity.ok().body(userInfo);
         } catch (Exception e) {
             e.printStackTrace();
