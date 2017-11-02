@@ -1,27 +1,25 @@
 package com.alienlab.my.module.book.web;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alienlab.my.entity.BookInfo;
-import com.alienlab.my.entity.StockInfo;
+import com.alienlab.my.entity.BookNews;
 import com.alienlab.my.entity.UserInfo;
-import com.alienlab.my.module.book.service.IBookManageService;
+import com.alienlab.my.module.book.service.BookManageService;
 import com.alienlab.my.module.book.service.UserManageService;
-import com.alienlab.my.module.book.service.imp.BookManageService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Msater Zg
@@ -31,13 +29,13 @@ import java.util.Map;
 public class BookManageController {
 
     @Autowired
-    private IBookManageService iBookManageService;
+    private BookManageService iBookManageService;
 
     @Autowired
     UserManageService userManageService;
 
     @Autowired
-    BookManageService bookManageService;
+    com.alienlab.my.module.book.service.imp.BookManageServiceImpl bookManageService;
 
     @PutMapping(value = "/insertBookInfo")
     @ApiOperation(value = "insertBookInfo", notes = "插入书籍信息")
@@ -265,6 +263,49 @@ public class BookManageController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
         }
 
+    }
+
+    @GetMapping(value = "/getBookStockInfo")
+    @ApiOperation(value = "getBookStockInfo", notes = "会员还书")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "书籍的id", required = true, dataType = "STRING")
+    })
+    public ResponseEntity getBookStockInfo(@RequestParam("id") String id) {
+        JSONObject jsonObject = iBookManageService.getBookStockInfo(id);
+        return ResponseEntity.ok().body(jsonObject);
+    }
+
+    @PostMapping(value = "/insertUpdateBookNews")
+    @ApiOperation(value = "insertUpdateBookNews", notes = "获取单本书籍的详细信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "bookNewsData", value = "新闻信息", dataType = "String"),
+    })
+    public ResponseEntity insertUpdateBookNews(@RequestParam String bookNewsData) {
+        try {
+            BookNews bookNews = JSON.parseObject(bookNewsData, BookNews.class);
+            BookNews bookNewsReturn = bookManageService.insertUpdateBookNews(bookNews);
+            return ResponseEntity.ok().body(bookNewsReturn);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+    }
+
+    @GetMapping(value = "/getAllBookNews")
+    @ApiOperation(value = "getAllBookNews", notes = "获取单本书籍的详细信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "newsType", value = "新闻类型", dataType = "String"),
+    })
+    public ResponseEntity getAllBookNews(@RequestParam String newsType) {
+        try {
+            JSONArray jsonArray = bookManageService.getAllBookNews(newsType);
+            return ResponseEntity.ok().body(jsonArray);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
     }
 
 

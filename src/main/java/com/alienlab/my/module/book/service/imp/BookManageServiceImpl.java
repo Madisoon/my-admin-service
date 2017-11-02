@@ -1,9 +1,11 @@
 package com.alienlab.my.module.book.service.imp;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alienlab.my.entity.*;
-import com.alienlab.my.module.book.service.IBookManageService;
 import com.alienlab.my.repository.*;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -15,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
-public class BookManageService implements IBookManageService {
+public class BookManageServiceImpl implements com.alienlab.my.module.book.service.BookManageService {
 
     @Value("${system.blank-reader-id}")
     private String blankReadid;
@@ -38,6 +40,9 @@ public class BookManageService implements IBookManageService {
 
     @Autowired
     UserInfoRepository userInfoRepository;
+
+    @Autowired
+    BookNewsRepository bookNewsRepository;
 
 
     @Override
@@ -306,5 +311,39 @@ public class BookManageService implements IBookManageService {
     @Override
     public BookInfo findBookByISBN13(String isbn) {
         return bookInfoRepository.findBookByISBN13(isbn);
+    }
+
+    @Override
+    public JSONObject getBookStockInfo(String id) {
+        String sql = "SELECT a.*,b.book_case,b.library_id FROM bookinfo a , stockinfo b " +
+                "WHERE a.id = b.book_info_id AND a.id = '" + id + "'" +
+                "AND b.user_info_id = '88888888' LIMIT 0,1 ";
+        Map<String, Object> map = new HashMap<>();
+        try {
+            map = jdbcTemplate.queryForMap(sql);
+        } catch (Exception e) {
+            map.put("result", 0);
+        }
+        JSONObject jsonObject = (JSONObject) JSON.toJSON(map);
+        return jsonObject;
+    }
+
+    @Override
+    public BookNews insertUpdateBookNews(BookNews bookNews) {
+        BookNews bookNewsReturn = bookNewsRepository.save(bookNews);
+        return bookNewsReturn;
+    }
+
+    @Override
+    public BookNews deleteBookNews(String id) {
+        return null;
+    }
+
+    @Override
+    public JSONArray getAllBookNews(String type) {
+        String sql = "SELECT * FROM booknews WHERE news_type = '" + type + "'";
+        List list = jdbcTemplate.queryForList(sql);
+        JSONArray jsonArray = (JSONArray) JSON.toJSON(list);
+        return jsonArray;
     }
 }

@@ -3,7 +3,7 @@ package com.alienlab.my.module.book.web;
 import com.alienlab.my.entity.OrderInfo;
 import com.alienlab.my.entity.SaveInfo;
 import com.alienlab.my.module.book.service.UserManageService;
-import com.alienlab.my.module.book.service.imp.BookManageService;
+import com.alienlab.my.module.book.service.imp.BookManageServiceImpl;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class UpiBookManageController {
 
     @Autowired
-    BookManageService bookManageService;
+    BookManageServiceImpl bookManageService;
 
     @Autowired
     UserManageService userManageService;

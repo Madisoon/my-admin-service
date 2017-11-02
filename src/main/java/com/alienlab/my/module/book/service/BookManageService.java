@@ -1,20 +1,20 @@
 package com.alienlab.my.module.book.service;
 
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alienlab.my.entity.BookInfo;
-import com.alienlab.my.entity.OrderInfo;
-import com.alienlab.my.entity.SaveInfo;
-import com.alienlab.my.entity.StockInfo;
+import com.alienlab.my.entity.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface IBookManageService {
+public interface BookManageService {
 
     // 书籍信息的接口
     public BookInfo insertBookInfo(BookInfo bookInfo, String stockInfo);
+
+    public JSONObject getBookStockInfo(String id);
 
     public List<BookInfo> getAllBook();
 
@@ -42,7 +42,21 @@ public interface IBookManageService {
 
     public JSONObject advancedSearch(JSONObject basicSearch, JSONObject ARSearch, JSONObject LLSearch, int index, int length) throws Exception;
 
-    public Page<BookInfo> searchBook(String type,String value1,String value2,String value3,String value4,Pageable pageable) throws Exception;
+    public Page<BookInfo> searchBook(String type, String value1, String value2, String value3, String value4, Pageable pageable) throws Exception;
 
     public BookInfo findOneBook(Long bookid) throws Exception;
+
+    // 网站新闻的接口
+
+    /**
+     * 用来插入或者改变新闻的数据
+     *
+     * @param bookNews
+     * @return
+     */
+    public BookNews insertUpdateBookNews(BookNews bookNews);
+
+    public BookNews deleteBookNews(String id);
+
+    public JSONArray getAllBookNews(String type);
 }
