@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -275,6 +276,28 @@ public class BookManageController {
         return ResponseEntity.ok().body(jsonObject);
     }
 
+    @PostMapping(value = "/getBookCase")
+    @ApiOperation(value = "getBookCase", notes = "得到书籍的信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "libraryId", value = "书籍编码", required = true, dataType = "STRING")
+    })
+    public ResponseEntity getBookCase(@RequestParam("libraryId") String libraryId) {
+        JSONObject jsonObject = iBookManageService.getBookCase(libraryId);
+        return ResponseEntity.ok().body(jsonObject);
+    }
+
+    @PostMapping(value = "/updateBookCase")
+    @ApiOperation(value = "updateBookCase", notes = "得到书籍的信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "libraryId", value = "书籍编码", required = true, dataType = "STRING"),
+            @ApiImplicitParam(name = "bookCase", value = "书架信息", required = true, dataType = "STRING")
+    })
+    public ResponseEntity updateBookCase(@RequestParam("libraryId") String libraryId,
+                                         @RequestParam("bookCase") String bookCase) {
+        JSONObject jsonObject = iBookManageService.updateBookCase(libraryId, bookCase);
+        return ResponseEntity.ok().body(jsonObject);
+    }
+
     @PostMapping(value = "/insertUpdateBookNews")
     @ApiOperation(value = "insertUpdateBookNews", notes = "获取单本书籍的详细信息")
     @ApiImplicitParams({
@@ -283,6 +306,7 @@ public class BookManageController {
     public ResponseEntity insertUpdateBookNews(@RequestParam String bookNewsData) {
         try {
             BookNews bookNews = JSON.parseObject(bookNewsData, BookNews.class);
+            bookNews.setNewsTime(new Date());
             BookNews bookNewsReturn = bookManageService.insertUpdateBookNews(bookNews);
             return ResponseEntity.ok().body(bookNewsReturn);
         } catch (Exception e) {

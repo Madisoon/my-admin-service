@@ -26,6 +26,10 @@ public interface BookManageService {
 
     public BookInfo findBookByISBN13(String isbn);
 
+    public JSONObject getBookCase(String libraryId);
+
+    public JSONObject updateBookCase(String libraryId, String bookCase);
+
     // 库存信息的接口
 
     public StockInfo insertStockInfo(StockInfo stockInfo);

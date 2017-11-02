@@ -22,10 +22,10 @@ public class BookNews {
     private String newsTitle;
 
     @Column(name = "news_content")
-    private Date newsContent;
+    private String newsContent;
 
     @Column(name = "news_type")
-    private Date newsType;
+    private String newsType;
 
     @Column(name = "news_time")
     private Date newsTime;
@@ -46,19 +46,19 @@ public class BookNews {
         this.newsTitle = newsTitle;
     }
 
-    public Date getNewsContent() {
+    public String getNewsContent() {
         return newsContent;
     }
 
-    public void setNewsContent(Date newsContent) {
+    public void setNewsContent(String newsContent) {
         this.newsContent = newsContent;
     }
 
-    public Date getNewsType() {
+    public String getNewsType() {
         return newsType;
     }
 
-    public void setNewsType(Date newsType) {
+    public void setNewsType(String newsType) {
         this.newsType = newsType;
     }
 

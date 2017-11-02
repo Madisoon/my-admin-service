@@ -329,6 +329,24 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
     }
 
     @Override
+    public JSONObject getBookCase(String libraryId) {
+        String sql = "SELECT * FROM stockinfo a ,bookinfo b " +
+                "WHERE a.`book_info_id` = b.`id` AND a.`library_id` = '" + libraryId + "'";
+        Map<String, Object> map = jdbcTemplate.queryForMap(sql);
+        JSONObject jsonObject = (JSONObject) JSON.toJSON(map);
+        return jsonObject;
+    }
+
+    @Override
+    public JSONObject updateBookCase(String libraryId, String bookCase) {
+        String sql = "UPDATE stockinfo a SET a.`book_case` = '" + bookCase + "' WHERE a.`library_id` = '" + libraryId + "'";
+        int result = jdbcTemplate.update(sql);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("result", result);
+        return jsonObject;
+    }
+
+    @Override
     public BookNews insertUpdateBookNews(BookNews bookNews) {
         BookNews bookNewsReturn = bookNewsRepository.save(bookNews);
         return bookNewsReturn;
