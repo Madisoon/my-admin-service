@@ -65,8 +65,11 @@ public class UserController {
     })
     public ResponseEntity vipBorrowReturn(@RequestParam String userPhone,
                                           @RequestParam String libraryId) {
+
         JSONObject jsonObject = userManageService.vipBorrowReturn(userPhone, libraryId);
         return ResponseEntity.ok().body(jsonObject);
+
+
     }
 
     @PostMapping(value = "/postUserData")
@@ -81,8 +84,14 @@ public class UserController {
                                        @RequestParam String returnBookId,
                                        @RequestParam String borrowBookId,
                                        @RequestParam String orderBookId) {
-        JSONObject jsonObject = userManageService.postUserData(userInfoData, returnBookId, borrowBookId, orderBookId);
-        return ResponseEntity.ok().body(jsonObject);
+        try {
+            JSONObject jsonObject = userManageService.postUserData(userInfoData, returnBookId, borrowBookId, orderBookId);
+            return ResponseEntity.ok().body(jsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
     }
 
 

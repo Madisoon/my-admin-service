@@ -107,11 +107,13 @@ public class BookManageService implements IBookManageService {
     @Override
     public SaveInfo collectBook(Long readerId, Long bookId) throws Exception {
         BookInfo bookInfo = bookInfoRepository.findOne(bookId);
-        if(bookInfo == null){
+        if (bookInfo == null) {
             throw new Exception("没有该书库存，请联系管理员！");
         }
         UserInfo userInfo = userInfoRepository.findOne(readerId);
-        if(userInfo == null) throw new Exception("非法用户！");
+        if (userInfo == null) {
+            throw new Exception("非法用户！");
+        }
         SaveInfo saveInfo = saveInfoRepository.findSaveInfoByUserInfoAndSaveBookInfo(userInfo, bookInfo);
         if (saveInfo != null) {
             throw new Exception("您已收藏过该书籍，无法继续添加！");
@@ -132,16 +134,18 @@ public class BookManageService implements IBookManageService {
             }
         }
         BookInfo bookInfo = bookInfoRepository.findOne(bookId);
-        if(bookInfo == null){
-            throw  new Exception("库存中暂无该书籍信息，无法预定!");
+        if (bookInfo == null) {
+            throw new Exception("库存中暂无该书籍信息，无法预定!");
         }
         int flag = 0;
         Set<StockInfo> stockInfos = bookInfo.getStockInfo();
-        for(StockInfo stockInfo :stockInfos){
-            if(blankReadid.equals(stockInfo.getUserInfoId()))flag++;
+        for (StockInfo stockInfo : stockInfos) {
+            if (blankReadid.equals(stockInfo.getUserInfoId())) {
+                flag++;
+            }
         }
-        if(flag==stockInfos.size()){
-            throw  new Exception("暂无空余库存，无法预订该书籍!");
+        if (flag == stockInfos.size()) {
+            throw new Exception("暂无空余库存，无法预订该书籍!");
         }
         OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoOrderAndOrderBookInfo(userInfo, bookInfo);
         if (orderInfo != null) {
@@ -177,15 +181,22 @@ public class BookManageService implements IBookManageService {
     }
 
     @Override
-    public Page<BookInfo> searchBook(String type,String value1, String value2, String value3, String value4, Pageable pageable) throws Exception {
+    public Page<BookInfo> searchBook(String type, String value1, String value2, String value3, String value4, Pageable pageable) throws Exception {
         Page<BookInfo> bookInfos;
         if (isNull(value1)) {
             bookInfos = bookInfoRepository.findAll(pageable);
             return bookInfos;
-        }else{
-            if(type.equals("all")){ bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthor(value1,value2,value3,value4,pageable);  return bookInfos;}
-            else if(type.equals("ar")){ bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthorAndArtag(value1,value2,value3,value4,1,pageable);  return bookInfos;}
-            else if(type.equals("lexile")){ bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthorAndLexileTag(value1,value2,value3,value4,1,pageable);  return bookInfos;}
+        } else {
+            if (type.equals("all")) {
+                bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthor(value1, value2, value3, value4, pageable);
+                return bookInfos;
+            } else if (type.equals("ar")) {
+                bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthorAndArtag(value1, value2, value3, value4, 1, pageable);
+                return bookInfos;
+            } else if (type.equals("lexile")) {
+                bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthorAndLexileTag(value1, value2, value3, value4, 1, pageable);
+                return bookInfos;
+            }
         }
 
         return null;
@@ -195,8 +206,8 @@ public class BookManageService implements IBookManageService {
     @Override
     public BookInfo findOneBook(Long bookid) throws Exception {
         BookInfo bookInfo = bookInfoRepository.findOne(bookid);
-        if (bookInfo==null){
-            throw  new Exception("没有对应书籍信息,请联系管理员！");
+        if (bookInfo == null) {
+            throw new Exception("没有对应书籍信息,请联系管理员！");
         }
         return bookInfo;
     }
@@ -204,7 +215,7 @@ public class BookManageService implements IBookManageService {
     public StringBuffer setBuffer(StringBuffer sql, JSONObject basicSearch, JSONObject ARSearch, JSONObject LLSearch) {
         if (basicSearch != null) {
             if (JsonIsNull(basicSearch, "title")) {
-                sql.append(" AND  name like  '% "+ basicSearch.getString("title") + " %' ");
+                sql.append(" AND  name like  '% " + basicSearch.getString("title") + " %' ");
             }
             if (JsonIsNull(basicSearch, "ISBN")) {
                 sql.append(" AND isbn13  like  '%" + basicSearch.getString("ISBN") + " %' or isbn10 like  '% " + basicSearch.getString("ISBN") + "%'    ");
@@ -262,7 +273,7 @@ public class BookManageService implements IBookManageService {
         return flag;
     }
 
-    public Boolean isNull(String value){
+    public Boolean isNull(String value) {
         Boolean flag = false;
         if (value == null || "".equals(value) || "null".equals(value)) {
             flag = true;
@@ -280,8 +291,8 @@ public class BookManageService implements IBookManageService {
         UserInfo userInfo = userInfoRepository.findOne(Long.valueOf(stockInfo.getUserInfoId()));
         HistoryInfo historyInfo = new HistoryInfo();
 
-        historyInfo.setStockInfo(stockInfo);
-        historyInfo.setUserInfoHistory(userInfo);
+        historyInfo.setHistoryStockInfo(stockInfo);
+        historyInfo.setHistoryUser(userInfo);
         historyInfo.setBorrowTime(stockInfo.getLastTime());
         historyInfo.setReturnTime(new Date());
         historyInfo.setRRanking("1");

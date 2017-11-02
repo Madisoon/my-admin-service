@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Msater Zg on 2017/10/2.
+ * @author Msater Zg
  */
 @RestController
 @RequestMapping(value = "/book")
@@ -47,9 +47,16 @@ public class BookManageController {
     })
     public ResponseEntity insertBookInfo(@RequestParam("bookInfo") String bookInfoData,
                                          @RequestParam("stockInfo") String stockInfo) {
-        BookInfo bookInfo = JSON.parseObject(bookInfoData, BookInfo.class);
-        BookInfo returnBookInfo = iBookManageService.insertBookInfo(bookInfo, stockInfo);
-        return ResponseEntity.ok().body(returnBookInfo);
+
+        try {
+            BookInfo bookInfo = JSON.parseObject(bookInfoData, BookInfo.class);
+            BookInfo returnBookInfo = iBookManageService.insertBookInfo(bookInfo, stockInfo);
+            return ResponseEntity.ok().body(returnBookInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
     }
 
     @GetMapping(value = "/getAllBook")
@@ -57,9 +64,14 @@ public class BookManageController {
     @ApiImplicitParams({
     })
     public ResponseEntity getAllBook() {
-        List<BookInfo> list = iBookManageService.getAllBook();
-
-        return ResponseEntity.ok().body(list);
+        try {
+            List<BookInfo> list = iBookManageService.getAllBook();
+            return ResponseEntity.ok().body(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
 
     }
 
@@ -69,9 +81,15 @@ public class BookManageController {
             @ApiImplicitParam(name = "bookInfo", value = "书籍信息", required = true, dataType = "STRING")
     })
     public ResponseEntity updateBookInfo(@RequestParam("bookInfo") String bookInfoData) {
-        BookInfo bookInfo = JSON.parseObject(bookInfoData, BookInfo.class);
-        BookInfo bookInfoReturn = iBookManageService.updateBookInfo(bookInfo);
-        return ResponseEntity.ok().body(bookInfoReturn);
+        try {
+            BookInfo bookInfo = JSON.parseObject(bookInfoData, BookInfo.class);
+            BookInfo bookInfoReturn = iBookManageService.updateBookInfo(bookInfo);
+            return ResponseEntity.ok().body(bookInfoReturn);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
 
     }
 
@@ -81,10 +99,17 @@ public class BookManageController {
             @ApiImplicitParam(name = "isbn13", value = "书籍编码", required = true, dataType = "STRING")
     })
     public ResponseEntity deleteBookInfo(@RequestParam("isbn13") String isbn13) {
-        BookInfo bookInfo = new BookInfo();
-        bookInfo.setiSBN13(isbn13);
-        iBookManageService.deleteBookInfo(bookInfo);
-        return ResponseEntity.ok().body("1");
+        try {
+            BookInfo bookInfo = new BookInfo();
+            bookInfo.setiSBN13(isbn13);
+            iBookManageService.deleteBookInfo(bookInfo);
+            return ResponseEntity.ok().body("1");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+
     }
 
     @GetMapping(value = "/getAllBookByIsbn")
@@ -93,8 +118,14 @@ public class BookManageController {
             @ApiImplicitParam(name = "isbn13", value = "书籍编码", required = true, dataType = "STRING")
     })
     public ResponseEntity getAllBookByIsbn(@RequestParam("isbn13") String isbn13) {
-        BookInfo bookInfo = iBookManageService.findBookByISBN13(isbn13);
-        return ResponseEntity.ok().body(bookInfo);
+        try {
+            BookInfo bookInfo = iBookManageService.findBookByISBN13(isbn13);
+            return ResponseEntity.ok().body(bookInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
     }
 
     @PostMapping(value = "/returnBook")
@@ -103,10 +134,16 @@ public class BookManageController {
             @ApiImplicitParam(name = "isbn", value = "书籍编码", required = true, dataType = "STRING")
     })
     public ResponseEntity returnBook(@RequestParam("isbn") String isbn) {
-        JSONObject jsonObject = iBookManageService.updateStock(isbn);
-        return ResponseEntity.ok().body(jsonObject);
-    }
+        try {
+            JSONObject jsonObject = iBookManageService.updateStock(isbn);
+            return ResponseEntity.ok().body(jsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
 
+    }
 
     @GetMapping(value = "/getRecommendBook")
     @ApiOperation(value = "getRecommendBook", notes = "获取本馆推荐书籍")
@@ -142,7 +179,6 @@ public class BookManageController {
     }
 
 
-
     @GetMapping("/searchBook")
     @ApiOperation(value = "searchBook", notes = "搜索书籍")
     @ApiImplicitParams({
@@ -151,10 +187,10 @@ public class BookManageController {
             @ApiImplicitParam(name = "index", value = "当前页码", dataType = "int"),
             @ApiImplicitParam(name = "length", value = "每页长度", dataType = "int"),
     })
-    public ResponseEntity searchBook(@RequestParam String type,@RequestParam String value, @RequestParam int index, @RequestParam int length) {
+    public ResponseEntity searchBook(@RequestParam String type, @RequestParam String value, @RequestParam int index, @RequestParam int length) {
 
         try {
-            Page<BookInfo> page = bookManageService.searchBook(type,value,value,value,value,new PageRequest(index,length));
+            Page<BookInfo> page = bookManageService.searchBook(type, value, value, value, value, new PageRequest(index, length));
             return ResponseEntity.ok().body(page);
         } catch (Exception e) {
             e.printStackTrace();
@@ -169,13 +205,13 @@ public class BookManageController {
             @ApiImplicitParam(name = "userphone", value = "用户手机号码（用户名）", dataType = "string"),
             @ApiImplicitParam(name = "password", value = "用户密码", dataType = "string"),
     })
-    public ResponseEntity postUserData(@RequestParam String userphone,@RequestParam String password) {
+    public ResponseEntity postUserData(@RequestParam String userphone, @RequestParam String password) {
         try {
             JSONObject result = new JSONObject();
-            UserInfo userInfo= userManageService.userLogin(userphone,password);
+            UserInfo userInfo = userManageService.userLogin(userphone, password);
             JSONObject book = userManageService.getuserWatchBook(userInfo.getId());
-            result.put("userInfo",userInfo);
-            result.put("bookInfo",book);
+            result.put("userInfo", userInfo);
+            result.put("bookInfo", book);
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             e.printStackTrace();
@@ -204,7 +240,7 @@ public class BookManageController {
     })
     public ResponseEntity regist(@RequestBody UserInfo userInfo) {
         try {
-            UserInfo userInfo1 =  userManageService.regist(userInfo);
+            UserInfo userInfo1 = userManageService.regist(userInfo);
             return ResponseEntity.ok().body(userInfo1);
         } catch (Exception e) {
             e.printStackTrace();
