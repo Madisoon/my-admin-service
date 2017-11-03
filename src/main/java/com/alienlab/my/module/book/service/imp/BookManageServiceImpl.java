@@ -292,10 +292,9 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
         String dateFormData = simpleDateFormat.format(new Date());
         String sqlUpdate = "UPDATE stockinfo a SET a.last_time='" + dateFormData + "' , " +
                 "a.user_info_id='88888888' WHERE a.library_id = '" + libraryId + "' ";
-        StockInfo stockInfo = stockInfoRepository.findOne(Long.valueOf(libraryId));
+        StockInfo stockInfo = stockInfoRepository.findStockByLibraryId(libraryId);
         UserInfo userInfo = userInfoRepository.findOne(Long.valueOf(stockInfo.getUserInfoId()));
         HistoryInfo historyInfo = new HistoryInfo();
-
         historyInfo.setHistoryStockInfo(stockInfo);
         historyInfo.setHistoryUser(userInfo);
         historyInfo.setBorrowTime(stockInfo.getLastTime());

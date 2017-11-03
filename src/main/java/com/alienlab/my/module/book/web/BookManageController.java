@@ -317,13 +317,14 @@ public class BookManageController {
     }
 
     @GetMapping(value = "/getAllBookNews")
-    @ApiOperation(value = "getAllBookNews", notes = "获取单本书籍的详细信息")
+    @ApiOperation(value = "getAllBookNews", notes = "根据新闻的类型获取新闻")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "newsType", value = "新闻类型", dataType = "String"),
     })
     public ResponseEntity getAllBookNews(@RequestParam String newsType) {
         try {
             JSONArray jsonArray = bookManageService.getAllBookNews(newsType);
+            System.out.println(jsonArray);
             return ResponseEntity.ok().body(jsonArray);
         } catch (Exception e) {
             e.printStackTrace();
