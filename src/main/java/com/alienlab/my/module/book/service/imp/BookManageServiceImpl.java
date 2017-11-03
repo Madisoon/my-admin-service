@@ -309,7 +309,7 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
 
     @Override
     public BookInfo findBookByISBN13(String isbn) {
-        return bookInfoRepository.findBookByISBN13(isbn);
+        return bookInfoRepository.findBookByISBN13OrISBN10(isbn, isbn);
     }
 
     @Override
