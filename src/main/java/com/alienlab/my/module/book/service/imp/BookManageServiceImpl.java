@@ -291,7 +291,7 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String dateFormData = simpleDateFormat.format(new Date());
         String sqlUpdate = "UPDATE stockinfo a SET a.last_time='" + dateFormData + "' , " +
-                "a.user_info_id='88888888' WHERE a.library_id = '" + libraryId + "' ";
+                "a.user_info_id='88888888' , a.stock_tag = '1'  WHERE a.library_id = '" + libraryId + "' ";
         StockInfo stockInfo = stockInfoRepository.findStockByLibraryId(libraryId);
         UserInfo userInfo = userInfoRepository.findOne(Long.valueOf(stockInfo.getUserInfoId()));
         HistoryInfo historyInfo = new HistoryInfo();
