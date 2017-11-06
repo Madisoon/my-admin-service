@@ -297,6 +297,7 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
         HistoryInfo historyInfo = new HistoryInfo();
         historyInfo.setHistoryStockInfo(stockInfo);
         historyInfo.setHistoryUser(userInfo);
+        historyInfo.setBookId(stockInfo.getBookInfo().getId());
         historyInfo.setBorrowTime(stockInfo.getLastTime());
         historyInfo.setReturnTime(new Date());
         historyInfo.setRRanking("1");
