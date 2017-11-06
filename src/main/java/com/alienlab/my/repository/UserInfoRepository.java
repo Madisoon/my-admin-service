@@ -8,5 +8,5 @@ import java.util.List;
 public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
     public UserInfo findUserByReaderIdOrPhoneNo(String readerId, String phoneNo);
     UserInfo findUserByPhoneNoAndPassword(String phone,String password);
-    List<UserInfo>  findUserByPhoneNo(String phone);
+    UserInfo  findUserByPhoneNo(String phone);
 }

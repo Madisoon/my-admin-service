@@ -237,11 +237,30 @@ public class UserManageServiceImpl implements UserManageService {
 
     @Override
     public UserInfo regist(UserInfo userInfo) throws Exception {
-        List<UserInfo> userInfos = userInfoRepository.findUserByPhoneNo(userInfo.getPhoneNo());
+        UserInfo userInfos = userInfoRepository.findUserByPhoneNo(userInfo.getPhoneNo());
         if (userInfos != null) {
             throw new Exception("该手机号已经注册过，无法重复注册！");
         }
         return userInfoRepository.save(userInfo);
 
+    }
+
+    @Override
+    public UserInfo getUserByPhone(String phone) throws Exception {
+        UserInfo userInfo = userInfoRepository.findUserByPhoneNo(phone);
+        if(userInfo == null){
+            throw new Exception("没有改手机号码的注册信息，请确认信息是否正确！");
+        }
+        return userInfo;
+    }
+
+    @Override
+    public UserInfo changePassword(String phone, String newpassword) throws Exception {
+        UserInfo userInfo = userInfoRepository.findUserByPhoneNo(phone);
+        if(userInfo == null){
+            throw  new Exception("没有对应号码的注册用户！");
+        }
+        userInfo.setPassword(newpassword);
+        return userInfoRepository.save(userInfo);
     }
 }

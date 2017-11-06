@@ -29,4 +29,8 @@ public interface UserManageService {
     public void deleteOrderBook(Long userId,Long bookId) throws Exception;
 
     public UserInfo regist(UserInfo userInfo)throws Exception;
+
+    public UserInfo getUserByPhone(String phone) throws Exception;
+
+    public UserInfo changePassword(String phone ,String newpassword) throws Exception;
 }
