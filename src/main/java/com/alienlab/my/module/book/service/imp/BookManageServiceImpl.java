@@ -188,7 +188,7 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
     @Override
     public Page<BookInfo> searchBook(String type, String value1, String value2, String value3, String value4, Pageable pageable) throws Exception {
         Page<BookInfo> bookInfos;
-        if (isNull(value1)) {
+        if (isNull(value1) && type.equals("all")) {
             bookInfos = bookInfoRepository.findAll(pageable);
             return bookInfos;
         } else {
@@ -196,10 +196,12 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
                 bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthor(value1, value2, value3, value4, pageable);
                 return bookInfos;
             } else if (type.equals("ar")) {
-                bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthorAndArtag(value1, value2, value3, value4, 1, pageable);
+                if(isNull(value1)) bookInfos = bookInfoRepository.findBookByArtag(1,pageable);
+                else  bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthorAndArtag(value1, value2, value3, value4, 1, pageable);
                 return bookInfos;
             } else if (type.equals("lexile")) {
-                bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthorAndLexileTag(value1, value2, value3, value4, 1, pageable);
+                if(isNull(value1)) bookInfos = bookInfoRepository.findBookByLexileTag(1,pageable);
+                else bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthorAndLexileTag(value1, value2, value3, value4, 1, pageable);
                 return bookInfos;
             }
         }
