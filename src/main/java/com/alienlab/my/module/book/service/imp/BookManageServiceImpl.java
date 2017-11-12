@@ -145,7 +145,7 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
         int flag = 0;
         Set<StockInfo> stockInfos = bookInfo.getStockInfo();
         for (StockInfo stockInfo : stockInfos) {
-            if (blankReadid.equals(stockInfo.getUserInfoId())) {
+            if (!(blankReadid.equals(stockInfo.getUserInfoId()))) {
                 flag++;
             }
         }
@@ -192,16 +192,17 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
             bookInfos = bookInfoRepository.findAll(pageable);
             return bookInfos;
         } else {
+            String sql = " select * from bookinfo where isbn13 = "+value1+" or isbn10 = "+value1+" or name like '%"+value1+"%' or author like '%"+value1+"%' ";
             if (type.equals("all")) {
-                bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthor(value1, value2, value3, value4, pageable);
+                bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameLikeOrAuthorLike(value1, value2, value3, value4, pageable);
                 return bookInfos;
             } else if (type.equals("ar")) {
                 if(isNull(value1)) bookInfos = bookInfoRepository.findBookByArtag(1,pageable);
-                else  bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthorAndArtag(value1, value2, value3, value4, 1, pageable);
+                else  bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameLikeOrAuthorLikeAndArtag(value1, value2, value3, value4, 1, pageable);
                 return bookInfos;
             } else if (type.equals("lexile")) {
                 if(isNull(value1)) bookInfos = bookInfoRepository.findBookByLexileTag(1,pageable);
-                else bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthorAndLexileTag(value1, value2, value3, value4, 1, pageable);
+                else bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameLikeOrAuthorLikeAndLexileTag(value1, value2, value3, value4, 1, pageable);
                 return bookInfos;
             }
         }
