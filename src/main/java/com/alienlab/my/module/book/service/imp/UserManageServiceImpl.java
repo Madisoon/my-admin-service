@@ -136,14 +136,16 @@ public class UserManageServiceImpl implements UserManageService {
         }
         String delete = "DELETE FROM orderinfo WHERE user_info_id ='" + userInfo.getId() + "'";
         jdbcTemplate.update(delete);
-        for (int i = 0; i < orderBookIdsLen; i++) {
-            OrderInfo orderInfo = new OrderInfo();
-            BookInfo bookInfo = new BookInfo();
-            bookInfo.setId(Long.valueOf(orderBookIds[i]));
-            orderInfo.setOrderBookInfo(bookInfo);
-            orderInfo.setUserInfo(userInfo);
-            orderInfo.setOrderTime(new Date());
-            orderInfoRepository.save(orderInfo);
+        if (!"".equals(orderBookId)) {
+            for (int i = 0; i < orderBookIdsLen; i++) {
+                OrderInfo orderInfo = new OrderInfo();
+                BookInfo bookInfo = new BookInfo();
+                bookInfo.setId(Long.valueOf(orderBookIds[i]));
+                orderInfo.setOrderBookInfo(bookInfo);
+                orderInfo.setUserInfo(userInfo);
+                orderInfo.setOrderTime(new Date());
+                orderInfoRepository.save(orderInfo);
+            }
         }
         JSONObject jsonObject = new JSONObject();
         return jsonObject;
@@ -248,7 +250,7 @@ public class UserManageServiceImpl implements UserManageService {
     @Override
     public UserInfo getUserByPhone(String phone) throws Exception {
         UserInfo userInfo = userInfoRepository.findUserByPhoneNo(phone);
-        if(userInfo == null){
+        if (userInfo == null) {
             throw new Exception("没有改手机号码的注册信息，请确认信息是否正确！");
         }
         return userInfo;
@@ -257,8 +259,8 @@ public class UserManageServiceImpl implements UserManageService {
     @Override
     public UserInfo changePassword(String phone, String newpassword) throws Exception {
         UserInfo userInfo = userInfoRepository.findUserByPhoneNo(phone);
-        if(userInfo == null){
-            throw  new Exception("没有对应号码的注册用户！");
+        if (userInfo == null) {
+            throw new Exception("没有对应号码的注册用户！");
         }
         userInfo.setPassword(newpassword);
         return userInfoRepository.save(userInfo);
