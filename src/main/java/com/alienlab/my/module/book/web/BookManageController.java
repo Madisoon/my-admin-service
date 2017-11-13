@@ -148,14 +148,20 @@ public class BookManageController {
     @ApiOperation(value = "getRecommendBook", notes = "获取本馆推荐书籍")
     public ResponseEntity getRecommendBook() {
         try {
+            JSONObject result = new JSONObject();
             Page<BookInfo> recommendList = iBookManageService.getRecommednBook(new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "recommendIndex")));
-            return ResponseEntity.ok().body(recommendList);
+            List list = bookManageService.getBorrowRanking();
+            result.put("recommendList",recommendList);
+            result.put("borrowList",list);
+            return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             e.printStackTrace();
             ExecResult er = new ExecResult(false, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
         }
     }
+
+
 
     @PostMapping("/advancedSearch")
     @ApiOperation(value = "advancedSearch", notes = "高级搜索")

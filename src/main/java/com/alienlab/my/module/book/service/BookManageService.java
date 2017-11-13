@@ -63,4 +63,6 @@ public interface BookManageService {
     public BookNews deleteBookNews(String id);
 
     public JSONArray getAllBookNews(String type);
+
+    public List getBorrowRanking() throws  Exception;
 }

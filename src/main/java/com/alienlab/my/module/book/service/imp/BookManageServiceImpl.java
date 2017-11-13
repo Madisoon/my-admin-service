@@ -102,7 +102,7 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
 
     @Override
     public Page<BookInfo> getRecommednBook(Pageable pageable) throws Exception {
-        Page<BookInfo> recommendList = bookInfoRepository.findAll(pageable);
+        Page<BookInfo> recommendList = bookInfoRepository.findBookByOrderByRecommendIndexDesc(pageable);
         if (recommendList == null) {
             throw new Exception("书籍为空或暂无推荐书籍，请联系管理员!");
         }
@@ -145,7 +145,7 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
         int flag = 0;
         Set<StockInfo> stockInfos = bookInfo.getStockInfo();
         for (StockInfo stockInfo : stockInfos) {
-            if (blankReadid.equals(stockInfo.getUserInfoId())) {
+            if (!(blankReadid.equals(stockInfo.getUserInfoId()))) {
                 flag++;
             }
         }
@@ -192,16 +192,17 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
             bookInfos = bookInfoRepository.findAll(pageable);
             return bookInfos;
         } else {
+            String sql = " select * from bookinfo where isbn13 = "+value1+" or isbn10 = "+value1+" or name like '%"+value1+"%' or author like '%"+value1+"%' ";
             if (type.equals("all")) {
-                bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthor(value1, value2, value3, value4, pageable);
+                bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameContainingOrAuthorContaining(value1, value2, value3, value4, pageable);
                 return bookInfos;
             } else if (type.equals("ar")) {
                 if(isNull(value1)) bookInfos = bookInfoRepository.findBookByArtag(1,pageable);
-                else  bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthorAndArtag(value1, value2, value3, value4, 1, pageable);
+                else  bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameContainingOrAuthorContainingAndArtag(value1, value2, value3, value4, 1, pageable);
                 return bookInfos;
             } else if (type.equals("lexile")) {
                 if(isNull(value1)) bookInfos = bookInfoRepository.findBookByLexileTag(1,pageable);
-                else bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameOrAuthorAndLexileTag(value1, value2, value3, value4, 1, pageable);
+                else bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameContainingOrAuthorContainingAndLexileTag(value1, value2, value3, value4, 1, pageable);
                 return bookInfos;
             }
         }
@@ -365,5 +366,22 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
         List list = jdbcTemplate.queryForList(sql);
         JSONArray jsonArray = (JSONArray) JSON.toJSON(list);
         return jsonArray;
+    }
+
+    @Override
+    public List getBorrowRanking() throws Exception {
+        String sql = "  select c.* ,count(*) cou from historyinfo a ,bookinfo c where a.book_id = c.id group by c.id order by cou DESC LIMIT 10 ";
+        List<Map<String,Object>> list = new ArrayList();
+        try {
+             list = jdbcTemplate.queryForList(sql);
+        } catch (Exception e) {
+            throw new Exception("暂时没有收藏记录哦！");
+        }
+        for(int i=0;i<list.size();i++){
+
+            list.get(i).put("iSBN13",list.get(i).get("isbn13"));
+            list.get(i).put("iSBN10",list.get(i).get("isbn10"));
+        }
+        return list;
     }
 }
