@@ -21,6 +21,8 @@ public interface BookInfoRepository extends JpaRepository<BookInfo, Long> {
 
     Page<BookInfo> findBookByArtag(int tag, Pageable pageable);
 
+    Page<BookInfo> findBookByOrderByRecommendIndexDesc(Pageable pageable);
+
 
 
 };
