@@ -194,15 +194,15 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
         } else {
             String sql = " select * from bookinfo where isbn13 = "+value1+" or isbn10 = "+value1+" or name like '%"+value1+"%' or author like '%"+value1+"%' ";
             if (type.equals("all")) {
-                bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameLikeOrAuthorLike(value1, value2, value3, value4, pageable);
+                bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameContainingOrAuthorContaining(value1, value2, value3, value4, pageable);
                 return bookInfos;
             } else if (type.equals("ar")) {
                 if(isNull(value1)) bookInfos = bookInfoRepository.findBookByArtag(1,pageable);
-                else  bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameLikeOrAuthorLikeAndArtag(value1, value2, value3, value4, 1, pageable);
+                else  bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameContainingOrAuthorContainingAndArtag(value1, value2, value3, value4, 1, pageable);
                 return bookInfos;
             } else if (type.equals("lexile")) {
                 if(isNull(value1)) bookInfos = bookInfoRepository.findBookByLexileTag(1,pageable);
-                else bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameLikeOrAuthorLikeAndLexileTag(value1, value2, value3, value4, 1, pageable);
+                else bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameContainingOrAuthorContainingAndLexileTag(value1, value2, value3, value4, 1, pageable);
                 return bookInfos;
             }
         }
