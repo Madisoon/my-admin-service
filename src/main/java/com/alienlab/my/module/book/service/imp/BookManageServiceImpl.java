@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alienlab.my.entity.*;
+import com.alienlab.my.module.book.service.BookManageService;
 import com.alienlab.my.repository.*;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
-public class BookManageServiceImpl implements com.alienlab.my.module.book.service.BookManageService {
+public class BookManageServiceImpl implements BookManageService {
 
     @Value("${system.blank-reader-id}")
     private String blankReadid;
@@ -102,7 +103,7 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
 
     @Override
     public Page<BookInfo> getRecommednBook(Pageable pageable) throws Exception {
-        Page<BookInfo> recommendList = bookInfoRepository.findBookByOrderByRecommendIndexDesc(pageable);
+        Page<BookInfo> recommendList = bookInfoRepository.findAll(pageable);
         if (recommendList == null) {
             throw new Exception("书籍为空或暂无推荐书籍，请联系管理员!");
         }
@@ -145,7 +146,7 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
         int flag = 0;
         Set<StockInfo> stockInfos = bookInfo.getStockInfo();
         for (StockInfo stockInfo : stockInfos) {
-            if (!(blankReadid.equals(stockInfo.getUserInfoId()))) {
+            if (blankReadid.equals(stockInfo.getUserInfoId())) {
                 flag++;
             }
         }
@@ -192,17 +193,18 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
             bookInfos = bookInfoRepository.findAll(pageable);
             return bookInfos;
         } else {
-            String sql = " select * from bookinfo where isbn13 = "+value1+" or isbn10 = "+value1+" or name like '%"+value1+"%' or author like '%"+value1+"%' ";
             if (type.equals("all")) {
                 bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameContainingOrAuthorContaining(value1, value2, value3, value4, pageable);
                 return bookInfos;
             } else if (type.equals("ar")) {
-                if(isNull(value1)) bookInfos = bookInfoRepository.findBookByArtag(1,pageable);
-                else  bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameContainingOrAuthorContainingAndArtag(value1, value2, value3, value4, 1, pageable);
+                if (isNull(value1)) bookInfos = bookInfoRepository.findBookByArtag(1, pageable);
+                else
+                    bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameContainingOrAuthorContainingAndArtag(value1, value2, value3, value4, 1, pageable);
                 return bookInfos;
             } else if (type.equals("lexile")) {
-                if(isNull(value1)) bookInfos = bookInfoRepository.findBookByLexileTag(1,pageable);
-                else bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameContainingOrAuthorContainingAndLexileTag(value1, value2, value3, value4, 1, pageable);
+                if (isNull(value1)) bookInfos = bookInfoRepository.findBookByLexileTag(1, pageable);
+                else
+                    bookInfos = bookInfoRepository.findBookByISBN13OrISBN10OrNameContainingOrAuthorContainingAndLexileTag(value1, value2, value3, value4, 1, pageable);
                 return bookInfos;
             }
         }
@@ -356,8 +358,14 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
     }
 
     @Override
-    public BookNews deleteBookNews(String id) {
-        return null;
+    public JSONObject deleteBookNews(String id) {
+        String[] ids = id.split(",");
+        for (int i = 0; i < ids.length; i++) {
+            bookNewsRepository.delete(Long.parseLong(ids[i]));
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("result", 1);
+        return jsonObject;
     }
 
     @Override
@@ -373,7 +381,7 @@ public class BookManageServiceImpl implements com.alienlab.my.module.book.servic
         String sql = "  select c.* ,count(*) cou from historyinfo a ,bookinfo c where a.book_id = c.id group by c.id order by cou DESC LIMIT 10 ";
         List<Map<String,Object>> list = new ArrayList();
         try {
-             list = jdbcTemplate.queryForList(sql);
+            list = jdbcTemplate.queryForList(sql);
         } catch (Exception e) {
             throw new Exception("暂时没有收藏记录哦！");
         }

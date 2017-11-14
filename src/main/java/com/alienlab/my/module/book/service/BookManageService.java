@@ -60,7 +60,7 @@ public interface BookManageService {
      */
     public BookNews insertUpdateBookNews(BookNews bookNews);
 
-    public BookNews deleteBookNews(String id);
+    public JSONObject deleteBookNews(String id);
 
     public JSONArray getAllBookNews(String type);
 

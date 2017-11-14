@@ -339,6 +339,21 @@ public class BookManageController {
         }
     }
 
+    @PostMapping(value = "/deleteBookNews")
+    @ApiOperation(value = "deleteBookNews", notes = "删除新闻")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "bookId", value = "新闻id", dataType = "String"),
+    })
+    public ResponseEntity deleteBookNews(@RequestParam String bookId) {
+        try {
+            return ResponseEntity.ok().body(bookManageService.deleteBookNews(bookId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+    }
+
 
 }
 

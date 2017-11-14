@@ -49,29 +49,31 @@ public class UserManageServiceImpl implements UserManageService {
     @Override
     public JSONObject getUserInfo(String vipNumber) {
         //生成EntityMange
-
-
         //预定信息
 
         String sqlStock = "SELECT b.*,c.* FROM userinfo a,orderinfo  b,bookinfo c  " +
                 "WHERE  (a.reader_id = '" + vipNumber + "' OR a.phone_no='" + vipNumber + "')   " +
                 "AND a.id = b.user_info_id  " +
                 "AND  b.library_id = c.id";
-        System.out.println(sqlStock);
         List<Map<String, Object>> listStock = jdbcTemplate.queryForList(sqlStock);
         JSONArray jsonArrayStock = (JSONArray) JSON.toJSON(listStock);
 
         //个人信息
         String personSql = "SELECT * FROM userinfo a WHERE  (a.reader_id = '" + vipNumber + "' OR a.phone_no='" + vipNumber + "')";
-        Map<String, Object> listPerson = jdbcTemplate.queryForMap(personSql);
-        JSONObject jsonObjectPerson = (JSONObject) JSON.toJSON(listPerson);
+        JSONObject jsonObjectPerson = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            Map<String, Object> listPerson = jdbcTemplate.queryForMap(personSql);
+            jsonObjectPerson = (JSONObject) JSON.toJSON(listPerson);
+            jsonObject.put("result", 1);
+        } catch (Exception e) {
+            jsonObject.put("result", 0);
+        }
         //已订信息
         String sql = "SELECT b.*,c.* FROM userinfo a,stockinfo b,bookinfo c WHERE  (a.reader_id = '" + vipNumber + "' OR a.phone_no='" + vipNumber + "'  " +
                 ") AND a.id = b.user_info_id AND  b.book_info_id = c.id";
         List<Map<String, Object>> listOrder = jdbcTemplate.queryForList(sql);
         JSONArray jsonArray = (JSONArray) JSON.toJSON(listOrder);
-        JSONObject jsonObject = new JSONObject();
-
         jsonObject.put("person", jsonObjectPerson);
         jsonObject.put("order", jsonArrayStock);
         jsonObject.put("stock", jsonArray);
@@ -90,8 +92,14 @@ public class UserManageServiceImpl implements UserManageService {
         StockInfo stockInfo = stockInfoRepository.findStockByLibraryIdAndUserInfoId(libraryId, String.valueOf(userInfo.getId()));
         String sql = "SELECT b.* FROM stockinfo a ,bookinfo b  " +
                 "WHERE a.book_info_id = b.id AND a.library_id = '" + libraryId + "'";
-        Map<String, Object> bookInfo = jdbcTemplate.queryForMap(sql);
-        JSONObject jsonObject = (JSONObject) JSON.toJSON(bookInfo);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            Map<String, Object> bookInfo = jdbcTemplate.queryForMap(sql);
+            jsonObject = (JSONObject) JSON.toJSON(bookInfo);
+        } catch (Exception e) {
+            jsonObject.put("result", "0");
+            return jsonObject;
+        }
         BookInfo bookInfo1 = bookInfoRepository.findOne(jsonObject.getLong("id"));
         OrderInfo orderInfo = orderInfoRepository.findOrderInfoByUserInfoOrderAndOrderBookInfo(userInfo, bookInfo1);
         JSONObject returnJsonObject = new JSONObject();

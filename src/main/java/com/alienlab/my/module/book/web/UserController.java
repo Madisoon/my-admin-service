@@ -52,8 +52,14 @@ public class UserController {
             @ApiImplicitParam(name = "readerId", value = "用户id", dataType = "string"),
     })
     public ResponseEntity getUserInfo(@RequestParam String readerId) {
-        JSONObject jsonObject = userManageService.getUserInfo(readerId);
-        return ResponseEntity.ok().body(jsonObject);
+        try {
+            JSONObject jsonObject = userManageService.getUserInfo(readerId);
+            return ResponseEntity.ok().body(jsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
     }
 
 
@@ -126,7 +132,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
         }
     }
-
 
 
 }
