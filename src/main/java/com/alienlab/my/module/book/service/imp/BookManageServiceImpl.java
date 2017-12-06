@@ -190,7 +190,7 @@ public class BookManageServiceImpl implements BookManageService {
     public Page<BookInfo> searchBook(String type, String value1, String value2, String value3, String value4, Pageable pageable) throws Exception {
         Page<BookInfo> bookInfos;
         if (isNull(value1) && type.equals("all")) {
-            bookInfos = bookInfoRepository.findAll(pageable);
+             bookInfos = bookInfoRepository.findAll(pageable);
             return bookInfos;
         } else {
             if (type.equals("all")) {

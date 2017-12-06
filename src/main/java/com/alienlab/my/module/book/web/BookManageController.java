@@ -8,6 +8,7 @@ import com.alienlab.my.entity.BookNews;
 import com.alienlab.my.entity.UserInfo;
 import com.alienlab.my.module.book.service.BookManageService;
 import com.alienlab.my.module.book.service.UserManageService;
+import com.alienlab.my.module.book.service.WebConfigurationService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +35,9 @@ public class BookManageController {
 
     @Autowired
     UserManageService userManageService;
+
+    @Autowired
+    WebConfigurationService webConfigurationService;
 
     @Autowired
     com.alienlab.my.module.book.service.imp.BookManageServiceImpl bookManageService;
@@ -352,6 +356,21 @@ public class BookManageController {
             ExecResult er = new ExecResult(false, e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
         }
+    }
+
+    @GetMapping(value = "/getWebConfigInfo")
+    @ApiOperation(value = "getWebConfigInfo", notes = "获取当前web配置信息")
+    @ApiImplicitParams({
+    })
+    public ResponseEntity getWebConfigInfo() {
+        try {
+            return ResponseEntity.ok().body(webConfigurationService.getWebConfig());
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+
     }
 
 
