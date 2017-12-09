@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.alienlab.my.entity.*;
 import com.alienlab.my.module.book.service.BookManageService;
 import com.alienlab.my.repository.*;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -315,7 +314,12 @@ public class BookManageServiceImpl implements BookManageService {
 
     @Override
     public BookInfo findBookByISBN13(String isbn) {
-        return bookInfoRepository.findBookByISBN13OrISBN10(isbn, isbn);
+        BookInfo bookInfo = bookInfoRepository.findBookByISBN13OrISBN10(isbn, isbn);
+        if (bookInfo == null) {
+            bookInfo = new BookInfo();
+            bookInfo.setId(Long.parseLong("0"));
+        }
+        return bookInfo;
     }
 
     @Override
@@ -335,10 +339,18 @@ public class BookManageServiceImpl implements BookManageService {
 
     @Override
     public JSONObject getBookCase(String libraryId) {
-        String sql = "SELECT * FROM stockinfo a ,bookinfo b " +
-                "WHERE a.`book_info_id` = b.`id` AND a.`library_id` = '" + libraryId + "'";
-        Map<String, Object> map = jdbcTemplate.queryForMap(sql);
-        JSONObject jsonObject = (JSONObject) JSON.toJSON(map);
+        String sql = " SELECT b.isbn10,b.isbn13,a.library_id,b.name,c.phone_no,a.user_info_id  " +
+                " FROM stockinfo a ,bookinfo b, userinfo c   " +
+                " WHERE a.book_info_id= b.id AND a.library_id = '" + libraryId + "'  " +
+                " AND a.user_info_id = c.id";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            Map<String, Object> map = jdbcTemplate.queryForMap(sql);
+            jsonObject = (JSONObject) JSON.toJSON(map);
+        } catch (Exception e) {
+            // 输入有误
+            jsonObject.put("result", 2);
+        }
         return jsonObject;
     }
 
@@ -379,16 +391,16 @@ public class BookManageServiceImpl implements BookManageService {
     @Override
     public List getBorrowRanking() throws Exception {
         String sql = "  select c.* ,count(*) cou from historyinfo a ,bookinfo c where a.book_id = c.id group by c.id order by cou DESC LIMIT 10 ";
-        List<Map<String,Object>> list = new ArrayList();
+        List<Map<String, Object>> list = new ArrayList();
         try {
             list = jdbcTemplate.queryForList(sql);
         } catch (Exception e) {
             throw new Exception("暂时没有收藏记录哦！");
         }
-        for(int i=0;i<list.size();i++){
+        for (int i = 0; i < list.size(); i++) {
 
-            list.get(i).put("iSBN13",list.get(i).get("isbn13"));
-            list.get(i).put("iSBN10",list.get(i).get("isbn10"));
+            list.get(i).put("iSBN13", list.get(i).get("isbn13"));
+            list.get(i).put("iSBN10", list.get(i).get("isbn10"));
         }
         return list;
     }

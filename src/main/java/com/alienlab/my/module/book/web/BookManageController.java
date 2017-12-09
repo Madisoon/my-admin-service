@@ -8,7 +8,6 @@ import com.alienlab.my.entity.BookNews;
 import com.alienlab.my.entity.UserInfo;
 import com.alienlab.my.module.book.service.BookManageService;
 import com.alienlab.my.module.book.service.UserManageService;
-import com.alienlab.my.module.book.service.WebConfigurationService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -19,7 +18,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -35,9 +41,6 @@ public class BookManageController {
 
     @Autowired
     UserManageService userManageService;
-
-    @Autowired
-    WebConfigurationService webConfigurationService;
 
     @Autowired
     com.alienlab.my.module.book.service.imp.BookManageServiceImpl bookManageService;
@@ -155,8 +158,8 @@ public class BookManageController {
             JSONObject result = new JSONObject();
             Page<BookInfo> recommendList = iBookManageService.getRecommednBook(new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "recommendIndex")));
             List list = bookManageService.getBorrowRanking();
-            result.put("recommendList",recommendList);
-            result.put("borrowList",list);
+            result.put("recommendList", recommendList);
+            result.put("borrowList", list);
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             e.printStackTrace();
@@ -164,7 +167,6 @@ public class BookManageController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
         }
     }
-
 
 
     @PostMapping("/advancedSearch")
@@ -358,21 +360,30 @@ public class BookManageController {
         }
     }
 
-    @GetMapping(value = "/getWebConfigInfo")
-    @ApiOperation(value = "getWebConfigInfo", notes = "获取当前web配置信息")
-    @ApiImplicitParams({
-    })
-    public ResponseEntity getWebConfigInfo() {
-        try {
-            return ResponseEntity.ok().body(webConfigurationService.getWebConfig());
-        } catch (Exception e) {
-            e.printStackTrace();
-            ExecResult er = new ExecResult(false, e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+    @RequestMapping(value = "/uploadOrderFile", method = RequestMethod.POST)
+    public String uploadHead(HttpServletRequest request, HttpServletResponse httpServletResponse, @RequestParam("myImage") MultipartFile file) throws IOException {
+        if (!file.isEmpty()) {
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+            String str = sdf.format(date);
+            String filePath = "C:/dummy-path/" + str + ""
+                    + file.getOriginalFilename();//获取服务器的绝对路径+项目相对路径head/图片原名
+            //讲客户端文件传输到服务器端
+            file.transferTo(new File(filePath));
+            httpServletResponse.setContentType("text/text;charset=utf-8");
+            PrintWriter out = httpServletResponse.getWriter();
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("errno", "0");
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.add("http://121.43.171.195:8080/dummy-path/" + str + file.getOriginalFilename() + "");
+            jsonObject.put("data", jsonArray);
+            out.print(jsonObject.toString());
+            out.flush();
+            out.close();
+            return jsonObject.toString();
         }
-
+        return "";
     }
-
 
 }
 
