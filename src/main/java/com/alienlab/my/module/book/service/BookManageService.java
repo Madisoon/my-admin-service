@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BookManageService {
 
@@ -64,5 +65,9 @@ public interface BookManageService {
 
     public JSONArray getAllBookNews(String type);
 
-    public List getBorrowRanking() throws  Exception;
+    public List getBorrowRanking(int index,int length) throws  Exception;
+
+    public List<BookInfo> findBookSeries()throws Exception;
+
+    public Map findBorrowCount() throws Exception;
 }

@@ -15,6 +15,17 @@ public class WebConfiguration {
     @Column(name = "book_count")
     private String bookCount;
 
+    @Column(name = "tel_number")
+    private String telNumber;
+
+    public String getTelNumber() {
+        return telNumber;
+    }
+
+    public void setTelNumber(String telNumber) {
+        this.telNumber = telNumber;
+    }
+
     public Long getId() {
         return id;
     }
