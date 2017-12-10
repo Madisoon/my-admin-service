@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.alienlab.my.entity.*;
 import com.alienlab.my.module.book.service.BookManageService;
 import com.alienlab.my.repository.*;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -103,7 +102,7 @@ public class BookManageServiceImpl implements BookManageService {
 
     @Override
     public Page<BookInfo> getRecommednBook(Pageable pageable) throws Exception {
-        Page<BookInfo> recommendList = bookInfoRepository.findBookByRecommendIndexGreaterThan(0,pageable);
+        Page<BookInfo> recommendList = bookInfoRepository.findAll(pageable);
         if (recommendList == null) {
             throw new Exception("书籍为空或暂无推荐书籍，请联系管理员!");
         }
@@ -177,8 +176,7 @@ public class BookManageServiceImpl implements BookManageService {
             return result;
         }
         sql = new StringBuffer();
-        sql.append("select  id, isbn13 iSBN13,isbn10 iSBN10,name,author,book_type bookType,lexile_combined lexileCombined,\n" +
-                "  doc_type docType,bl,series,il,pages,arpoints,weight,arrating,quiz_no quizNo,artag,lexile_tag lexileTag,audio  FROM bookinfo  where 1=1 ");
+        sql.append("select *  FROM bookinfo  where 1=1 ");
         setBuffer(sql, basicSearch, ARSearch, LLSearch);
         int start = index * length;
         sql.append(" LIMIT " + start + " , " + length + " ");
@@ -235,27 +233,10 @@ public class BookManageServiceImpl implements BookManageService {
                 sql.append(" AND  author like  '% " + basicSearch.getString("author") + "%' ");
             }
             if (JsonIsNull(basicSearch, "publisher")) {
-                sql.append(" AND  series =  " + basicSearch.getString("publisher") + "  ");
-            }
-            if (JsonIsNull(basicSearch, "docType")) {
-                sql.append(" AND  doc_type =  " + basicSearch.getString("docType") + "  ");
+                sql.append(" AND  doc_type like '%  " + basicSearch.getString("publisher") + "%'  ");
             }
             if (JsonIsNull(basicSearch, "bookType")) {
                 sql.append(" AND  book_type like '%  " + basicSearch.getString("bookType") + "%'  ");
-            }
-
-
-            if (JsonIsNull(basicSearch, "hasstock") && basicSearch.getBoolean("hasstock")) {
-                sql.append(" AND  stock > 0  ");
-            }
-            if (JsonIsNull(basicSearch, "musflag") && basicSearch.getBoolean("musflag")) {
-                sql.append(" AND  audio = 1  ");
-            }
-            if (JsonIsNull(basicSearch, "arflag") && basicSearch.getBoolean("arflag")) {
-                sql.append(" AND  artag =1 ");
-            }
-            if (JsonIsNull(basicSearch, "lsflag") && basicSearch.getBoolean("lsflag")) {
-                sql.append(" AND  lexile_tag = 1   ");
             }
         }
 
@@ -264,28 +245,28 @@ public class BookManageServiceImpl implements BookManageService {
                 sql.append(" AND  il like '% " + ARSearch.getString("interestLevel") + "%'  ");
             }
             if (JsonIsNull(ARSearch, "ABLev")) {
-                sql.append(" AND bl >= " + ARSearch.getInteger("ABLev") + "  ");
+                sql.append(" AND bl >= " + ARSearch.getString("ABLev") + "  ");
             }
             if (JsonIsNull(ARSearch, "ABLevT")) {
-                sql.append(" AND  bl <= " + ARSearch.getInteger("ABLevT") + "  ");
+                sql.append(" AND  bl <= " + ARSearch.getString("ABLevT") + "  ");
             }
             if (JsonIsNull(ARSearch, "QN")) {
-                sql.append(" AND  quiz_no = " + ARSearch.getInteger("QN") + "  ");
+                sql.append(" AND  quiz_no like '%" + ARSearch.getString("QN") + " %' ");
             }
             if (JsonIsNull(ARSearch, "ARP")) {
-                sql.append(" AND  arpoints >= " + ARSearch.getInteger("ARP") + "  ");
+                sql.append(" AND  arpoints >= " + ARSearch.getString("ARP") + "  ");
             }
             if (JsonIsNull(ARSearch, "ARPT")) {
-                sql.append(" AND  arpoints <= " + ARSearch.getInteger("ARPT") + "  ");
+                sql.append(" AND  arpoints <= " + ARSearch.getString("ARPT") + "  ");
             }
         }
 
         if (LLSearch != null) {
             if (JsonIsNull(LLSearch, "LLV")) {
-                sql.append(" AND  lexile_value >= " + LLSearch.getInteger("LLV") + "  ");
+                sql.append(" AND  lexile_value >= " + LLSearch.getString("LLV") + "  ");
             }
             if (JsonIsNull(LLSearch, "LLVT")) {
-                sql.append(" AND lexile_value <= " + LLSearch.getInteger("LLVT") + "  ");
+                sql.append(" AND lexile_value <= " + LLSearch.getString("LLVT") + "  ");
             }
             if (JsonIsNull(LLSearch, "sort")) {
                 sql.append(" ORDER BY  " + LLSearch.getString("sort") + " DESC   ");
@@ -333,7 +314,12 @@ public class BookManageServiceImpl implements BookManageService {
 
     @Override
     public BookInfo findBookByISBN13(String isbn) {
-        return bookInfoRepository.findBookByISBN13OrISBN10(isbn, isbn);
+        BookInfo bookInfo = bookInfoRepository.findBookByISBN13OrISBN10(isbn, isbn);
+        if (bookInfo == null) {
+            bookInfo = new BookInfo();
+            bookInfo.setId(Long.parseLong("0"));
+        }
+        return bookInfo;
     }
 
     @Override
@@ -353,10 +339,18 @@ public class BookManageServiceImpl implements BookManageService {
 
     @Override
     public JSONObject getBookCase(String libraryId) {
-        String sql = "SELECT * FROM stockinfo a ,bookinfo b " +
-                "WHERE a.`book_info_id` = b.`id` AND a.`library_id` = '" + libraryId + "'";
-        Map<String, Object> map = jdbcTemplate.queryForMap(sql);
-        JSONObject jsonObject = (JSONObject) JSON.toJSON(map);
+        String sql = " SELECT b.isbn10,b.isbn13,a.library_id,b.name,c.phone_no,a.user_info_id  " +
+                " FROM stockinfo a ,bookinfo b, userinfo c   " +
+                " WHERE a.book_info_id= b.id AND a.library_id = '" + libraryId + "'  " +
+                " AND a.user_info_id = c.id";
+        JSONObject jsonObject = new JSONObject();
+        try {
+            Map<String, Object> map = jdbcTemplate.queryForMap(sql);
+            jsonObject = (JSONObject) JSON.toJSON(map);
+        } catch (Exception e) {
+            // 输入有误
+            jsonObject.put("result", 2);
+        }
         return jsonObject;
     }
 
@@ -395,42 +389,19 @@ public class BookManageServiceImpl implements BookManageService {
     }
 
     @Override
-    public List getBorrowRanking(int index,int length) throws Exception {
-        int start = index *length;
-        int end = (index+1)*length;
-        String sql = "  select c.* ,count(*) cou from historyinfo a ,bookinfo c where a.book_id = c.id group by c.id order by cou DESC LIMIT "+start+","+end+"  ";
-        List<Map<String,Object>> list = new ArrayList();
+    public List getBorrowRanking() throws Exception {
+        String sql = "  select c.* ,count(*) cou from historyinfo a ,bookinfo c where a.book_id = c.id group by c.id order by cou DESC LIMIT 10 ";
+        List<Map<String, Object>> list = new ArrayList();
         try {
             list = jdbcTemplate.queryForList(sql);
         } catch (Exception e) {
             throw new Exception("暂时没有收藏记录哦！");
         }
-        for(int i=0;i<list.size();i++){
+        for (int i = 0; i < list.size(); i++) {
 
-            list.get(i).put("iSBN13",list.get(i).get("isbn13"));
-            list.get(i).put("iSBN10",list.get(i).get("isbn10"));
+            list.get(i).put("iSBN13", list.get(i).get("isbn13"));
+            list.get(i).put("iSBN10", list.get(i).get("isbn10"));
         }
-
-
         return list;
-    }
-
-    @Override
-    public Map findBorrowCount() throws  Exception{
-        String sqlToalBorrowCount = "select count(0) totalborrow from( select c.id from historyinfo a ,bookinfo c where a.book_id = c.id group by c.id) c";
-        Map result = new HashMap();
-        try {
-            result = jdbcTemplate.queryForMap(sqlToalBorrowCount);
-        } catch (Exception e) {
-            throw new Exception("获取借阅历史书籍总数失败！");
-        }
-        return result;
-    }
-
-    @Override
-    public List findBookSeries() throws Exception {
-        String sql = "select bookinfo.id ,bookinfo.series FROM bookinfo where series is NOT NULL AND  series !=' ' group by series  order by series";
-        List result = jdbcTemplate.queryForList(sql);
-        return result;
     }
 }
