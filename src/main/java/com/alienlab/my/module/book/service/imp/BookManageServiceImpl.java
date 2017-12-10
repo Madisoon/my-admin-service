@@ -233,10 +233,27 @@ public class BookManageServiceImpl implements BookManageService {
                 sql.append(" AND  author like  '% " + basicSearch.getString("author") + "%' ");
             }
             if (JsonIsNull(basicSearch, "publisher")) {
-                sql.append(" AND  doc_type like '%  " + basicSearch.getString("publisher") + "%'  ");
+                sql.append(" AND  series =  " + basicSearch.getString("publisher") + "  ");
+            }
+            if (JsonIsNull(basicSearch, "docType")) {
+                sql.append(" AND  doc_type =  " + basicSearch.getString("docType") + "  ");
             }
             if (JsonIsNull(basicSearch, "bookType")) {
                 sql.append(" AND  book_type like '%  " + basicSearch.getString("bookType") + "%'  ");
+            }
+
+
+            if (JsonIsNull(basicSearch, "hasstock") && basicSearch.getBoolean("hasstock")) {
+                sql.append(" AND  stock > 0  ");
+            }
+            if (JsonIsNull(basicSearch, "musflag") && basicSearch.getBoolean("musflag")) {
+                sql.append(" AND  audio = 1  ");
+            }
+            if (JsonIsNull(basicSearch, "arflag") && basicSearch.getBoolean("arflag")) {
+                sql.append(" AND  artag =1 ");
+            }
+            if (JsonIsNull(basicSearch, "lsflag") && basicSearch.getBoolean("lsflag")) {
+                sql.append(" AND  lexile_tag = 1   ");
             }
         }
 
@@ -245,28 +262,28 @@ public class BookManageServiceImpl implements BookManageService {
                 sql.append(" AND  il like '% " + ARSearch.getString("interestLevel") + "%'  ");
             }
             if (JsonIsNull(ARSearch, "ABLev")) {
-                sql.append(" AND bl >= " + ARSearch.getString("ABLev") + "  ");
+                sql.append(" AND bl >= " + ARSearch.getInteger("ABLev") + "  ");
             }
             if (JsonIsNull(ARSearch, "ABLevT")) {
-                sql.append(" AND  bl <= " + ARSearch.getString("ABLevT") + "  ");
+                sql.append(" AND  bl <= " + ARSearch.getInteger("ABLevT") + "  ");
             }
             if (JsonIsNull(ARSearch, "QN")) {
-                sql.append(" AND  quiz_no like '%" + ARSearch.getString("QN") + " %' ");
+                sql.append(" AND  quiz_no = " + ARSearch.getInteger("QN") + "  ");
             }
             if (JsonIsNull(ARSearch, "ARP")) {
-                sql.append(" AND  arpoints >= " + ARSearch.getString("ARP") + "  ");
+                sql.append(" AND  arpoints >= " + ARSearch.getInteger("ARP") + "  ");
             }
             if (JsonIsNull(ARSearch, "ARPT")) {
-                sql.append(" AND  arpoints <= " + ARSearch.getString("ARPT") + "  ");
+                sql.append(" AND  arpoints <= " + ARSearch.getInteger("ARPT") + "  ");
             }
         }
 
         if (LLSearch != null) {
             if (JsonIsNull(LLSearch, "LLV")) {
-                sql.append(" AND  lexile_value >= " + LLSearch.getString("LLV") + "  ");
+                sql.append(" AND  lexile_value >= " + LLSearch.getInteger("LLV") + "  ");
             }
             if (JsonIsNull(LLSearch, "LLVT")) {
-                sql.append(" AND lexile_value <= " + LLSearch.getString("LLVT") + "  ");
+                sql.append(" AND lexile_value <= " + LLSearch.getInteger("LLVT") + "  ");
             }
             if (JsonIsNull(LLSearch, "sort")) {
                 sql.append(" ORDER BY  " + LLSearch.getString("sort") + " DESC   ");
@@ -389,19 +406,42 @@ public class BookManageServiceImpl implements BookManageService {
     }
 
     @Override
-    public List getBorrowRanking() throws Exception {
-        String sql = "  select c.* ,count(*) cou from historyinfo a ,bookinfo c where a.book_id = c.id group by c.id order by cou DESC LIMIT 10 ";
-        List<Map<String, Object>> list = new ArrayList();
-        try {
-            list = jdbcTemplate.queryForList(sql);
-        } catch (Exception e) {
-            throw new Exception("暂时没有收藏记录哦！");
-        }
-        for (int i = 0; i < list.size(); i++) {
+    public List getBorrowRanking(int index,int length) throws Exception {
+        int start = index *length;
+        int end = (index+1)*length;
+        String sql = "  select c.* ,count(*) cou from historyinfo a ,bookinfo c where a.book_id = c.id group by c.id order by cou DESC LIMIT "+start+","+end+"  ";
+        List<Map<String,Object>> list = new ArrayList();
+            try {
+                list = jdbcTemplate.queryForList(sql);
+            } catch (Exception e) {
+                throw new Exception("暂时没有收藏记录哦！");
+            }
+            for (int i = 0; i < list.size(); i++) {
 
-            list.get(i).put("iSBN13", list.get(i).get("isbn13"));
-            list.get(i).put("iSBN10", list.get(i).get("isbn10"));
+                list.get(i).put("iSBN13", list.get(i).get("isbn13"));
+                list.get(i).put("iSBN10", list.get(i).get("isbn10"));
+            }
+
+
+            return list;
         }
-        return list;
+
+    @Override
+    public Map findBorrowCount() throws  Exception{
+        String sqlToalBorrowCount = "select count(0) totalborrow from( select c.id from historyinfo a ,bookinfo c where a.book_id = c.id group by c.id) c";
+        Map result = new HashMap();
+        try {
+            result = jdbcTemplate.queryForMap(sqlToalBorrowCount);
+        } catch (Exception e) {
+            throw new Exception("获取借阅历史书籍总数失败！");
+        }
+        return result;
+    }
+
+    @Override
+    public List findBookSeries() throws Exception {
+        String sql = "select bookinfo.id ,bookinfo.series FROM bookinfo where series is NOT NULL AND  series !=' ' group by series  order by series";
+        List result = jdbcTemplate.queryForList(sql);
+        return result;
     }
 }

@@ -28,6 +28,7 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Msater Zg
@@ -153,13 +154,26 @@ public class BookManageController {
 
     @GetMapping(value = "/getRecommendBook")
     @ApiOperation(value = "getRecommendBook", notes = "获取本馆推荐书籍")
-    public ResponseEntity getRecommendBook() {
+    public ResponseEntity getRecommendBook(@RequestParam int index, @RequestParam int length) {
+        try {
+            Page<BookInfo> recommendList = iBookManageService.getRecommednBook(new PageRequest(index, length, new Sort(Sort.Direction.DESC, "recommendIndex")));
+            return ResponseEntity.ok().body(recommendList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+    }
+
+    @GetMapping(value = "/getBorrowRecommendBook")
+    @ApiOperation(value = "getBorrowRecommendBook", notes = "获取借阅书籍")
+    public ResponseEntity getBorrowRecommendBook(@RequestParam int index, @RequestParam int length) {
         try {
             JSONObject result = new JSONObject();
-            Page<BookInfo> recommendList = iBookManageService.getRecommednBook(new PageRequest(0, 10, new Sort(Sort.Direction.DESC, "recommendIndex")));
-            List list = bookManageService.getBorrowRanking();
-            result.put("recommendList", recommendList);
-            result.put("borrowList", list);
+            List list = bookManageService.getBorrowRanking(index, length);
+            Map boorowCount = iBookManageService.findBorrowCount();
+            result.put("borrowRecommendList", list);
+            result.put("total", boorowCount.get("totalborrow"));
             return ResponseEntity.ok().body(result);
         } catch (Exception e) {
             e.printStackTrace();
@@ -385,7 +399,22 @@ public class BookManageController {
         return "";
     }
 
+    @GetMapping(value = "/getBookSeries")
+    @ApiOperation(value = "getBookSeries", notes = "获取当前图书的所有系列")
+    @ApiImplicitParams({
+    })
+    public ResponseEntity getBookSeries() {
+        try {
+            return ResponseEntity.ok().body(bookManageService.findBookSeries());
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+
+    }
 }
+
 
 
 
