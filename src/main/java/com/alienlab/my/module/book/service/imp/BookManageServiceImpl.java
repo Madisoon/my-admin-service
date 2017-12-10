@@ -102,7 +102,7 @@ public class BookManageServiceImpl implements BookManageService {
 
     @Override
     public Page<BookInfo> getRecommednBook(Pageable pageable) throws Exception {
-        Page<BookInfo> recommendList = bookInfoRepository.findAll(pageable);
+        Page<BookInfo> recommendList = bookInfoRepository.findBookByRecommendIndexGreaterThan(0,pageable);
         if (recommendList == null) {
             throw new Exception("书籍为空或暂无推荐书籍，请联系管理员!");
         }
