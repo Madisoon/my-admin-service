@@ -171,6 +171,11 @@ public class UserManageServiceImpl implements UserManageService {
     @Override
     public UserInfo userLogin(String username, String password) throws Exception {
         UserInfo userInfo = userInfoRepository.findUserByPhoneNoAndPassword(username, password);
+        /*List historyInfo = historyInfoRepository.findHistoryByHistoryUser(userInfo);
+        if(historyInfo == null){
+            historyInfo = new ArrayList();
+        }
+        userInfo.setHistoryInfo(historyInfo);*/
         if (userInfo == null) {
             throw new Exception("用户名或密码错误！");
         }
@@ -272,5 +277,27 @@ public class UserManageServiceImpl implements UserManageService {
         }
         userInfo.setPassword(newpassword);
         return userInfoRepository.save(userInfo);
+    }
+
+    @Override
+    public JSONObject getUserWord(UserInfo userInfo) throws Exception {
+        JSONObject result = new JSONObject();
+         List<HistoryInfo> historyInfo = historyInfoRepository.findHistoryByHistoryUser(userInfo);
+         if(historyInfo == null){
+             result.put("readBookCount",0);
+             result.put("readBookWord",0);
+         }
+         int len = historyInfo.size();
+         //定义循环变量，阅读书本数量和阅读字数
+         int i=0,readBookCount=0,readBookWord=0;
+         for(i=0;i<len;i++){
+             readBookCount++;
+             HistoryInfo historyInfo1 = historyInfo.get(i);
+             BookInfo bookInfo = bookInfoRepository.findOne(historyInfo1.getBookId());
+             readBookWord += bookInfo.getWordCount();
+         }
+        result.put("readBookCount",readBookCount);
+        result.put("readBookWord",readBookWord);
+        return result;
     }
 }

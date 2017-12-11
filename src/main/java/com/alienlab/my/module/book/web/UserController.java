@@ -134,4 +134,21 @@ public class UserController {
     }
 
 
+    @PostMapping(value = "/getUserWord")
+    @ApiOperation(value = "getUserWord", notes = "获取用户的读取书本和字数")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userinfo", value = "用户id", dataType = "Long"),
+    })
+    public ResponseEntity getUserWord(@RequestBody UserInfo userInfo) {
+        try {
+            JSONObject result = userManageService.getUserWord(userInfo);
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+    }
+
+
 }

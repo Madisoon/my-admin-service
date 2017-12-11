@@ -33,4 +33,6 @@ public interface UserManageService {
     public UserInfo getUserByPhone(String phone) throws Exception;
 
     public UserInfo changePassword(String phone ,String newpassword) throws Exception;
+
+    public JSONObject getUserWord(UserInfo userInfo) throws Exception;
 }
