@@ -7,6 +7,9 @@ import com.alienlab.my.entity.*;
 import com.alienlab.my.module.book.service.UserManageService;
 import com.alienlab.my.repository.*;
 import com.alienlab.my.utils.NumberInfoPost;
+import com.alienlab.my.utils.SmsDemo;
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
+import com.aliyuncs.exceptions.ClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -82,8 +85,13 @@ public class UserManageServiceImpl implements UserManageService {
 
     @Override
     public String getUserYzNumber(String userPhone, String userCode) {
-        String message = numberInfoPost.sendMsgByYunPian(userCode, userPhone);
-        return message;
+        SendSmsResponse response = new SendSmsResponse();
+        try {
+            response = SmsDemo.sendSms(userCode, userPhone);
+        } catch (ClientException e) {
+            e.printStackTrace();
+        }
+        return response.toString();
     }
 
     @Override
@@ -283,22 +291,22 @@ public class UserManageServiceImpl implements UserManageService {
     @Override
     public JSONObject getUserWord(UserInfo userInfo) throws Exception {
         JSONObject result = new JSONObject();
-         List<HistoryInfo> historyInfo = historyInfoRepository.findHistoryByHistoryUser(userInfo);
-         if(historyInfo == null){
-             result.put("readBookCount",0);
-             result.put("readBookWord",0);
-         }
-         int len = historyInfo.size();
-         //定义循环变量，阅读书本数量和阅读字数
-         int i=0,readBookCount=0,readBookWord=0;
-         for(i=0;i<len;i++){
-             readBookCount++;
-             HistoryInfo historyInfo1 = historyInfo.get(i);
-             BookInfo bookInfo = bookInfoRepository.findOne(historyInfo1.getBookId());
-             readBookWord += bookInfo.getWordCount();
-         }
-        result.put("readBookCount",readBookCount);
-        result.put("readBookWord",readBookWord);
+        List<HistoryInfo> historyInfo = historyInfoRepository.findHistoryByHistoryUser(userInfo);
+        if (historyInfo == null) {
+            result.put("readBookCount", 0);
+            result.put("readBookWord", 0);
+        }
+        int len = historyInfo.size();
+        //定义循环变量，阅读书本数量和阅读字数
+        int i = 0, readBookCount = 0, readBookWord = 0;
+        for (i = 0; i < len; i++) {
+            readBookCount++;
+            HistoryInfo historyInfo1 = historyInfo.get(i);
+            BookInfo bookInfo = bookInfoRepository.findOne(historyInfo1.getBookId());
+            readBookWord += bookInfo.getWordCount();
+        }
+        result.put("readBookCount", readBookCount);
+        result.put("readBookWord", readBookWord);
         return result;
     }
 }
