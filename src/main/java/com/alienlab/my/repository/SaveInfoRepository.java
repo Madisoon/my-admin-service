@@ -7,9 +7,13 @@ import com.alienlab.my.entity.UserInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 @Repository
 public interface SaveInfoRepository extends JpaRepository<SaveInfo, Long> {
 
     SaveInfo findSaveInfoByUserInfoAndSaveBookInfo(UserInfo userInfo, BookInfo bookInfo);
+
+    List<SaveInfo> findSaveByUserInfo(UserInfo userInfo);
 }

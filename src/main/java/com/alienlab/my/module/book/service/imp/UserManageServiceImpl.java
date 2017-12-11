@@ -256,6 +256,7 @@ public class UserManageServiceImpl implements UserManageService {
         if (userInfos != null) {
             throw new Exception("该手机号已经注册过，无法重复注册！");
         }
+        userInfo.setRegisterDate(new Date());
         return userInfoRepository.save(userInfo);
 
     }

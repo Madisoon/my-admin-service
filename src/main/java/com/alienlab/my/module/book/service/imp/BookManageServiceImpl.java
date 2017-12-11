@@ -123,6 +123,12 @@ public class BookManageServiceImpl implements BookManageService {
         if (saveInfo != null) {
             throw new Exception("您已收藏过该书籍，无法继续添加！");
         }
+        List<SaveInfo> saveInfos = saveInfoRepository.findSaveByUserInfo(userInfo);
+        if(saveInfo!=null){
+            if(saveInfos.size()>40){
+                throw new Exception("您收藏的书籍已经超过40本的收藏上限啦！");
+            }
+        }
         saveInfo = new SaveInfo();
         saveInfo.setSaveBookInfo(bookInfo);
         saveInfo.setUserInfo(userInfo);
