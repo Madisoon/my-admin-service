@@ -96,7 +96,7 @@ public class UserManageServiceImpl implements UserManageService {
         } catch (ClientException e) {
             e.printStackTrace();
         }
-        return response.toString();
+        return response.getCode();
     }
 
     @Override
