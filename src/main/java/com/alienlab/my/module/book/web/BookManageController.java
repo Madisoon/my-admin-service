@@ -250,7 +250,7 @@ public class BookManageController {
     }
 
 
-    @PostMapping(value = "/getUserYzNumber")
+    @GetMapping(value = "/getUserYzNumber")
     @ApiOperation(value = "getUserYzNumber", notes = "获取")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userPhone", value = "用户手机号", dataType = "string"),

@@ -87,7 +87,12 @@ public class UserManageServiceImpl implements UserManageService {
     public String getUserYzNumber(String userPhone, String userCode) {
         SendSmsResponse response = new SendSmsResponse();
         try {
-            response = SmsDemo.sendSms(userCode, userPhone);
+            response = SmsDemo.sendSms(userPhone, userCode);
+            System.out.println("短信接口返回的数据----------------");
+            System.out.println("Code=" + response.getCode());
+            System.out.println("Message=" + response.getMessage());
+            System.out.println("RequestId=" + response.getRequestId());
+            System.out.println("BizId=" + response.getBizId());
         } catch (ClientException e) {
             e.printStackTrace();
         }
