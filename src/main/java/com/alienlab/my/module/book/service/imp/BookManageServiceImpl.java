@@ -261,6 +261,19 @@ public class BookManageServiceImpl implements BookManageService {
             if (JsonIsNull(basicSearch, "lsflag") && basicSearch.getBoolean("lsflag")) {
                 sql.append(" AND  lexile_tag = 1   ");
             }
+
+            if (JsonIsNull(basicSearch, "start")) {
+                sql.append(" AND age_start >= " + basicSearch.getString("start") + "  ");
+            }
+            if (JsonIsNull(basicSearch, "ageEnd")) {
+                sql.append(" AND  age_end <= " + basicSearch.getString("ageEnd") + "  ");
+            }
+            if (JsonIsNull(basicSearch, "gradeStart")) {
+                sql.append(" AND grade_start >= " + basicSearch.getString("gradeStart") + "  ");
+            }
+            if (JsonIsNull(basicSearch, "gradeEnd")) {
+                sql.append(" AND  grade_stop <= " + basicSearch.getString("gradeEnd") + "  ");
+            }
         }
 
         if (ARSearch != null) {

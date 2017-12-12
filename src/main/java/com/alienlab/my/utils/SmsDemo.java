@@ -63,14 +63,14 @@ public class SmsDemo {
         return sendSmsResponse;
     }
 
-    public static void main(String[] args) throws ClientException, InterruptedException {
+   /* public static void main(String[] args) throws ClientException, InterruptedException {
         //发短信
-        SendSmsResponse response = sendSms("18752002129", "657485");
+        SendSmsResponse response = sendSms("18752002039", "657485");
         System.out.println("短信接口返回的数据----------------");
         System.out.println("Code=" + response.getCode());
         System.out.println("Message=" + response.getMessage());
         System.out.println("RequestId=" + response.getRequestId());
         System.out.println("BizId=" + response.getBizId());
         Thread.sleep(3000L);
-    }
+    }*/
 }
