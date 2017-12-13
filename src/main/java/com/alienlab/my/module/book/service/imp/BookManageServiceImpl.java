@@ -182,7 +182,7 @@ public class BookManageServiceImpl implements BookManageService {
             return result;
         }
         sql = new StringBuffer();
-        sql.append("select *  FROM bookinfo  where 1=1 ");
+        sql.append("select isbn13 iSBN13,isbn10 iSBN10,name,author,pages,weight,series,doc_type docType,book_type bookType,pub_lisher pubLisher,count,stock,bl,arpoints,arrating,quiz_no quizNo,lexile_tag lexileTag,lexile_value lexileValue,audio,artag,lexile_combined lexileCombined,il FROM bookinfo  where 1=1 ");
         setBuffer(sql, basicSearch, ARSearch, LLSearch);
         int start = index * length;
         sql.append(" LIMIT " + start + " , " + length + " ");
@@ -266,7 +266,7 @@ public class BookManageServiceImpl implements BookManageService {
                 sql.append(" AND age_start >= " + basicSearch.getString("start") + "  ");
             }
             if (JsonIsNull(basicSearch, "ageEnd")) {
-                sql.append(" AND  age_end <= " + basicSearch.getString("ageEnd") + "  ");
+                sql.append(" AND  age_stop <= " + basicSearch.getString("ageEnd") + "  ");
             }
             if (JsonIsNull(basicSearch, "gradeStart")) {
                 sql.append(" AND grade_start >= " + basicSearch.getString("gradeStart") + "  ");
