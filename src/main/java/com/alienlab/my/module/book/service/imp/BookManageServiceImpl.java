@@ -230,22 +230,22 @@ public class BookManageServiceImpl implements BookManageService {
     public StringBuffer setBuffer(StringBuffer sql, JSONObject basicSearch, JSONObject ARSearch, JSONObject LLSearch) {
         if (basicSearch != null) {
             if (JsonIsNull(basicSearch, "title")) {
-                sql.append(" AND  name like  '% " + basicSearch.getString("title") + " %' ");
+                sql.append(" AND  name like  '%"+basicSearch.getString("title")+"%' ");
             }
             if (JsonIsNull(basicSearch, "ISBN")) {
-                sql.append(" AND isbn13  like  '%" + basicSearch.getString("ISBN") + " %' or isbn10 like  '% " + basicSearch.getString("ISBN") + "%'    ");
+                sql.append(" AND isbn13  like  '%"+basicSearch.getString("ISBN")+"%' or isbn10 like  '% " + basicSearch.getString("ISBN") + "%'    ");
             }
             if (JsonIsNull(basicSearch, "author")) {
-                sql.append(" AND  author like  '% " + basicSearch.getString("author") + "%' ");
+                sql.append(" AND  author like  '%"+basicSearch.getString("author")+"%' ");
             }
             if (JsonIsNull(basicSearch, "publisher")) {
-                sql.append(" AND  series =  " + basicSearch.getString("publisher") + "  ");
+                sql.append(" AND  series =  '"+basicSearch.getString("publisher")+"'  ");
             }
             if (JsonIsNull(basicSearch, "docType")) {
-                sql.append(" AND  doc_type =  " + basicSearch.getString("docType") + "  ");
+                sql.append(" AND  doc_type =  '"+basicSearch.getString("docType")+"'  ");
             }
             if (JsonIsNull(basicSearch, "bookType")) {
-                sql.append(" AND  book_type like '%  " + basicSearch.getString("bookType") + "%'  ");
+                sql.append(" AND  book_type like '%"+basicSearch.getString("bookType")+"%'  ");
             }
 
 
@@ -263,49 +263,49 @@ public class BookManageServiceImpl implements BookManageService {
             }
 
             if (JsonIsNull(basicSearch, "start")) {
-                sql.append(" AND age_start >= " + basicSearch.getString("start") + "  ");
+                sql.append(" AND age_start >= "+basicSearch.getInteger("start")+" ");
             }
             if (JsonIsNull(basicSearch, "ageEnd")) {
-                sql.append(" AND  age_stop <= " + basicSearch.getString("ageEnd") + "  ");
+                sql.append(" AND  age_stop <= "+basicSearch.getInteger("ageEnd")+"  ");
             }
             if (JsonIsNull(basicSearch, "gradeStart")) {
-                sql.append(" AND grade_start >= " + basicSearch.getString("gradeStart") + "  ");
+                sql.append(" AND grade_start >= "+basicSearch.getInteger("gradeStart")+"  ");
             }
             if (JsonIsNull(basicSearch, "gradeEnd")) {
-                sql.append(" AND  grade_stop <= " + basicSearch.getString("gradeEnd") + "  ");
+                sql.append(" AND  grade_stop <= "+basicSearch.getInteger("gradeEnd")+"  ");
             }
         }
 
         if (ARSearch != null) {
             if (JsonIsNull(ARSearch, "interestLevel")) {
-                sql.append(" AND  il like '% " + ARSearch.getString("interestLevel") + "%'  ");
+                sql.append(" AND  il like '%"+ARSearch.getString("interestLevel")+"%'  ");
             }
             if (JsonIsNull(ARSearch, "ABLev")) {
-                sql.append(" AND bl >= " + ARSearch.getInteger("ABLev") + "  ");
+                sql.append(" AND bl >= "+ARSearch.getInteger("ABLev")+"  ");
             }
             if (JsonIsNull(ARSearch, "ABLevT")) {
-                sql.append(" AND  bl <= " + ARSearch.getInteger("ABLevT") + "  ");
+                sql.append(" AND  bl <= "+ARSearch.getInteger("ABLevT")+"  ");
             }
             if (JsonIsNull(ARSearch, "QN")) {
-                sql.append(" AND  quiz_no = " + ARSearch.getInteger("QN") + "  ");
+                sql.append(" AND  quiz_no = "+ARSearch.getInteger("QN")+"  ");
             }
             if (JsonIsNull(ARSearch, "ARP")) {
-                sql.append(" AND  arpoints >= " + ARSearch.getInteger("ARP") + "  ");
+                sql.append(" AND  arpoints >= "+ARSearch.getInteger("ARP")+"  ");
             }
             if (JsonIsNull(ARSearch, "ARPT")) {
-                sql.append(" AND  arpoints <= " + ARSearch.getInteger("ARPT") + "  ");
+                sql.append(" AND  arpoints <= "+ARSearch.getInteger("ARPT")+"  ");
             }
         }
 
         if (LLSearch != null) {
             if (JsonIsNull(LLSearch, "LLV")) {
-                sql.append(" AND  lexile_value >= " + LLSearch.getInteger("LLV") + "  ");
+                sql.append(" AND  lexile_value >= "+LLSearch.getInteger("LLV")+"  ");
             }
             if (JsonIsNull(LLSearch, "LLVT")) {
-                sql.append(" AND lexile_value <= " + LLSearch.getInteger("LLVT") + "  ");
+                sql.append(" AND lexile_value <= "+LLSearch.getInteger("LLVT")+"  ");
             }
             if (JsonIsNull(LLSearch, "sort")) {
-                sql.append(" ORDER BY  " + LLSearch.getString("sort") + " DESC   ");
+                sql.append(" ORDER BY  " + LLSearch.getString("sort") + "    ");
             }
         }
         return sql;
