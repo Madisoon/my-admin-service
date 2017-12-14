@@ -278,7 +278,7 @@ public class UserManageServiceImpl implements UserManageService {
     public UserInfo getUserByPhone(String phone) throws Exception {
         UserInfo userInfo = userInfoRepository.findUserByPhoneNo(phone);
         if (userInfo == null) {
-            throw new Exception("没有改手机号码的注册信息，请确认信息是否正确！");
+            throw new Exception("没有该手机号码的注册信息，请确认信息是否正确！");
         }
         return userInfo;
     }
