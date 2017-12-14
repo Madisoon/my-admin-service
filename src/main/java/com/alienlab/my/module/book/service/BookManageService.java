@@ -65,9 +65,19 @@ public interface BookManageService {
 
     public JSONArray getAllBookNews(String type);
 
-    public List getBorrowRanking(int index,int length) throws  Exception;
+    public List getBorrowRanking(int index, int length) throws Exception;
 
-    public List<BookInfo> findBookSeries()throws Exception;
+    public List<BookInfo> findBookSeries() throws Exception;
 
     public Map findBorrowCount() throws Exception;
+
+    public SysImage saveImageUrl(SysImage sysImage);
+
+    public List<SysImage> listImageInformation();
+
+    public JSONObject removeImageInformation(String id);
+
+    public JSONArray listArBookSearch(String searchData);
+
+    public JSONArray listLexBookSearch(String searchData);
 }

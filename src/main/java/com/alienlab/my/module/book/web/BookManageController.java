@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alienlab.my.entity.BookInfo;
 import com.alienlab.my.entity.BookNews;
+import com.alienlab.my.entity.SysImage;
 import com.alienlab.my.entity.UserInfo;
 import com.alienlab.my.module.book.service.BookManageService;
 import com.alienlab.my.module.book.service.UserManageService;
@@ -393,7 +394,7 @@ public class BookManageController {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("errno", "0");
             JSONArray jsonArray = new JSONArray();
-            jsonArray.add("http://121.43.171.195:8080/dummy-path/" + str + file.getOriginalFilename() + "");
+            jsonArray.add("http://121.43.171.195:8080/dummyPath/" + str + file.getOriginalFilename() + "");
             jsonObject.put("data", jsonArray);
             out.print(jsonObject.toString());
             out.flush();
@@ -431,6 +432,68 @@ public class BookManageController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
         }
 
+    }
+
+    @RequestMapping(value = "/uploadOrderImage", method = RequestMethod.POST)
+    public String uploadHead(@RequestParam("file") MultipartFile file) throws IOException {
+        if (!file.isEmpty()) {
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+            String str = sdf.format(date);
+            String filePath = "C:/dummy-path/" + str + ""
+                    + file.getOriginalFilename();//获取服务器的绝对路径+项目相对路径head/图片原名
+            file.transferTo(new File(filePath));
+            return str + file.getOriginalFilename();
+        }
+        return "";
+    }
+
+    @PostMapping(value = "/saveImageUrl")
+    @ApiOperation(value = "saveImageUrl", notes = "得到书籍的信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "imageInfo", value = "图片信息", required = true, dataType = "STRING")
+    })
+    public ResponseEntity saveImageUrl(@RequestParam("imageInfo") String imageInfo) {
+        SysImage sysImage = JSON.parseObject(imageInfo, SysImage.class);
+        sysImage = iBookManageService.saveImageUrl(sysImage);
+        return ResponseEntity.ok().body(sysImage);
+    }
+
+    @GetMapping(value = "/listImageInformation")
+    @ApiOperation(value = "listImageInformation", notes = "得到书籍的信息")
+    public ResponseEntity listImageInformation() {
+        List<SysImage> list = iBookManageService.listImageInformation();
+        return ResponseEntity.ok().body(list);
+    }
+
+    @PostMapping(value = "/removeImageInformation")
+    @ApiOperation(value = "removeImageInformation", notes = "得到书籍的信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "图片信息", required = true, dataType = "STRING")
+    })
+    public ResponseEntity removeImageInformation(@RequestParam("id") String id) {
+        JSONObject jsonObject = iBookManageService.removeImageInformation(id);
+        return ResponseEntity.ok().body(jsonObject);
+    }
+
+    @GetMapping(value = "/listArBookSearch")
+    @ApiOperation(value = "listArBookSearch", notes = "搜索的ar书籍api")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "searchData", value = "搜索信息", required = true, dataType = "STRING")
+    })
+    public ResponseEntity listArBookSearch(@RequestParam("searchData") String searchData) {
+        JSONArray jsonArray = iBookManageService.listArBookSearch(searchData);
+        return ResponseEntity.ok().body(jsonArray);
+    }
+
+    @GetMapping(value = "/listLexBookSearch")
+    @ApiOperation(value = "listLexBookSearch", notes = "搜索的ar书籍api")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "searchData", value = "搜索信息", required = true, dataType = "STRING")
+    })
+    public ResponseEntity listLexBookSearch(@RequestParam("searchData") String searchData) {
+        JSONArray jsonArray = iBookManageService.listArBookSearch(searchData);
+        return ResponseEntity.ok().body(jsonArray);
     }
 }
 
