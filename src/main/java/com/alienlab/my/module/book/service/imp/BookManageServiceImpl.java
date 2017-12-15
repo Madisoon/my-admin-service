@@ -267,16 +267,16 @@ public class BookManageServiceImpl implements BookManageService {
             }
 
             if (JsonIsNull(basicSearch, "start")) {
-                sql.append(" AND age_start >= " + basicSearch.getInteger("start") + " ");
+                sql.append(" AND age_start >= " + basicSearch.getFloat("start") + " ");
             }
             if (JsonIsNull(basicSearch, "ageEnd")) {
-                sql.append(" AND  age_stop <= " + basicSearch.getInteger("ageEnd") + "  ");
+                sql.append(" AND  age_stop <= " + basicSearch.getFloat("ageEnd") + "  ");
             }
             if (JsonIsNull(basicSearch, "gradeStart")) {
-                sql.append(" AND grade_start >= " + basicSearch.getInteger("gradeStart") + "  ");
+                sql.append(" AND grade_start >= " + basicSearch.getFloat("gradeStart") + "  ");
             }
             if (JsonIsNull(basicSearch, "gradeEnd")) {
-                sql.append(" AND  grade_stop <= " + basicSearch.getInteger("gradeEnd") + "  ");
+                sql.append(" AND  grade_stop <= " + basicSearch.getFloat("gradeEnd") + "  ");
             }
         }
 
@@ -285,28 +285,28 @@ public class BookManageServiceImpl implements BookManageService {
                 sql.append(" AND  il like '%" + ARSearch.getString("interestLevel") + "%'  ");
             }
             if (JsonIsNull(ARSearch, "ABLev")) {
-                sql.append(" AND bl >= " + ARSearch.getInteger("ABLev") + "  ");
+                sql.append(" AND bl >= " + ARSearch.getFloat("ABLev") + "  ");
             }
             if (JsonIsNull(ARSearch, "ABLevT")) {
-                sql.append(" AND  bl <= " + ARSearch.getInteger("ABLevT") + "  ");
+                sql.append(" AND  bl <= " + ARSearch.getFloat("ABLevT") + "  ");
             }
             if (JsonIsNull(ARSearch, "QN")) {
-                sql.append(" AND  quiz_no = " + ARSearch.getInteger("QN") + "  ");
+                sql.append(" AND  quiz_no = " + ARSearch.getFloat("QN") + "  ");
             }
             if (JsonIsNull(ARSearch, "ARP")) {
-                sql.append(" AND  arpoints >= " + ARSearch.getInteger("ARP") + "  ");
+                sql.append(" AND  arpoints >= " + ARSearch.getFloat("ARP") + "  ");
             }
             if (JsonIsNull(ARSearch, "ARPT")) {
-                sql.append(" AND  arpoints <= " + ARSearch.getInteger("ARPT") + "  ");
+                sql.append(" AND  arpoints <= " + ARSearch.getFloat("ARPT") + "  ");
             }
         }
 
         if (LLSearch != null) {
             if (JsonIsNull(LLSearch, "LLV")) {
-                sql.append(" AND  lexile_value >= " + LLSearch.getInteger("LLV") + "  ");
+                sql.append(" AND  lexile_value >= " + LLSearch.getFloat("LLV") + "  ");
             }
             if (JsonIsNull(LLSearch, "LLVT")) {
-                sql.append(" AND lexile_value <= " + LLSearch.getInteger("LLVT") + "  ");
+                sql.append(" AND lexile_value <= " + LLSearch.getFloat("LLVT") + "  ");
             }
             if (JsonIsNull(LLSearch, "sort")) {
                 sql.append(" ORDER BY  " + LLSearch.getString("sort") + "    ");
@@ -494,36 +494,113 @@ public class BookManageServiceImpl implements BookManageService {
     }
 
     @Override
-    public JSONArray listArBookSearch(String searchData) {
+    public JSONObject listArBookSearch(String searchData) {
         JSONObject jsonObject = JSON.parseObject(searchData);
-        StringBuffer list = new StringBuffer();
-        list.append("SELECT * FROM arbooklist a WHERE ");
-        Set set = jsonObject.keySet();
-        Iterator<String> iterator = set.iterator();
-        while (iterator.hasNext()) {
-            String keySearch = iterator.next();
-            String valueSearch = jsonObject.getString(keySearch);
-            list.append(" a." + keySearch + "  LIKE '%" + valueSearch + "%' ");
+        StringBuffer sql = new StringBuffer();
+
+        sql.append("  select id,name,author,doc_type docType ,pub_lisher pubLisher,bl,il FROM arbooklist  where 1=1");
+        setBuffer(sql,jsonObject);
+        List searchResult = jdbcTemplate.queryForList(sql.toString());
+        JSONObject result = new JSONObject();
+        result.put("content", searchResult);
+        return result;
+    }
+
+
+    public StringBuffer setBuffer(StringBuffer sql, JSONObject ARSearch) {
+        if (ARSearch != null) {
+            if (JsonIsNull(ARSearch, "title")) {
+                sql.append(" AND  name like  '%" + ARSearch.getString("title") + "%' ");
+            }
+            if (JsonIsNull(ARSearch, "author")) {
+                sql.append(" AND  author like  '%" + ARSearch.getString("author") + "%' ");
+            }
+            if (JsonIsNull(ARSearch, "interestLevel")) {
+                sql.append(" AND  il like '%" + ARSearch.getString("interestLevel") + "%'  ");
+            }
+            if (JsonIsNull(ARSearch, "award")) {
+                sql.append(" AND  awards like '%" + ARSearch.getString("award") + "%'  ");
+            }
+            if (JsonIsNull(ARSearch, "ABLev")) {
+                sql.append(" AND bl >= " + ARSearch.getFloat("ABLev") + "  ");
+            }
+            if (JsonIsNull(ARSearch, "ABLevT")) {
+                sql.append(" AND  bl <= " + ARSearch.getFloat("ABLevT") + "  ");
+            }
+            if (JsonIsNull(ARSearch, "QN")) {
+                sql.append(" AND  quiz_no = " + ARSearch.getFloat("QN") + "  ");
+            }
+            if (JsonIsNull(ARSearch, "ARP")) {
+                sql.append(" AND  arpoints >= " + ARSearch.getFloat("ARP") + "  ");
+            }
+            if (JsonIsNull(ARSearch, "ARPT")) {
+                sql.append(" AND  arpoints <= " + ARSearch.getFloat("ARPT") + "  ");
+            }
+
+            sql.append(" LIMIT 0, 20 ");
         }
-        list.append(" LIMIT 0, 20 ");
-        JSONArray jsonArray = (JSONArray) JSON.toJSON(jdbcTemplate.queryForList(list.toString()));
-        return jsonArray;
+
+        return sql;
+
     }
 
     @Override
-    public JSONArray listLexBookSearch(String searchData) {
+    public JSONObject listLexBookSearch(String searchData) {
         JSONObject jsonObject = JSON.parseObject(searchData);
-        StringBuffer list = new StringBuffer();
-        list.append("SELECT * FROM arbooklist a WHERE ");
-        Set set = jsonObject.keySet();
-        Iterator<String> iterator = set.iterator();
-        while (iterator.hasNext()) {
-            String keySearch = iterator.next();
-            String valueSearch = jsonObject.getString(keySearch);
-            list.append(" a." + keySearch + "  LIKE '%" + valueSearch + "%' ");
+
+        StringBuffer sql = new StringBuffer();
+
+        sql.append("select id, isbn13 iSBN13,isbn10 iSBN10,name,author,pages,series,doc_type docType,pub_lisher pubLisher,lexile_value lexileValue,lexile_combined lexileCombined FROM lexilebooklist  where 1=1 ");
+        setLexBuffer(sql,jsonObject);
+        List searchResult = jdbcTemplate.queryForList(sql.toString());
+        JSONObject result = new JSONObject();
+        result.put("content", searchResult);
+        return result;
+    }
+
+
+    public StringBuffer setLexBuffer(StringBuffer sql, JSONObject LLSearch) {
+        if (LLSearch != null) {
+            if (JsonIsNull(LLSearch, "title")) {
+                sql.append(" AND  name like  '%" + LLSearch.getString("title") + "%' ");
+            }
+            if (JsonIsNull(LLSearch, "ISBN")) {
+                sql.append(" AND isbn13  like  '%" + LLSearch.getString("ISBN") + "%' or isbn10 like  '% " + LLSearch.getString("ISBN") + "%'    ");
+            }
+            if (JsonIsNull(LLSearch, "author")) {
+                sql.append(" AND  author like  '%" + LLSearch.getString("author") + "%' ");
+            }
+            if (JsonIsNull(LLSearch, "publisher")) {
+                sql.append(" AND  series =  '" + LLSearch.getString("publisher") + "'  ");
+            }
+            if (JsonIsNull(LLSearch, "docType")) {
+                sql.append(" AND  doc_type =  '" + LLSearch.getString("docType") + "'  ");
+            }
+            if (JsonIsNull(LLSearch, "bookType")) {
+                sql.append(" AND  book_type like '%" + LLSearch.getString("bookType") + "%'  ");
+            }
+            if (JsonIsNull(LLSearch, "interestLevel")) {
+                sql.append(" AND  il like '%" + LLSearch.getString("interestLevel") + "%'  ");
+            }
+            if (JsonIsNull(LLSearch, "ABLev")) {
+                sql.append(" AND bl >= " + LLSearch.getFloat("ABLev") + "  ");
+            }
+            if (JsonIsNull(LLSearch, "ABLevT")) {
+                sql.append(" AND  bl <= " + LLSearch.getFloat("ABLevT") + "  ");
+            }
+            if (JsonIsNull(LLSearch, "QN")) {
+                sql.append(" AND  quiz_no = " + LLSearch.getFloat("QN") + "  ");
+            }
+            if (JsonIsNull(LLSearch, "ARP")) {
+                sql.append(" AND  arpoints >= " + LLSearch.getFloat("ARP") + "  ");
+            }
+            if (JsonIsNull(LLSearch, "ARPT")) {
+                sql.append(" AND  arpoints <= " + LLSearch.getFloat("ARPT") + "  ");
+            }
+            sql.append(" LIMIT 0, 20 ");
         }
-        list.append(" LIMIT 0, 20 ");
-        JSONArray jsonArray = (JSONArray) JSON.toJSON(jdbcTemplate.queryForList(list.toString()));
-        return jsonArray;
+
+        return sql;
+
     }
 }

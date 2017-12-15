@@ -482,8 +482,8 @@ public class BookManageController {
             @ApiImplicitParam(name = "searchData", value = "搜索信息", required = true, dataType = "STRING")
     })
     public ResponseEntity listArBookSearch(@RequestParam("searchData") String searchData) {
-        JSONArray jsonArray = iBookManageService.listArBookSearch(searchData);
-        return ResponseEntity.ok().body(jsonArray);
+        JSONObject jsonObject = iBookManageService.listArBookSearch(searchData);
+        return ResponseEntity.ok().body(jsonObject);
     }
 
     @GetMapping(value = "/listLexBookSearch")
@@ -492,8 +492,8 @@ public class BookManageController {
             @ApiImplicitParam(name = "searchData", value = "搜索信息", required = true, dataType = "STRING")
     })
     public ResponseEntity listLexBookSearch(@RequestParam("searchData") String searchData) {
-        JSONArray jsonArray = iBookManageService.listArBookSearch(searchData);
-        return ResponseEntity.ok().body(jsonArray);
+        JSONObject jsonObject = iBookManageService.listArBookSearch(searchData);
+        return ResponseEntity.ok().body(jsonObject);
     }
 }
 

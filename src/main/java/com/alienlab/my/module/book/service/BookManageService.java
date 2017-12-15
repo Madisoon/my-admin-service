@@ -77,7 +77,7 @@ public interface BookManageService {
 
     public JSONObject removeImageInformation(String id);
 
-    public JSONArray listArBookSearch(String searchData);
+    public JSONObject listArBookSearch(String searchData);
 
-    public JSONArray listLexBookSearch(String searchData);
+    public JSONObject listLexBookSearch(String searchData);
 }
