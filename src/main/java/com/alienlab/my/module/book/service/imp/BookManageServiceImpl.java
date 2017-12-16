@@ -237,7 +237,7 @@ public class BookManageServiceImpl implements BookManageService {
                 sql.append(" AND  name like  '%" + basicSearch.getString("title") + "%' ");
             }
             if (JsonIsNull(basicSearch, "ISBN")) {
-                sql.append(" AND isbn13  like  '%" + basicSearch.getString("ISBN") + "%' or isbn10 like  '% " + basicSearch.getString("ISBN") + "%'    ");
+                sql.append(" AND isbn13  like  '%" + basicSearch.getString("ISBN") + "%' or isbn10 like  '%"+basicSearch.getString("ISBN") + "%'    ");
             }
             if (JsonIsNull(basicSearch, "author")) {
                 sql.append(" AND  author like  '%" + basicSearch.getString("author") + "%' ");
@@ -498,7 +498,7 @@ public class BookManageServiceImpl implements BookManageService {
         JSONObject jsonObject = JSON.parseObject(searchData);
         StringBuffer sql = new StringBuffer();
 
-        sql.append("  select id,name,author,doc_type docType ,pub_lisher pubLisher,bl,il FROM arbooklist  where 1=1");
+        sql.append("  select id,quiz_no quizNo,name,author,doc_type docType ,series,ar_points arpoints,pub_lisher pubLisher,bl,il FROM arbooklist  where 1=1");
         setBuffer(sql,jsonObject);
         List searchResult = jdbcTemplate.queryForList(sql.toString());
         JSONObject result = new JSONObject();
@@ -550,7 +550,7 @@ public class BookManageServiceImpl implements BookManageService {
 
         StringBuffer sql = new StringBuffer();
 
-        sql.append("select id, isbn13 iSBN13,isbn10 iSBN10,name,author,pages,series,doc_type docType,pub_lisher pubLisher,lexile_value lexileValue,lexile_combined lexileCombined FROM lexilebooklist  where 1=1 ");
+        sql.append("select id, name,author,doc_type docType,lexile_combined lexileCombined,series,pages FROM lexilebooklist  where 1=1 ");
         setLexBuffer(sql,jsonObject);
         List searchResult = jdbcTemplate.queryForList(sql.toString());
         JSONObject result = new JSONObject();
@@ -565,7 +565,7 @@ public class BookManageServiceImpl implements BookManageService {
                 sql.append(" AND  name like  '%" + LLSearch.getString("title") + "%' ");
             }
             if (JsonIsNull(LLSearch, "ISBN")) {
-                sql.append(" AND isbn13  like  '%" + LLSearch.getString("ISBN") + "%' or isbn10 like  '% " + LLSearch.getString("ISBN") + "%'    ");
+                sql.append(" AND isbn13  like  '%" + LLSearch.getString("ISBN") + "%' or isbn10 like  '%" + LLSearch.getString("ISBN") + "%'    ");
             }
             if (JsonIsNull(LLSearch, "author")) {
                 sql.append(" AND  author like  '%" + LLSearch.getString("author") + "%' ");
@@ -576,28 +576,15 @@ public class BookManageServiceImpl implements BookManageService {
             if (JsonIsNull(LLSearch, "docType")) {
                 sql.append(" AND  doc_type =  '" + LLSearch.getString("docType") + "'  ");
             }
-            if (JsonIsNull(LLSearch, "bookType")) {
-                sql.append(" AND  book_type like '%" + LLSearch.getString("bookType") + "%'  ");
+            if (JsonIsNull(LLSearch, "award")) {
+                sql.append(" AND  awards like '%" + LLSearch.getString("award") + "%'  ");
             }
-            if (JsonIsNull(LLSearch, "interestLevel")) {
-                sql.append(" AND  il like '%" + LLSearch.getString("interestLevel") + "%'  ");
+            if (JsonIsNull(LLSearch, "LLV")) {
+                sql.append(" AND  lexile_value >= " + LLSearch.getFloat("LLV") + "  ");
             }
-            if (JsonIsNull(LLSearch, "ABLev")) {
-                sql.append(" AND bl >= " + LLSearch.getFloat("ABLev") + "  ");
+            if (JsonIsNull(LLSearch, "LLVT")) {
+                sql.append(" AND lexile_value <= " + LLSearch.getFloat("LLVT") + "  ");
             }
-            if (JsonIsNull(LLSearch, "ABLevT")) {
-                sql.append(" AND  bl <= " + LLSearch.getFloat("ABLevT") + "  ");
-            }
-            if (JsonIsNull(LLSearch, "QN")) {
-                sql.append(" AND  quiz_no = " + LLSearch.getFloat("QN") + "  ");
-            }
-            if (JsonIsNull(LLSearch, "ARP")) {
-                sql.append(" AND  arpoints >= " + LLSearch.getFloat("ARP") + "  ");
-            }
-            if (JsonIsNull(LLSearch, "ARPT")) {
-                sql.append(" AND  arpoints <= " + LLSearch.getFloat("ARPT") + "  ");
-            }
-            sql.append(" LIMIT 0, 20 ");
         }
 
         return sql;

@@ -492,7 +492,7 @@ public class BookManageController {
             @ApiImplicitParam(name = "searchData", value = "搜索信息", required = true, dataType = "STRING")
     })
     public ResponseEntity listLexBookSearch(@RequestParam("searchData") String searchData) {
-        JSONObject jsonObject = iBookManageService.listArBookSearch(searchData);
+        JSONObject jsonObject = iBookManageService.listLexBookSearch(searchData);
         return ResponseEntity.ok().body(jsonObject);
     }
 }
