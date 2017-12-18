@@ -270,6 +270,14 @@ public class UserManageServiceImpl implements UserManageService {
             throw new Exception("该手机号已经注册过，无法重复注册！");
         }
         userInfo.setRegisterDate(new Date());
+        List<UserInfo> userInfo1 = userInfoRepository.findUserByOrderByReaderIdDesc();
+        int readId = 0;
+        if(userInfo1 == null){
+            readId = 90000001;
+        }else{
+            readId = Integer.parseInt(userInfo1.get(0).getReaderId());
+        }
+       userInfo.setReaderId(String.valueOf(readId+1));
         return userInfoRepository.save(userInfo);
 
     }
