@@ -35,4 +35,6 @@ public interface UserManageService {
     public UserInfo changePassword(String phone ,String newpassword) throws Exception;
 
     public JSONObject getUserWord(UserInfo userInfo) throws Exception;
+
+    public UserInfo changeUserInfo(UserInfo userInfo) throws Exception;
 }

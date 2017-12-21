@@ -41,6 +41,9 @@ public class UserInfo {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "school")
+    private String school;
+
     @Column(name = "address")
     private String address;
 
@@ -74,11 +77,18 @@ public class UserInfo {
     @Column(name = "lexileSuggestion")
     private String lexileSuggestion;
 
+    @Column(name = "detailadressint")
+    private String detailAdressint;
+
+
     @Column(name = "rCount")
     private int rCount;
 
     @Column(name = "rwCount")
     private int rwCount;
+
+    @Column(name = "grade")
+    private int grade;
 
     @OneToMany(mappedBy = "userInfo")
     private Set<SaveInfo> saveInfos = new HashSet<>();
@@ -113,7 +123,29 @@ public class UserInfo {
     private Set<StockInfo> stockInfo = new HashSet<>();*/
 
 
+    public String getDetailAdressint() {
+        return detailAdressint;
+    }
 
+    public void setDetailAdressint(String detailAdressint) {
+        this.detailAdressint = detailAdressint;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
 
     public Long getId() {
         return id;

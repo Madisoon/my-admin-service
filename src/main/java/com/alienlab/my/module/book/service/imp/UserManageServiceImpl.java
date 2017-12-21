@@ -322,4 +322,32 @@ public class UserManageServiceImpl implements UserManageService {
         result.put("readBookWord", readBookWord);
         return result;
     }
+
+    @Override
+    public UserInfo changeUserInfo(UserInfo userInfo) throws Exception {
+        UserInfo userInfo1 = userInfoRepository.findOne(userInfo.getId());
+        userInfo.setRegisterDate(userInfo.getRegisterDate());
+        userInfo.setPassword(userInfo1.getPassword());
+        userInfo.setReaderId(userInfo1.getReaderId());
+        userInfo.setNickName(userInfo1.getNickName());
+        userInfo.setPaidTag(userInfo1.getPaidTag());
+
+        userInfo.setPaidDate(userInfo1.getPaidDate());
+
+        userInfo.setPaidInfo(userInfo1.getPaidInfo());
+
+        userInfo.setMemStart(userInfo1.getMemStart());
+
+        userInfo.setMemEnd(userInfo1.getMemEnd());
+
+        userInfo.setARSuggestion(userInfo1.getARSuggestion());
+
+        userInfo.setLexileSuggestion(userInfo1.getLexileSuggestion());
+
+        userInfo.setrCount(userInfo1.getrCount());
+
+        userInfo.setRwCount(userInfo1.getRwCount());
+
+        return  userInfoRepository.save(userInfo);
+    }
 }

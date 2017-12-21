@@ -62,6 +62,21 @@ public class UserController {
         }
     }
 
+    @PostMapping(value = "/changeUserInfo")
+    @ApiOperation(value = "changeUserInfo", notes = "修改用户信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userinfo", value = "用户信息", dataType = "UserInfo"),
+    })
+    public ResponseEntity getUserInfo(@RequestBody UserInfo userInfo) {
+        try {
+            UserInfo userInfo1 = userManageService.changeUserInfo(userInfo);
+            return ResponseEntity.ok().body(userInfo1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+    }
 
     @PostMapping(value = "/vipBorrowReturn")
     @ApiOperation(value = "vipBorrowReturn", notes = "还书")
