@@ -498,7 +498,7 @@ public class BookManageServiceImpl implements BookManageService {
         JSONObject jsonObject = JSON.parseObject(searchData);
         StringBuffer sql = new StringBuffer();
 
-        sql.append("  select id,quiz_no quizNo,name,author,doc_type docType ,series,ar_points arpoints,pub_lisher pubLisher,bl,il FROM arbooklist  where 1=1");
+        sql.append("  select id,quiz_no quizNo,name,author,doc_type docType ,serise,ar_points arpoints,pub_lisher pubLisher,bl,il FROM arbooklist  where 1=1");
         setBuffer(sql,jsonObject);
         List searchResult = jdbcTemplate.queryForList(sql.toString());
         JSONObject result = new JSONObject();
@@ -523,6 +523,14 @@ public class BookManageServiceImpl implements BookManageService {
             }
             if (JsonIsNull(ARSearch, "ABLev")) {
                 sql.append(" AND bl >= " + ARSearch.getFloat("ABLev") + "  ");
+            }
+            if (JsonIsNull(ARSearch, "doctype")) {
+                if(ARSearch.getString("doctype").equals("Fiction")){
+                    sql.append(" AND  doc_type =  'F'  ");
+                }else if(ARSearch.getString("doctype").equals("Nonfiction")){
+                    sql.append(" AND  doc_type =  'N'  ");
+                }
+
             }
             if (JsonIsNull(ARSearch, "ABLevT")) {
                 sql.append(" AND  bl <= " + ARSearch.getFloat("ABLevT") + "  ");
