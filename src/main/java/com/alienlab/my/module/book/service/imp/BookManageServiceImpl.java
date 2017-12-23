@@ -245,9 +245,16 @@ public class BookManageServiceImpl implements BookManageService {
             if (JsonIsNull(basicSearch, "publisher")) {
                 sql.append(" AND  series =  '" + basicSearch.getString("publisher") + "'  ");
             }
+
             if (JsonIsNull(basicSearch, "docType")) {
-                sql.append(" AND  doc_type =  '" + basicSearch.getString("docType") + "'  ");
+                if(basicSearch.getString("docType").equals("Fiction")){
+                    sql.append(" AND  doc_type =  '" + basicSearch.getString("docType") + "'   ");
+                }else if(basicSearch.getString("docType").equals("Nonfiction")){
+                    sql.append(" AND  doc_type =  '" + basicSearch.getString("docType") + "'   ");
+                }
+
             }
+
             if (JsonIsNull(basicSearch, "bookType")) {
                 sql.append(" AND  book_type like '%" + basicSearch.getString("bookType") + "%'  ");
             }
@@ -296,9 +303,27 @@ public class BookManageServiceImpl implements BookManageService {
             if (JsonIsNull(ARSearch, "ARP")) {
                 sql.append(" AND  arpoints >= " + ARSearch.getFloat("ARP") + "  ");
             }
-            if (JsonIsNull(ARSearch, "ARPT")) {
-                sql.append(" AND  arpoints <= " + ARSearch.getFloat("ARPT") + "  ");
+
+
+            if (JsonIsNull(ARSearch, "quizType")) {
+
+                if (JsonIsNull(ARSearch, "quizType")) {
+                    String skills = ARSearch.getString("quizType");
+                    if(skills.equals("Recorded Voice")){
+                        sql.append(" AND  rvquiz  = 1  ");
+                    }
+
+                    if(skills.equals("Vocabulary Practice")){
+                        sql.append(" AND  vpquiz  = 1  ");
+                    }
+
+                    if(skills.equals("Literacy Skills")){
+                        sql.append(" AND  lsquiz  = 1  ");
+                    }
+
+                }
             }
+
         }
 
         if (LLSearch != null) {
@@ -463,7 +488,7 @@ public class BookManageServiceImpl implements BookManageService {
 
     @Override
     public List findBookSeries() throws Exception {
-        String sql = "select bookinfo.id ,bookinfo.series FROM bookinfo where series is NOT NULL AND  series !=' ' group by series  order by series";
+        String sql = "select bookinfo.series,count(*) sercount FROM bookinfo where series is NOT NULL AND  series !=' ' group by series  order by sercount desc";
         List result = jdbcTemplate.queryForList(sql);
         return result;
     }
@@ -508,10 +533,16 @@ public class BookManageServiceImpl implements BookManageService {
 
 
     public StringBuffer setBuffer(StringBuffer sql, JSONObject ARSearch) {
+
         if (ARSearch != null) {
             if (JsonIsNull(ARSearch, "title")) {
                 sql.append(" AND  name like  '%" + ARSearch.getString("title") + "%' ");
             }
+
+            if (JsonIsNull(ARSearch, "publisher")) {
+                sql.append(" AND  pub_lisher like  '%" + ARSearch.getString("publisher") + "%' ");
+            }
+
             if (JsonIsNull(ARSearch, "author")) {
                 sql.append(" AND  author like  '%" + ARSearch.getString("author") + "%' ");
             }
@@ -523,6 +554,11 @@ public class BookManageServiceImpl implements BookManageService {
             }
             if (JsonIsNull(ARSearch, "ABLev")) {
                 sql.append(" AND bl >= " + ARSearch.getFloat("ABLev") + "  ");
+            }
+
+
+            if (JsonIsNull(ARSearch, "series")) {
+                sql.append(" AND  serise =  '" + ARSearch.getString("series") + "'  ");
             }
             if (JsonIsNull(ARSearch, "doctype")) {
                 if(ARSearch.getString("doctype").equals("Fiction")){
@@ -538,11 +574,20 @@ public class BookManageServiceImpl implements BookManageService {
             if (JsonIsNull(ARSearch, "QN")) {
                 sql.append(" AND  quiz_no = " + ARSearch.getFloat("QN") + "  ");
             }
-            if (JsonIsNull(ARSearch, "ARP")) {
-                sql.append(" AND  arpoints >= " + ARSearch.getFloat("ARP") + "  ");
-            }
-            if (JsonIsNull(ARSearch, "ARPT")) {
-                sql.append(" AND  arpoints <= " + ARSearch.getFloat("ARPT") + "  ");
+            if (JsonIsNull(ARSearch, "skills")) {
+                String skills = ARSearch.getString("skills");
+                if(skills.equals("音频")){
+                    sql.append(" AND  rv_quiz  = 1  ");
+                }
+
+                if(skills.equals("词汇练习")){
+                    sql.append(" AND  vp_quiz  = 1  ");
+                }
+
+                if(skills.equals("文学题")){
+                    sql.append(" AND  ls_quiz  = 1  ");
+                }
+
             }
 
             sql.append(" LIMIT 0, 20 ");
@@ -581,8 +626,15 @@ public class BookManageServiceImpl implements BookManageService {
             if (JsonIsNull(LLSearch, "publisher")) {
                 sql.append(" AND  series =  '" + LLSearch.getString("publisher") + "'  ");
             }
+
+
             if (JsonIsNull(LLSearch, "docType")) {
-                sql.append(" AND  doc_type =  '" + LLSearch.getString("docType") + "'  ");
+                if(LLSearch.getString("docType").equals("Fiction")){
+                    sql.append(" AND  doc_type =  'Fiction'  ");
+                }else if(LLSearch.getString("docType").equals("Nonfiction")){
+                    sql.append(" AND  doc_type =  'Nonfiction'  ");
+                }
+
             }
             if (JsonIsNull(LLSearch, "award")) {
                 sql.append(" AND  awards like '%" + LLSearch.getString("award") + "%'  ");
