@@ -494,6 +494,13 @@ public class BookManageServiceImpl implements BookManageService {
     }
 
     @Override
+    public List findARBookSeries() throws Exception {
+        String sql = "select arbooklist.serise series,count(*) sercount FROM arbooklist where serise is NOT NULL AND  serise !=' ' group by serise  order by sercount desc";
+        List result = jdbcTemplate.queryForList(sql);
+        return result;
+    }
+
+    @Override
     public SysImage saveImageUrl(SysImage sysImage) {
         sysImage.setImageTime(new Date());
         SysImage sysImageReturn = sysImageRepository.save(sysImage);

@@ -419,6 +419,21 @@ public class BookManageController {
 
     }
 
+    @GetMapping(value = "/getARBookSeries")
+    @ApiOperation(value = "getARBookSeries", notes = "获取当前图书的所有系列")
+    @ApiImplicitParams({
+    })
+    public ResponseEntity getARBookSeries() {
+        try {
+            return ResponseEntity.ok().body(bookManageService.findARBookSeries());
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExecResult er = new ExecResult(false, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(er);
+        }
+
+    }
+
     @GetMapping(value = "/getWebConfigInfo")
     @ApiOperation(value = "getWebConfigInfo", notes = "获取web配置")
     @ApiImplicitParams({

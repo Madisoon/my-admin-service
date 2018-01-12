@@ -80,4 +80,6 @@ public interface BookManageService {
     public JSONObject listArBookSearch(String searchData);
 
     public JSONObject listLexBookSearch(String searchData);
+
+    public List<ARBookList> findARBookSeries() throws Exception;
 }
