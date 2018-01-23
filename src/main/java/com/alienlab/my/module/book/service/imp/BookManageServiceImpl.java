@@ -155,7 +155,7 @@ public class BookManageServiceImpl implements BookManageService {
         int flag = 0;
         Set<StockInfo> stockInfos = bookInfo.getStockInfo();
         for (StockInfo stockInfo : stockInfos) {
-            if (blankReadid.equals(stockInfo.getUserInfoId())) {
+            if (!blankReadid.equals(stockInfo.getUserInfoId())) {
                 flag++;
             }
         }
